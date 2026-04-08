@@ -278,3 +278,9 @@ export async function crearMecanico(
     return { error: e.message };
   }
 }
+
+export async function marcarContactoLeido(id: string) {
+  const { supabase } = await checkAdmin();
+  await supabase.from("contactos").update({ leido: true }).eq("id", id);
+  redirect("/admin/contacto");
+}

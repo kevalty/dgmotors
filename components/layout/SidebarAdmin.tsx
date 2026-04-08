@@ -16,6 +16,7 @@ import {
   ChevronRight,
   ShieldCheck,
   HardHat,
+  MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/actions/auth";
@@ -34,6 +35,7 @@ const navItems = [
   { href: "/admin/servicios", icon: Settings, label: "Servicios" },
   { href: "/admin/productos", icon: Package, label: "Productos" },
   { href: "/admin/reportes", icon: BarChart3, label: "Reportes" },
+  { href: "/admin/contacto", icon: MessageSquare, label: "Contacto" },
 ];
 
 interface SidebarAdminProps {

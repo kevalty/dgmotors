@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Calendar, Car, Wrench, Droplets, ChevronRight, Plus, Clock } from "lucide-react";
+import { Calendar, Car, Wrench, Droplets, ChevronRight, Plus, Clock, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -51,16 +51,32 @@ export default async function DashboardPage() {
       vehiculoIds.length > 0
         ? supabase
             .from("cambios_aceite")
-            .select("id, fecha, kilometraje, proximo_km, proxima_fecha, vehiculos(placa, marca, modelo)")
+            .select("id, fecha, kilometraje, proximo_km, proxima_fecha, vehiculo_id, vehiculos(placa, marca, modelo)")
             .in("vehiculo_id", vehiculoIds)
             .order("fecha", { ascending: false })
-            .limit(1)
         : Promise.resolve({ data: [] }),
     ]);
 
   const proximaCita = citas?.[0];
   const ultimoMantenimiento = mantenimientos?.[0];
-  const ultimoAceite = aceites?.[0];
+
+  // Último aceite global para el card
+  const ultimoAceite = aceites?.[0] ?? null;
+
+  // Alertas: último aceite por vehículo, filtrar vencidos o por vencer (≤30 días)
+  const hoy = new Date();
+  const ultimoPorVehiculo: Record<string, typeof aceites[0]> = {};
+  for (const a of (aceites || [])) {
+    if (a && !ultimoPorVehiculo[a.vehiculo_id]) {
+      ultimoPorVehiculo[a.vehiculo_id] = a;
+    }
+  }
+  const alertasAceite = Object.values(ultimoPorVehiculo).filter((a) => {
+    if (!a?.proxima_fecha) return false;
+    const proxima = new Date(a.proxima_fecha);
+    const diasRestantes = Math.ceil((proxima.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
+    return diasRestantes <= 30;
+  });
 
   return (
     <div>
@@ -83,6 +99,43 @@ export default async function DashboardPage() {
           </Button>
         </Link>
       </div>
+
+      {/* Alertas de aceite */}
+      {alertasAceite.length > 0 && (
+        <div className="mb-6 space-y-2">
+          {alertasAceite.map((a) => {
+            const proxima = new Date(a!.proxima_fecha!);
+            const dias = Math.ceil((proxima.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24));
+            const vencido = dias < 0;
+            return (
+              <div
+                key={a!.vehiculo_id}
+                className={`flex items-start gap-3 p-3 rounded-lg border text-sm ${
+                  vencido
+                    ? "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400"
+                    : "bg-yellow-500/10 border-yellow-500/30 text-yellow-700 dark:text-yellow-400"
+                }`}
+              >
+                <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium">
+                    {vencido
+                      ? `Cambio de aceite vencido hace ${Math.abs(dias)} días`
+                      : `Cambio de aceite vence en ${dias} día${dias !== 1 ? "s" : ""}`}
+                  </p>
+                  <p className="text-xs opacity-80 mt-0.5">
+                    {(a!.vehiculos as any)?.marca} {(a!.vehiculos as any)?.modelo} · {(a!.vehiculos as any)?.placa}
+                    {a!.proximo_km && ` · Próximo: ${formatKm(a!.proximo_km)}`}
+                  </p>
+                </div>
+                <Link href="/cliente/aceite" className="shrink-0 text-xs underline underline-offset-2 opacity-80">
+                  Ver historial
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">

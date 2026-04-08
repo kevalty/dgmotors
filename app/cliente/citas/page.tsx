@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Calendar, Plus, Clock, MapPin } from "lucide-react";
+import { Calendar, Plus, Clock, MapPin, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createClient } from "@/lib/supabase/server";
 import { formatDateTime, ESTADO_CITA_LABELS, ESTADO_CITA_COLORS } from "@/lib/utils";
+import { cancelarCita } from "@/lib/actions/citas";
 
 export const metadata: Metadata = { title: "Mis Citas" };
 
@@ -61,6 +62,21 @@ export default async function CitasPage() {
         </div>
         {cita.notas_cliente && (
           <p className="text-xs text-muted-foreground mt-2 italic">{cita.notas_cliente}</p>
+        )}
+        {(cita.estado === "pendiente" || cita.estado === "confirmada") && (
+          <div className="mt-3 pt-3 border-t border-border/50">
+            <form action={cancelarCita.bind(null, cita.id)}>
+              <Button
+                type="submit"
+                variant="ghost"
+                size="sm"
+                className="gap-1.5 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              >
+                <X className="w-3.5 h-3.5" />
+                Cancelar cita
+              </Button>
+            </form>
+          </div>
         )}
       </CardContent>
     </Card>

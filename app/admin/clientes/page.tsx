@@ -36,6 +36,12 @@ export default async function ClientesPage({
     .order("created_at", { ascending: false })
     .range(from, from + PAGE_SIZE - 1);
 
+  if (q) {
+    query = query.or(
+      `nombre.ilike.%${q}%,apellido.ilike.%${q}%,cedula.ilike.%${q}%,telefono.ilike.%${q}%`
+    );
+  }
+
   const { data: clientes, count } = await query;
 
   // Obtener email de auth.users no es posible directamente con cliente SSR,
@@ -67,6 +73,22 @@ export default async function ClientesPage({
           </Button>
         </Link>
       </div>
+
+      {/* Búsqueda */}
+      <form method="GET" className="mb-4 flex gap-2">
+        <Input
+          name="q"
+          defaultValue={q || ""}
+          placeholder="Buscar por nombre, cédula o teléfono..."
+          className="max-w-sm"
+        />
+        <Button type="submit" size="sm" variant="outline">Buscar</Button>
+        {q && (
+          <a href="/admin/clientes">
+            <Button type="button" size="sm" variant="ghost">Limpiar</Button>
+          </a>
+        )}
+      </form>
 
       <Card>
         <CardContent className="p-0">

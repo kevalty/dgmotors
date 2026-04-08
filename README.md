@@ -66,10 +66,33 @@ En el **SQL Editor** de Supabase (menú lateral), ejecutar los archivos de `supa
 | `004_mecanico_role.sql` | Agrega el rol `mecanico` al sistema |
 | `005_...` | (ver archivos en orden) |
 | `008_fix_citas_rls_y_tecnico.sql` | **Importante:** corrige RLS de citas y agrega columna `tecnico_id` |
+| `009_demo_seed.sql` | Datos de demostración (opcional) |
+| `010_contactos_table.sql` | Tabla para mensajes del formulario de contacto |
 
 > Abrir cada archivo, copiar el contenido, pegarlo en el SQL Editor y hacer clic en **Run**.
 
-### 6. Crear el primer usuario admin
+### 6. Cargar datos de demostración (opcional)
+
+Si quieres ver la plataforma con datos reales para mostrar a clientes, ejecutar también:
+
+```
+supabase/migrations/009_demo_seed.sql
+```
+
+Esto crea 2 mecánicos, 5 clientes con vehículos Ford, 11 citas en distintos estados y registros de mantenimiento con costos reales.
+
+**Credenciales del demo** (todos con contraseña `Demo1234!`):
+| Email | Rol |
+|---|---|
+| carlos.aguirre@dgmotors.com | mecánico |
+| miguel.torres@dgmotors.com | mecánico |
+| jvargas@gmail.com | cliente (2 vehículos) |
+| andrea.morales@gmail.com | cliente |
+| roberto.chiriboga@hotmail.com | cliente (2 vehículos) |
+| stephanie.alvarado@gmail.com | cliente |
+| diego.espinoza@gmail.com | cliente |
+
+### 7. Crear el primer usuario admin
 
 1. Ir a **Supabase → Authentication → Users → Add user**
 2. Crear el usuario con email y contraseña

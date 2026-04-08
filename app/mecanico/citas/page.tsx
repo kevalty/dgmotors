@@ -15,7 +15,7 @@ export default async function MecanicoCitasPage() {
     .from("citas")
     .select(`
       id, fecha_hora, estado, sucursal, notas_cliente, notas_admin,
-      perfiles(nombre, apellido, telefono),
+      perfiles!citas_cliente_id_fkey(nombre, apellido, telefono),
       vehiculos(placa, marca, modelo, anio),
       servicios(nombre)
     `)

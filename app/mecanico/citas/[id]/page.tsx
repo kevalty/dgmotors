@@ -41,7 +41,7 @@ export default function MecanicoCitaDetallePage({
     supabase
       .from("citas")
       .select(`
-        *, perfiles(id, nombre, apellido, telefono),
+        *, perfiles!citas_cliente_id_fkey(id, nombre, apellido, telefono),
         vehiculos(id, placa, marca, modelo, anio), servicios(nombre)
       `)
       .eq("id", id)

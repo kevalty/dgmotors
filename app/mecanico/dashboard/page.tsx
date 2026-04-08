@@ -36,7 +36,7 @@ export default async function MecanicoDashboardPage() {
       .limit(5),
     supabase
       .from("citas")
-      .select("id, fecha_hora, sucursal, estado, vehiculos(placa, marca, modelo), perfiles(nombre, apellido)")
+      .select("id, fecha_hora, sucursal, estado, vehiculos(placa, marca, modelo), perfiles!citas_cliente_id_fkey(nombre, apellido)")
       .in("estado", ["pendiente", "confirmada", "en_proceso"])
       .order("fecha_hora", { ascending: true })
       .limit(5),

@@ -19,7 +19,7 @@ export default async function AdminCitasPage() {
     .from("citas")
     .select(`
       id, fecha_hora, estado, sucursal,
-      perfiles(nombre, apellido),
+      perfiles!citas_cliente_id_fkey(nombre, apellido),
       vehiculos(placa, marca, modelo),
       servicios(nombre)
     `)

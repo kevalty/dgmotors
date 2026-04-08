@@ -39,7 +39,7 @@ export default function AdminCitaDetallePage() {
     Promise.all([
       supabase
         .from("citas")
-        .select(`*, perfiles(id, nombre, apellido, telefono), vehiculos(id, placa, marca, modelo, anio), servicios(nombre)`)
+        .select(`*, perfiles!citas_cliente_id_fkey(id, nombre, apellido, telefono), vehiculos(id, placa, marca, modelo, anio), servicios(nombre)`)
         .eq("id", id)
         .single(),
       supabase.from("perfiles").select("id, nombre, apellido").eq("rol", "mecanico").order("nombre"),
