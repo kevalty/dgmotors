@@ -54,7 +54,7 @@ export default async function DashboardPage() {
             .select("id, fecha, kilometraje, proximo_km, proxima_fecha, vehiculo_id, vehiculos(placa, marca, modelo)")
             .in("vehiculo_id", vehiculoIds)
             .order("fecha", { ascending: false })
-        : Promise.resolve({ data: [] }),
+        : Promise.resolve({ data: [] as any[] }),
     ]);
 
   const proximaCita = citas?.[0];
@@ -65,8 +65,8 @@ export default async function DashboardPage() {
 
   // Alertas: último aceite por vehículo, filtrar vencidos o por vencer (≤30 días)
   const hoy = new Date();
-  const ultimoPorVehiculo: Record<string, typeof aceites[0]> = {};
-  for (const a of (aceites || [])) {
+  const ultimoPorVehiculo: Record<string, any> = {};
+  for (const a of ((aceites as any[]) || [])) {
     if (a && !ultimoPorVehiculo[a.vehiculo_id]) {
       ultimoPorVehiculo[a.vehiculo_id] = a;
     }
