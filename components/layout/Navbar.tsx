@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Car, Menu, X, Sun, Moon, Calendar } from "lucide-react";
+import { Menu, X, Sun, Moon, Calendar } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -26,11 +27,15 @@ export function Navbar() {
       <div className="container mx-auto px-4 flex h-16 items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <Car className="w-4.5 h-4.5 text-primary-foreground" />
-          </div>
+          <Image
+            src="/asssets/logo-color.jpeg"
+            alt="DG Motors"
+            width={40}
+            height={40}
+            className="rounded-lg"
+          />
           <span
-            className="text-lg font-bold tracking-tight"
+            className="text-lg font-bold tracking-tight hidden sm:block"
             style={{ fontFamily: "var(--font-heading)" }}
           >
             DG Motors

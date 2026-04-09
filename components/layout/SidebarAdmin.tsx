@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -54,9 +55,13 @@ export function SidebarAdmin({ nombre, email }: SidebarAdminProps) {
       {/* Header */}
       <div className="p-4 border-b border-border/50">
         <Link href="/" className="flex items-center gap-2 mb-4">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-            <CarIcon className="w-4 h-4 text-primary-foreground" />
-          </div>
+          <Image
+            src="/asssets/logo-color.jpeg"
+            alt="DG Motors"
+            width={44}
+            height={44}
+            className="rounded-lg"
+          />
           <span className="text-base font-bold" style={{ fontFamily: "var(--font-heading)" }}>
             DG Motors
           </span>

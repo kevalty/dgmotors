@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Car, ExternalLink, MapPin, Phone, Mail, Clock } from "lucide-react";
+import Image from "next/image";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 export function Footer() {
@@ -10,15 +11,13 @@ export function Footer() {
           {/* Brand */}
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <Car className="w-4.5 h-4.5 text-primary-foreground" />
-              </div>
-              <span
-                className="text-lg font-bold"
-                style={{ fontFamily: "var(--font-heading)" }}
-              >
-                DG Motors
-              </span>
+              <Image
+                src="/asssets/logo-color.jpeg"
+                alt="DG Motors"
+                width={56}
+                height={56}
+                className="rounded-lg"
+              />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-4">
               Especialistas en vehículos americanos, Ford y multimarca. Mecánica
