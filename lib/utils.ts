@@ -60,3 +60,72 @@ export const ESTADO_CITA_COLORS: Record<string, string> = {
   completada: "bg-green-500/20 text-green-600 dark:text-green-400",
   cancelada: "bg-red-500/20 text-red-600 dark:text-red-400",
 };
+
+// ─── ERP: Órdenes de Trabajo ───────────────────────────────────────────────
+
+export const ESTADO_OT_LABELS: Record<string, string> = {
+  presupuesto: "Presupuesto",
+  aprobado: "Aprobado",
+  en_proceso: "En Proceso",
+  pausado: "Pausado",
+  completado: "Completado",
+  facturado: "Facturado",
+  entregado: "Entregado",
+  cancelado: "Cancelado",
+};
+
+export const ESTADO_OT_COLORS: Record<string, string> = {
+  presupuesto: "bg-slate-500/20 text-slate-600 dark:text-slate-400",
+  aprobado: "bg-blue-500/20 text-blue-600 dark:text-blue-400",
+  en_proceso: "bg-orange-500/20 text-orange-600 dark:text-orange-400",
+  pausado: "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400",
+  completado: "bg-green-500/20 text-green-600 dark:text-green-400",
+  facturado: "bg-purple-500/20 text-purple-600 dark:text-purple-400",
+  entregado: "bg-teal-500/20 text-teal-600 dark:text-teal-400",
+  cancelado: "bg-red-500/20 text-red-600 dark:text-red-400",
+};
+
+export const TIPO_OT_LABELS: Record<string, string> = {
+  preventivo: "Preventivo",
+  correctivo: "Correctivo",
+  revision: "Revisión",
+  otro: "Otro",
+};
+
+// ─── ERP: Facturación ─────────────────────────────────────────────────────
+
+export const ESTADO_FACTURA_LABELS: Record<string, string> = {
+  pendiente: "Pendiente",
+  pagada: "Pagada",
+  parcial: "Parcial",
+  anulada: "Anulada",
+  vencida: "Vencida",
+};
+
+export const ESTADO_FACTURA_COLORS: Record<string, string> = {
+  pendiente: "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400",
+  pagada: "bg-green-500/20 text-green-600 dark:text-green-400",
+  parcial: "bg-blue-500/20 text-blue-600 dark:text-blue-400",
+  anulada: "bg-red-500/20 text-red-600 dark:text-red-400",
+  vencida: "bg-orange-500/20 text-orange-600 dark:text-orange-400",
+};
+
+export const METODO_PAGO_LABELS: Record<string, string> = {
+  efectivo: "Efectivo",
+  tarjeta_credito: "Tarjeta Crédito",
+  tarjeta_debito: "Tarjeta Débito",
+  transferencia: "Transferencia",
+  cheque: "Cheque",
+  otro: "Otro",
+};
+
+// ─── ERP: Inventario ──────────────────────────────────────────────────────
+
+export const UNIDAD_LABELS: Record<string, string> = {
+  unidad: "Unidad",
+  litro: "Litro",
+  kg: "Kg",
+  metro: "Metro",
+  par: "Par",
+  juego: "Juego",
+};

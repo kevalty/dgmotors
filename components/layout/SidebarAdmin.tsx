@@ -13,11 +13,16 @@ import {
   BarChart3,
   Package,
   LogOut,
-  Car as CarIcon,
   ChevronRight,
   ShieldCheck,
   HardHat,
   MessageSquare,
+  ClipboardList,
+  Boxes,
+  FileText,
+  Wallet,
+  Truck,
+  ShoppingCart,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/actions/auth";
@@ -26,17 +31,38 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
-const navItems = [
-  { href: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/admin/clientes", icon: Users, label: "Clientes" },
-  { href: "/admin/mecanicos", icon: HardHat, label: "Mecánicos" },
-  { href: "/admin/vehiculos", icon: Car, label: "Vehículos" },
-  { href: "/admin/citas", icon: Calendar, label: "Citas" },
-  { href: "/admin/mantenimiento", icon: Wrench, label: "Mantenimiento" },
-  { href: "/admin/servicios", icon: Settings, label: "Servicios" },
-  { href: "/admin/productos", icon: Package, label: "Productos" },
-  { href: "/admin/reportes", icon: BarChart3, label: "Reportes" },
-  { href: "/admin/contacto", icon: MessageSquare, label: "Contacto" },
+const navGroups = [
+  {
+    label: "General",
+    items: [
+      { href: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+      { href: "/admin/clientes", icon: Users, label: "Clientes" },
+      { href: "/admin/mecanicos", icon: HardHat, label: "Mecánicos" },
+      { href: "/admin/vehiculos", icon: Car, label: "Vehículos" },
+      { href: "/admin/citas", icon: Calendar, label: "Citas" },
+    ],
+  },
+  {
+    label: "ERP",
+    items: [
+      { href: "/admin/ordenes", icon: ClipboardList, label: "Órdenes de Trabajo" },
+      { href: "/admin/inventario", icon: Boxes, label: "Inventario" },
+      { href: "/admin/facturacion", icon: FileText, label: "Facturación" },
+      { href: "/admin/caja", icon: Wallet, label: "Caja" },
+      { href: "/admin/proveedores", icon: Truck, label: "Proveedores" },
+      { href: "/admin/compras", icon: ShoppingCart, label: "Compras" },
+    ],
+  },
+  {
+    label: "Config",
+    items: [
+      { href: "/admin/mantenimiento", icon: Wrench, label: "Mantenimiento" },
+      { href: "/admin/servicios", icon: Settings, label: "Servicios" },
+      { href: "/admin/productos", icon: Package, label: "Productos" },
+      { href: "/admin/reportes", icon: BarChart3, label: "Reportes" },
+      { href: "/admin/contacto", icon: MessageSquare, label: "Contacto" },
+    ],
+  },
 ];
 
 interface SidebarAdminProps {
@@ -85,27 +111,36 @@ export function SidebarAdmin({ nombre, email }: SidebarAdminProps) {
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 p-3 space-y-0.5">
-        {navItems.map((item) => {
-          const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/");
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors",
-                isActive
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-              )}
-            >
-              <item.icon className="w-4 h-4 shrink-0" />
-              {item.label}
-              {isActive && <ChevronRight className="w-3.5 h-3.5 ml-auto" />}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
+        {navGroups.map((group) => (
+          <div key={group.label}>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground px-3 mb-1">
+              {group.label}
+            </p>
+            <div className="space-y-0.5">
+              {group.items.map((item) => {
+                const isActive =
+                  pathname === item.href || pathname.startsWith(item.href + "/");
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors",
+                      isActive
+                        ? "bg-primary/10 text-primary font-medium"
+                        : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                    )}
+                  >
+                    <item.icon className="w-4 h-4 shrink-0" />
+                    {item.label}
+                    {isActive && <ChevronRight className="w-3.5 h-3.5 ml-auto" />}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       {/* Footer */}

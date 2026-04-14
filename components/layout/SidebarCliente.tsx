@@ -11,8 +11,8 @@ import {
   Droplets,
   User,
   LogOut,
-  Car as CarIcon,
   ChevronRight,
+  FileText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/actions/auth";
@@ -26,6 +26,7 @@ const navItems = [
   { href: "/cliente/citas", icon: Calendar, label: "Mis Citas" },
   { href: "/cliente/mantenimiento", icon: Wrench, label: "Mantenimiento" },
   { href: "/cliente/aceite", icon: Droplets, label: "Aceite" },
+  { href: "/cliente/mis-facturas", icon: FileText, label: "Mis Facturas" },
   { href: "/cliente/perfil", icon: User, label: "Mi Perfil" },
 ];
 
