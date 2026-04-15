@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DG Motors — Guía de Demo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* ── PÁGINA ── */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 20px;
+    background: white;
+    padding: 14mm 16mm;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+  }
+
+  /* ── PORTADA ── */
+  .cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 297mm;
+    background: linear-gradient(160deg, #0a0a0b 0%, #1a1a1f 60%, #2a1a0a 100%);
+    color: white;
+    text-align: center;
+    padding: 20mm;
+  }
+
+  .cover-badge {
+    background: #e84040;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  .cover-logo {
+    width: 110px;
+    height: 110px;
+    background: #e84040;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    margin: 0 auto 28px;
+    box-shadow: 0 8px 32px rgba(232,64,64,0.4);
+  }
+
+  .cover h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    line-height: 1.1;
+  }
+
+  .cover h1 span { color: #e84040; }
+
+  .cover-sub {
+    font-size: 16px;
+    color: #888;
+    font-weight: 400;
+    margin-bottom: 48px;
+  }
+
+  .cover-divider {
+    width: 60px;
+    height: 3px;
+    background: #e84040;
+    margin: 0 auto 32px;
+    border-radius: 2px;
+  }
+
+  .cover-desc {
+    font-size: 14px;
+    color: #aaa;
+    max-width: 380px;
+    line-height: 1.8;
+    margin-bottom: 48px;
+  }
+
+  .cover-tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cover-tag {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #ccc;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+  }
+
+  .cover-footer {
+    position: absolute;
+    bottom: 20mm;
+    left: 0; right: 0;
+    text-align: center;
+    color: #555;
+    font-size: 11px;
+  }
+
+  /* ── CABECERA DE SECCIÓN ── */
+  .section-header {
+    background: linear-gradient(135deg, #0a0a0b, #1e1e24);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-header .icon {
+    width: 32px; height: 32px;
+    background: #e84040;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .section-header h2 {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .section-header p {
+    font-size: 11px;
+    color: #888;
+    margin-top: 1px;
+  }
+
+  /* ── PÁGINA HEADER ── */
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+    margin-bottom: 18px;
+  }
+
+  .page-header .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .page-header .brand .dot {
+    width: 10px; height: 10px;
+    background: #e84040;
+    border-radius: 50%;
+  }
+
+  .page-header .brand span {
+    font-weight: 700;
+    font-size: 12px;
+    color: #333;
+  }
+
+  .page-header .page-num {
+    font-size: 10px;
+    color: #999;
+  }
+
+  /* ── CREDENCIALES ── */
+  .cred-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+  }
+
+  .cred-table th {
+    background: #1a1a1f;
+    color: white;
+    padding: 8px 12px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .cred-table th:first-child { border-radius: 6px 0 0 6px; }
+  .cred-table th:last-child  { border-radius: 0 6px 6px 0; }
+
+  .cred-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+    vertical-align: middle;
+  }
+
+  .cred-table tr:last-child td { border-bottom: none; }
+  .cred-table tr:hover td { background: #fafafa; }
+
+  .role-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  .role-admin    { background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; }
+  .role-mecanico { background: #fff7ed; color: #ea580c; border: 1px solid #fdba74; }
+  .role-cliente  { background: #f0fdf4; color: #16a34a; border: 1px solid #86efac; }
+
+  .mono { font-family: monospace; font-size: 11px; background: #f5f5f5; padding: 2px 6px; border-radius: 4px; }
+
+  /* ── PORTALES GRID ── */
+  .portals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .portal-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .portal-card-header {
+    padding: 10px 12px;
+    color: white;
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .portal-card-header.admin    { background: linear-gradient(135deg, #1a1a1f, #2d2d35); }
+  .portal-card-header.cliente  { background: linear-gradient(135deg, #1e3a5f, #2563eb); }
+  .portal-card-header.mecanico { background: linear-gradient(135deg, #431407, #ea580c); }
+  .portal-card-header.publico  { background: linear-gradient(135deg, #052e16, #16a34a); }
+
+  .portal-icon {
+    width: 24px; height: 24px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  .portal-card ul {
+    list-style: none;
+    padding: 8px 12px;
+  }
+
+  .portal-card ul li {
+    font-size: 11px;
+    padding: 4px 0;
+    border-bottom: 1px solid #f5f5f5;
+    color: #444;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .portal-card ul li:last-child { border-bottom: none; }
+  .portal-card ul li::before { content: "→"; color: #e84040; font-size: 10px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── PANTALLAS ── */
+  .screens-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .screen-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+
+  .screen-card h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1a1a1f;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .screen-card h4 .tag {
+    font-size: 9px;
+    font-weight: 600;
+    background: #fef2f2;
+    color: #e84040;
+    padding: 1px 6px;
+    border-radius: 10px;
+  }
+
+  .screen-card p {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .screen-card .url {
+    font-size: 10px;
+    color: #999;
+    font-family: monospace;
+    background: #f8f8f8;
+    padding: 3px 7px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 6px;
+  }
+
+  /* ── FLUJO DEMO ── */
+  .flow-steps {
+    counter-reset: step;
+    list-style: none;
+    margin-bottom: 18px;
+  }
+
+  .flow-steps li {
+    counter-increment: step;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .flow-steps li:last-child { border-bottom: none; margin-bottom: 0; }
+
+  .step-num {
+    width: 26px; height: 26px;
+    background: #e84040;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-content h4 {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 3px;
+    color: #1a1a1f;
+  }
+
+  .step-content p {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .step-content .step-login {
+    font-size: 10px;
+    color: #999;
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* ── TECH STACK ── */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .tech-item {
+    background: #f8f8f8;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tech-item .tech-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .tech-item .tech-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1a1a1f;
+    display: block;
+  }
+
+  .tech-item .tech-desc {
+    font-size: 10px;
+    color: #888;
+    display: block;
+  }
+
+  /* ── ALERTAS / NOTAS ── */
+  .info-box {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-left: 4px solid #f97316;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+  }
+
+  .info-box p { font-size: 11px; color: #7c3aed; }
+  .info-box.orange p { color: #9a3412; }
+  .info-box.blue { background: #eff6ff; border-color: #bfdbfe; border-left-color: #3b82f6; }
+  .info-box.blue p { color: #1e40af; }
+  .info-box.green { background: #f0fdf4; border-color: #bbf7d0; border-left-color: #16a34a; }
+  .info-box.green p { color: #14532d; }
+
+  /* ── TABLA DB ── */
+  .db-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+    font-size: 11px;
+  }
+
+  .db-table th {
+    background: #f0f0f0;
+    color: #333;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .db-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #f5f5f5;
+    color: #444;
+    vertical-align: top;
+  }
+
+  .db-table tr:hover td { background: #fafafa; }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none; margin: 0; page-break-after: always; }
+    .page:last-child { page-break-after: avoid; }
+    @page { margin: 0; size: A4; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PORTADA                                    -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page cover" style="position:relative;">
+  <div class="cover-badge">Guía de Demostración</div>
+  <div class="cover-logo">🔧</div>
+  <h1>DG <span>Motors</span></h1>
+  <p class="cover-sub">Taller Automotriz — Plataforma Web Completa</p>
+  <div class="cover-divider"></div>
+  <p class="cover-desc">
+    Plataforma digital integral para la gestión de citas, mantenimientos, clientes y vehículos del taller DG Motors con sucursales en Quito y Guayaquil.
+  </p>
+  <div class="cover-tags">
+    <span class="cover-tag">Next.js 16</span>
+    <span class="cover-tag">TypeScript</span>
+    <span class="cover-tag">Supabase</span>
+    <span class="cover-tag">Tailwind CSS</span>
+    <span class="cover-tag">Dark / Light Mode</span>
+    <span class="cover-tag">Mobile First</span>
+  </div>
+  <div class="cover-footer">
+    Documento confidencial · Demo v1.0 · 2024
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PÁGINA 2 — RESUMEN + CREDENCIALES         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand"><div class="dot"></div><span>DG Motors — Guía Demo</span></div>
+    <span class="page-num">Pág. 2 — Resumen y Credenciales</span>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">📋</div>
+    <div>
+      <h2>¿Qué es esta plataforma?</h2>
+      <p>Descripción general del sistema</p>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:#444;margin-bottom:14px;line-height:1.8;">
+    DG Motors ahora tiene una plataforma web completa que reemplaza el proceso manual de llamadas telefónicas y papeles. El sistema tiene <strong>4 áreas distintas</strong>: un sitio público para nuevos clientes, un portal para clientes registrados, un panel de administración y un portal exclusivo para mecánicos.
+  </p>
+
+  <div class="portals-grid" style="grid-template-columns:1fr 1fr;margin-bottom:18px;">
+    <div style="background:#f8f8f8;border-radius:10px;padding:12px 14px;">
+      <div style="font-size:11px;font-weight:700;color:#333;margin-bottom:6px;">🌐 Sitio Público</div>
+      <p style="font-size:11px;color:#666;">Cualquier persona puede ver servicios, precios, sucursales con mapas, y enviar mensajes de contacto. Sin necesidad de cuenta.</p>
+    </div>
+    <div style="background:#f8f8f8;border-radius:10px;padding:12px 14px;">
+      <div style="font-size:11px;font-weight:700;color:#333;margin-bottom:6px;">👤 Portal Cliente</div>
+      <p style="font-size:11px;color:#666;">Clientes registrados pueden agendar citas, ver el historial de mantenimiento de sus vehículos y recibir alertas de aceite.</p>
+    </div>
+    <div style="background:#f8f8f8;border-radius:10px;padding:12px 14px;">
+      <div style="font-size:11px;font-weight:700;color:#333;margin-bottom:6px;">🛡️ Panel Admin</div>
+      <p style="font-size:11px;color:#666;">Control total: gestión de clientes, citas, mecánicos, mantenimientos, servicios y reportes de ingresos.</p>
+    </div>
+    <div style="background:#f8f8f8;border-radius:10px;padding:12px 14px;">
+      <div style="font-size:11px;font-weight:700;color:#333;margin-bottom:6px;">🔧 Portal Mecánico</div>
+      <p style="font-size:11px;color:#666;">Los mecánicos ven sus citas asignadas, actualizan el estado del trabajo y registran los mantenimientos realizados.</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">🔑</div>
+    <div>
+      <h2>Credenciales de Acceso</h2>
+      <p>Todos los usuarios tienen la misma contraseña: Demo1234!</p>
+    </div>
+  </div>
+
+  <table class="cred-table">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Contraseña</th>
+        <th>Rol</th>
+        <th>Nombre</th>
+        <th>Accede a</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="mono">admin1@dgmotors.com</span></td>
+        <td><span class="mono">Demo1234!</span></td>
+        <td><span class="role-badge role-admin">Admin</span></td>
+        <td>Admin DG Motors</td>
+        <td>/admin/dashboard</td>
+      </tr>
+      <tr>
+        <td><span class="mono">carlos@dgmotors.com</span></td>
+        <td><span class="mono">Demo1234!</span></td>
+        <td><span class="role-badge role-mecanico">Mecánico</span></td>
+        <td>Carlos Aguirre</td>
+        <td>/mecanico/dashboard</td>
+      </tr>
+      <tr>
+        <td><span class="mono">miguel@dgmotors.com</span></td>
+        <td><span class="mono">Demo1234!</span></td>
+        <td><span class="role-badge role-mecanico">Mecánico</span></td>
+        <td>Miguel Torres</td>
+        <td>/mecanico/dashboard</td>
+      </tr>
+      <tr>
+        <td><span class="mono">jvargas@gmail.com</span></td>
+        <td><span class="mono">Demo1234!</span></td>
+        <td><span class="role-badge role-cliente">Cliente</span></td>
+        <td>Juan Vargas</td>
+        <td>/cliente/dashboard</td>
+      </tr>
+      <tr>
+        <td><span class="mono">amorales@gmail.com</span></td>
+        <td><span class="mono">Demo1234!</span></td>
+        <td><span class="role-badge role-cliente">Cliente</span></td>
+        <td>Andrea Morales</td>
+        <td>/cliente/dashboard</td>
+      </tr>
+      <tr>
+        <td><span class="mono">rchiriboga@gmail.com</span></td>
+        <td><span class="mono">Demo1234!</span></td>
+        <td><span class="role-badge role-cliente">Cliente</span></td>
+        <td>Roberto Chiriboga</td>
+        <td>/cliente/dashboard</td>
+      </tr>
+      <tr>
+        <td><span class="mono">salvarado@gmail.com</span></td>
+        <td><span class="mono">Demo1234!</span></td>
+        <td><span class="role-badge role-cliente">Cliente</span></td>
+        <td>Stephanie Alvarado</td>
+        <td>/cliente/dashboard</td>
+      </tr>
+      <tr>
+        <td><span class="mono">despinoza@gmail.com</span></td>
+        <td><span class="mono">Demo1234!</span></td>
+        <td><span class="role-badge role-cliente">Cliente</span></td>
+        <td>Diego Espinoza</td>
+        <td>/cliente/dashboard</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box blue">
+    <p>💡 <strong>Redirección automática por rol:</strong> Al iniciar sesión, el sistema detecta el rol del usuario y redirige automáticamente al portal correcto. El cliente siempre va a <em>/cliente</em>, el admin a <em>/admin</em>, y el mecánico a <em>/mecanico</em>.</p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PÁGINA 3 — PANTALLAS POR PORTAL           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand"><div class="dot"></div><span>DG Motors — Guía Demo</span></div>
+    <span class="page-num">Pág. 3 — Pantallas por Portal</span>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">🌐</div>
+    <div><h2>Sitio Público</h2><p>Acceso sin cuenta — visible para todos</p></div>
+  </div>
+
+  <div class="screens-grid">
+    <div class="screen-card">
+      <h4>🏠 Página Principal (Home) <span class="tag">Público</span></h4>
+      <p>Hero con llamada a la acción, servicios destacados, estadísticas del taller, mapa con las dos sucursales, y sección de contacto rápido.</p>
+      <span class="url">/</span>
+    </div>
+    <div class="screen-card">
+      <h4>🔧 Servicios y Precios <span class="tag">Público</span></h4>
+      <p>Catálogo completo de servicios agrupados por categoría con precios mínimos y máximos. Diagnóstico, mantenimiento, frenos, suspensión, electromecánica, A/C.</p>
+      <span class="url">/servicios</span>
+    </div>
+    <div class="screen-card">
+      <h4>📍 Sucursales <span class="tag">Público</span></h4>
+      <p>Información de Quito y Guayaquil con iframe de Google Maps para cada una, horarios de atención y teléfonos directos.</p>
+      <span class="url">/sucursales</span>
+    </div>
+    <div class="screen-card">
+      <h4>✉️ Contacto <span class="tag">Público</span></h4>
+      <p>Formulario con nombre, email, teléfono, sucursal de interés y mensaje. Los mensajes se guardan en la base de datos y el admin los ve en tiempo real.</p>
+      <span class="url">/contacto</span>
+    </div>
+    <div class="screen-card">
+      <h4>🏢 Nosotros <span class="tag">Público</span></h4>
+      <p>Historia del taller, especialización en vehículos Ford y americanos, equipo de trabajo y valores de la empresa.</p>
+      <span class="url">/nosotros</span>
+    </div>
+    <div class="screen-card">
+      <h4>🛍️ Productos <span class="tag">Público</span></h4>
+      <p>Catálogo de productos disponibles: aceites, filtros, frenos, suspensión, electricidad. Con precios referenciales y detalle de cada producto.</p>
+      <span class="url">/productos</span>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">👤</div>
+    <div><h2>Portal Cliente</h2><p>Requiere cuenta — rol: cliente</p></div>
+  </div>
+
+  <div class="screens-grid">
+    <div class="screen-card">
+      <h4>📊 Dashboard <span class="tag">Cliente</span></h4>
+      <p>Vista resumen: próxima cita, último mantenimiento, último cambio de aceite. <strong>Alertas en rojo/amarillo</strong> cuando el aceite está vencido o por vencer en los próximos 30 días.</p>
+      <span class="url">/cliente/dashboard</span>
+    </div>
+    <div class="screen-card">
+      <h4>🚗 Mis Vehículos <span class="tag">Cliente</span></h4>
+      <p>Lista de vehículos registrados con placa, modelo, año y kilometraje. Permite agregar nuevos vehículos con todos sus datos técnicos. Juan Vargas tiene 2 autos registrados.</p>
+      <span class="url">/cliente/vehiculos</span>
+    </div>
+    <div class="screen-card">
+      <h4>📅 Mis Citas <span class="tag">Cliente</span></h4>
+      <p>Lista de citas próximas e historial. El cliente puede <strong>cancelar citas</strong> pendientes o confirmadas directamente desde aquí. Cada cita muestra el estado con colores.</p>
+      <span class="url">/cliente/citas</span>
+    </div>
+    <div class="screen-card">
+      <h4>➕ Agendar Cita <span class="tag">Cliente</span></h4>
+      <p>Formulario para nueva cita: selección de vehículo, servicio, sucursal (Quito o Guayaquil), fecha/hora y notas adicionales para el taller.</p>
+      <span class="url">/cliente/citas/nueva</span>
+    </div>
+    <div class="screen-card">
+      <h4>🔩 Historial de Mantenimiento <span class="tag">Cliente</span></h4>
+      <p>Todos los mantenimientos registrados por el taller: preventivos, correctivos, cambios de aceite. Con fecha, costo, kilometraje y observaciones del mecánico.</p>
+      <span class="url">/cliente/mantenimiento</span>
+    </div>
+    <div class="screen-card">
+      <h4>🛢️ Historial de Aceite <span class="tag">Cliente</span></h4>
+      <p>Registro detallado de cambios de aceite: fecha, marca, viscosidad, litros. Muestra la fecha y kilometraje del próximo cambio recomendado.</p>
+      <span class="url">/cliente/aceite</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PÁGINA 4 — ADMIN Y MECÁNICO               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand"><div class="dot"></div><span>DG Motors — Guía Demo</span></div>
+    <span class="page-num">Pág. 4 — Panel Admin y Portal Mecánico</span>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">🛡️</div>
+    <div><h2>Panel de Administración</h2><p>Acceso exclusivo rol admin — control total del taller</p></div>
+  </div>
+
+  <div class="screens-grid">
+    <div class="screen-card">
+      <h4>📊 Dashboard Admin <span class="tag">Admin</span></h4>
+      <p>Métricas clave: clientes totales, vehículos, citas del día e ingresos del mes. <strong>Filtro de fecha</strong> para ver cualquier día específico. Lista de citas del día con estado en tiempo real.</p>
+      <span class="url">/admin/dashboard</span>
+    </div>
+    <div class="screen-card">
+      <h4>📅 Gestión de Citas <span class="tag">Admin</span></h4>
+      <p>3 pestañas: <strong>"Por confirmar"</strong> (citas nuevas que esperan al admin), <strong>"En curso"</strong> (confirmadas/en proceso), <strong>"Historial"</strong>. Badge con conteo de pendientes.</p>
+      <span class="url">/admin/citas</span>
+    </div>
+    <div class="screen-card">
+      <h4>✅ Gestionar Cita <span class="tag">Admin</span></h4>
+      <p>Cambiar estado de la cita, asignar mecánico responsable, agregar notas internas. Botón de <strong>WhatsApp</strong> que abre un mensaje predefinido para notificar al cliente.</p>
+      <span class="url">/admin/citas/[id]</span>
+    </div>
+    <div class="screen-card">
+      <h4>👥 Clientes <span class="tag">Admin</span></h4>
+      <p>Lista paginada de todos los clientes con <strong>búsqueda en tiempo real</strong> por nombre, cédula o teléfono. Registro de clientes walk-in (sin cuenta previa).</p>
+      <span class="url">/admin/clientes</span>
+    </div>
+    <div class="screen-card">
+      <h4>🔩 Registrar Mantenimiento <span class="tag">Admin</span></h4>
+      <p>Formulario completo para registrar trabajos: tipo, descripción, kilometraje, costo, fecha del próximo servicio y lista de repuestos utilizados con costos individuales.</p>
+      <span class="url">/admin/mantenimiento/nuevo</span>
+    </div>
+    <div class="screen-card">
+      <h4>✏️ Editar Mantenimiento <span class="tag">Admin</span></h4>
+      <p>Corrección de errores en registros ya guardados: precio incorrecto, vehículo equivocado, fecha o descripción. Accesible desde el listado de mantenimientos.</p>
+      <span class="url">/admin/mantenimiento/[id]/editar</span>
+    </div>
+    <div class="screen-card">
+      <h4>🔧 Mecánicos <span class="tag">Admin</span></h4>
+      <p>Lista de mecánicos registrados. El admin puede crear nuevas cuentas de mecánico directamente desde la plataforma con nombre, email y contraseña.</p>
+      <span class="url">/admin/mecanicos</span>
+    </div>
+    <div class="screen-card">
+      <h4>⚙️ Servicios y Precios <span class="tag">Admin</span></h4>
+      <p>CRUD completo de servicios: agregar, editar o desactivar servicios del catálogo. Cada servicio tiene precio mínimo, máximo y duración estimada.</p>
+      <span class="url">/admin/servicios</span>
+    </div>
+    <div class="screen-card">
+      <h4>📈 Reportes <span class="tag">Admin</span></h4>
+      <p>Comparativo mensual de citas e ingresos vs mes anterior. Top 5 servicios más solicitados con barra de progreso visual. Totales de clientes y vehículos.</p>
+      <span class="url">/admin/reportes</span>
+    </div>
+    <div class="screen-card">
+      <h4>✉️ Mensajes de Contacto <span class="tag">Admin</span></h4>
+      <p>Bandeja de entrada de mensajes del formulario público. Muestra nuevos mensajes con badge "Nuevo". Cada mensaje tiene botón de marcar como leído y acceso directo al WhatsApp del cliente.</p>
+      <span class="url">/admin/contacto</span>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">🔧</div>
+    <div><h2>Portal Mecánico</h2><p>Acceso exclusivo rol mecánico — citas asignadas</p></div>
+  </div>
+
+  <div class="screens-grid">
+    <div class="screen-card">
+      <h4>🏠 Dashboard Mecánico <span class="tag">Mecánico</span></h4>
+      <p>Vista rápida de citas asignadas del día. Acceso directo para registrar un nuevo trabajo. Indicador de citas en proceso y confirmadas pendientes.</p>
+      <span class="url">/mecanico/dashboard</span>
+    </div>
+    <div class="screen-card">
+      <h4>📋 Citas del Taller <span class="tag">Mecánico</span></h4>
+      <p>Solo ve las citas que le fueron asignadas, en estado confirmada o en proceso. Puede cambiar el estado a "En Proceso" o "Completada" y enviar notificación WhatsApp al cliente.</p>
+      <span class="url">/mecanico/citas</span>
+    </div>
+    <div class="screen-card">
+      <h4>📝 Registrar Trabajo <span class="tag">Mecánico</span></h4>
+      <p>Registra el mantenimiento realizado: descripción del trabajo, repuestos usados, costo total, próximo servicio recomendado. También puede registrar cambios de aceite.</p>
+      <span class="url">/mecanico/registrar</span>
+    </div>
+    <div class="screen-card">
+      <h4>📖 Mi Historial <span class="tag">Mecánico</span></h4>
+      <p>Todos los trabajos que el mecánico ha realizado históricamente, con fechas, vehículos atendidos y tipo de servicio.</p>
+      <span class="url">/mecanico/historial</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PÁGINA 5 — FUNCIONALIDADES DESTACADAS     -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand"><div class="dot"></div><span>DG Motors — Guía Demo</span></div>
+    <span class="page-num">Pág. 5 — Funcionalidades Destacadas</span>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">⭐</div>
+    <div><h2>Funcionalidades Clave</h2><p>Lo que hace diferente a esta plataforma</p></div>
+  </div>
+
+  <div class="screens-grid" style="grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+
+    <div class="screen-card" style="border-color:#fca5a5;">
+      <h4>🔴 Alertas de Aceite Vencido</h4>
+      <p>El dashboard del cliente muestra automáticamente una <strong>alerta roja</strong> cuando el aceite de algún vehículo está vencido, y <strong>alerta amarilla</strong> cuando vence en los próximos 30 días. Incluye qué vehículo es y el kilometraje límite.</p>
+      <p style="margin-top:6px;font-style:italic;color:#888;font-size:10px;">Demo: Roberto Chiriboga (Mustang) y Stephanie Alvarado (Escape) tienen alertas rojas activas.</p>
+    </div>
+
+    <div class="screen-card" style="border-color:#86efac;">
+      <h4>📱 WhatsApp por Estado de Cita</h4>
+      <p>Cada cambio de estado genera un mensaje de WhatsApp diferente y personalizado. El botón cambia de texto según el estado: <em>"Confirmar cita"</em>, <em>"Notificar inicio de trabajo"</em>, <em>"Notificar trabajo completo"</em>, <em>"Confirmar cancelación"</em>.</p>
+      <p style="margin-top:6px;font-style:italic;color:#888;font-size:10px;">Incluye nombre del cliente, vehículo, servicio, fecha y ubicación en Maps.</p>
+    </div>
+
+    <div class="screen-card" style="border-color:#bfdbfe;">
+      <h4>🔍 Búsqueda de Clientes</h4>
+      <p>El admin puede buscar clientes por <strong>nombre, apellido, cédula o teléfono</strong> en tiempo real. Ideal para el demo: buscar "Vargas" y encontrar a Juan Vargas instantáneamente con sus vehículos.</p>
+    </div>
+
+    <div class="screen-card" style="border-color:#d8b4fe;">
+      <h4>🚶 Registro Walk-In</h4>
+      <p>El admin puede registrar clientes que llegan al taller sin cuenta previa. Solo necesita cédula, nombre y teléfono. Opcionalmente puede registrar el vehículo en el mismo flujo.</p>
+      <span class="url">/admin/clientes/nuevo</span>
+    </div>
+
+    <div class="screen-card" style="border-color:#fed7aa;">
+      <h4>🔧 Asignación de Mecánico</h4>
+      <p>Cuando el admin confirma una cita, puede seleccionar qué mecánico la atenderá. El mecánico solo ve las citas que le fueron asignadas, manteniendo organizado el flujo del taller.</p>
+    </div>
+
+    <div class="screen-card" style="border-color:#a7f3d0;">
+      <h4>❌ Cancelación de Citas (Cliente)</h4>
+      <p>El cliente puede cancelar sus citas <strong>pendientes o confirmadas</strong> directamente desde su portal, sin necesitar llamar al taller. Las citas completadas o ya canceladas no muestran el botón.</p>
+    </div>
+
+    <div class="screen-card" style="border-color:#fca5a5;">
+      <h4>📬 Bandeja de Mensajes</h4>
+      <p>Todos los mensajes del formulario de contacto público llegan a una bandeja en el admin. Muestra badge "Nuevo" en los no leídos. El admin puede marcarlos como leídos y responder por WhatsApp o email directamente.</p>
+    </div>
+
+    <div class="screen-card" style="border-color:#bfdbfe;">
+      <h4>🌙 Dark Mode / Light Mode</h4>
+      <p>Disponible en todos los portales desde el menú lateral o la barra de navegación inferior en móvil. Persiste la preferencia del usuario entre sesiones.</p>
+    </div>
+
+    <div class="screen-card" style="border-color:#a7f3d0;">
+      <h4>📱 Diseño Mobile-First</h4>
+      <p>En móvil aparece una barra de navegación inferior con acceso a las secciones principales. Los sidebars se ocultan automáticamente en pantallas pequeñas.</p>
+    </div>
+
+    <div class="screen-card" style="border-color:#fed7aa;">
+      <h4>📅 Filtro de Fecha en Dashboard</h4>
+      <p>El admin puede navegar entre días para ver qué citas hubo en fechas específicas. Botones de día anterior/siguiente y campo de fecha directo. Botón "Hoy" para volver al día actual.</p>
+    </div>
+  </div>
+
+  <div class="info-box green">
+    <p>✅ <strong>Seguridad:</strong> La plataforma tiene políticas de seguridad a nivel de base de datos (Row Level Security). Un cliente nunca puede ver datos de otro cliente. Los mecánicos solo ven citas asignadas a ellos. Solo el admin tiene acceso total.</p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PÁGINA 6 — SCRIPT DEL DEMO               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand"><div class="dot"></div><span>DG Motors — Guía Demo</span></div>
+    <span class="page-num">Pág. 6 — Script de Demostración</span>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">🎬</div>
+    <div>
+      <h2>Guión de Demo — 10 minutos</h2>
+      <p>Flujo recomendado para mostrar la plataforma al cliente</p>
+    </div>
+  </div>
+
+  <ol class="flow-steps">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Sitio Público — Lo que ven los clientes sin cuenta</h4>
+        <p>Abrir <strong>la página principal</strong>. Mostrar el hero, los servicios y el mapa con las dos sucursales. Navegar a <em>/servicios</em> para mostrar el catálogo con precios. Ir a <em>/contacto</em> y enviar un mensaje de prueba.</p>
+        <span class="step-login">Sin login — abrir en modo claro y oscuro para mostrar ambos temas</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Portal Cliente — Experiencia del dueño del vehículo</h4>
+        <p>Iniciar sesión con <strong>roberto.chiriboga@gmail.com</strong>. Mostrar el <strong>dashboard con alerta roja</strong> del Mustang (aceite vencido hace 2 meses). Ver sus 2 vehículos, el historial de mantenimiento del F-250 y sus citas.</p>
+        <span class="step-login">Login: rchiriboga@gmail.com / Demo1234!</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Cliente agenda una cita nueva</h4>
+        <p>Desde el portal de Roberto, ir a <em>Mis Citas → Nueva Cita</em>. Seleccionar el Mustang, elegir el servicio de diagnóstico, sucursal Quito, fecha de mañana. Enviar. La cita queda en estado <strong>"Pendiente"</strong>.</p>
+        <span class="step-login">Esto crea una cita real que el admin verá al instante</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Panel Admin — Gestión completa</h4>
+        <p>Cambiar a <strong>admin1@dgmotors.com</strong>. Ir a <em>Dashboard</em> — ver las citas del día. Ir a <em>Citas → "Por confirmar"</em> — la cita de Roberto aparece aquí. Confirmarla, asignar al mecánico Carlos Aguirre. Mostrar el botón de WhatsApp que se genera automáticamente.</p>
+        <span class="step-login">Login: admin1@dgmotors.com / Demo1234!</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Admin busca un cliente</h4>
+        <p>Ir a <em>Clientes</em>. En el buscador escribir "Vargas". Aparece Juan Vargas con sus 2 vehículos (Ford F-150 y Explorer). Hacer clic en el cliente para ver su perfil completo, vehículos, historial de citas y mantenimientos.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h4>Admin revisa mensajes de contacto</h4>
+        <p>Ir a <em>Contacto</em> en el sidebar. Mostrar los 3 mensajes sin leer (en rojo). Uno de ellos es de una empresa con flota de 4 camionetas buscando convenio corporativo — un lead valioso. Marcar como leído.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <h4>Portal Mecánico — Vista del trabajador</h4>
+        <p>Cambiar a <strong>carlos@dgmotors.com</strong>. Ver el dashboard con las citas asignadas. La cita del Mustang de Roberto ya aparece confirmada. Abrirla, cambiar estado a <strong>"En proceso"</strong>. Enviar WhatsApp al cliente avisando que su vehículo está siendo atendido.</p>
+        <span class="step-login">Login: carlos@dgmotors.com / Demo1234!</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">8</div>
+      <div class="step-content">
+        <h4>Admin registra el mantenimiento</h4>
+        <p>Volver al admin. Ir a <em>Mantenimiento → Registrar</em>. Buscar el Mustang de Roberto, registrar el diagnóstico con costo y observaciones. El cliente podrá ver esto inmediatamente en su portal.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">9</div>
+      <div class="step-content">
+        <h4>Reportes e ingresos</h4>
+        <p>Mostrar la página de <em>Reportes</em>: ingresos del mes comparado con el anterior, top 5 servicios más solicitados con barras visuales, totales de clientes y vehículos.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">10</div>
+      <div class="step-content">
+        <h4>Cierre — El cliente ve todo lo que hizo el taller</h4>
+        <p>Volver al portal de Roberto. El historial de mantenimiento ya muestra el diagnóstico registrado por el admin. El dashboard no tiene más alerta del Mustang (si se registró el aceite). <strong>El ciclo completo está cerrado.</strong></p>
+      </div>
+    </li>
+  </ol>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PÁGINA 7 — MÓDULOS ERP                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand"><div class="dot"></div><span>DG Motors — Guía Demo</span></div>
+    <span class="page-num">Pág. 7 — Módulos ERP</span>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">🏭</div>
+    <div>
+      <h2>Sistema ERP Integrado</h2>
+      <p>Reemplaza GETSOFT con control total y personalización 100% propia</p>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;">
+
+    <div style="background:#fff7ed;border:1px solid #fed7aa;border-top:3px solid #f97316;border-radius:8px;padding:12px;">
+      <div style="font-size:11px;font-weight:700;color:#9a3412;margin-bottom:6px;">📋 Órdenes de Trabajo</div>
+      <ul style="font-size:10px;color:#666;line-height:1.8;padding-left:14px;">
+        <li>Flujo: recepción → diagnóstico → ejecución → entrega</li>
+        <li>Checklist de daños al recibir (JSONB)</li>
+        <li>Fotos de entrada y salida</li>
+        <li>Líneas: mano de obra + repuestos + servicios</li>
+        <li>Email automático al cliente al cambiar estado</li>
+        <li>PDF de presupuesto / orden imprimible</li>
+      </ul>
+    </div>
+
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-top:3px solid #16a34a;border-radius:8px;padding:12px;">
+      <div style="font-size:11px;font-weight:700;color:#14532d;margin-bottom:6px;">📦 Inventario</div>
+      <ul style="font-size:10px;color:#666;line-height:1.8;padding-left:14px;">
+        <li>Productos con stock mínimo y alerta de bajo inventario</li>
+        <li>Movimientos: entrada, salida, ajuste, devolución</li>
+        <li>Stock disminuye automáticamente al usar en OT</li>
+        <li>Compras a proveedores con ingreso automático</li>
+        <li>Dashboard: alertas de stock bajo en tiempo real</li>
+      </ul>
+    </div>
+
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-top:3px solid #3b82f6;border-radius:8px;padding:12px;">
+      <div style="font-size:11px;font-weight:700;color:#1e40af;margin-bottom:6px;">🧾 Facturación</div>
+      <ul style="font-size:10px;color:#666;line-height:1.8;padding-left:14px;">
+        <li>Factura desde OT o manual</li>
+        <li>IVA 15% configurable, descuentos por línea</li>
+        <li>Numeración SRI: 001-001-000000001</li>
+        <li>PDF de factura imprimible</li>
+        <li>Historial de pagos parciales por factura</li>
+        <li>Portal cliente: cliente ve sus facturas</li>
+      </ul>
+    </div>
+
+    <div style="background:#fdf4ff;border:1px solid #e9d5ff;border-top:3px solid #a855f7;border-radius:8px;padding:12px;">
+      <div style="font-size:11px;font-weight:700;color:#581c87;margin-bottom:6px;">💰 Caja</div>
+      <ul style="font-size:10px;color:#666;line-height:1.8;padding-left:14px;">
+        <li>Abrir caja con fondo inicial</li>
+        <li>Cobros: efectivo, tarjeta, transferencia, cheque</li>
+        <li>Cierre con cuadre automático por método de pago</li>
+        <li>Historial de movimientos por sesión</li>
+        <li>Diferencia detectada al cerrar (sobrante / faltante)</li>
+      </ul>
+    </div>
+
+    <div style="background:#fff1f2;border:1px solid #fecdd3;border-top:3px solid #e11d48;border-radius:8px;padding:12px;">
+      <div style="font-size:11px;font-weight:700;color:#881337;margin-bottom:6px;">🚚 Compras y Proveedores</div>
+      <ul style="font-size:10px;color:#666;line-height:1.8;padding-left:14px;">
+        <li>Directorio de proveedores con contacto y RUC</li>
+        <li>Orden de compra con líneas de productos</li>
+        <li>Recepción de mercadería actualiza stock automáticamente</li>
+        <li>Estado: borrador → enviada → recibida → pagada</li>
+      </ul>
+    </div>
+
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-top:3px solid #0284c7;border-radius:8px;padding:12px;">
+      <div style="font-size:11px;font-weight:700;color:#0c4a6e;margin-bottom:6px;">🔍 Integración ANT Ecuador</div>
+      <ul style="font-size:10px;color:#666;line-height:1.8;padding-left:14px;">
+        <li>Ingresar placa → botón "Consultar ANT"</li>
+        <li>Auto-completa: marca, modelo, año, color, propietario</li>
+        <li>Cache 30 días para no repetir consultas</li>
+        <li>Disponible tanto en admin como en portal cliente</li>
+        <li><strong>Feature estrella del demo</strong></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="info-box green">
+    <p>✅ <strong>Flujo completo integrado:</strong> Consultar placa ANT → Recibir vehículo con checklist fotográfico → OT con servicios y repuestos → Stock se descuenta automáticamente → Factura con IVA SRI → Cobro en caja → Cliente recibe email y puede ver su historial en el portal.</p>
+  </div>
+
+  <div class="section-header" style="margin-top:14px;">
+    <div class="icon">👥</div>
+    <div><h2>Roles del Sistema ERP</h2><p>Cada empleado tiene acceso exactamente a lo que necesita</p></div>
+  </div>
+
+  <table class="db-table">
+    <thead>
+      <tr>
+        <th>Rol</th>
+        <th>Acceso principal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>admin</strong></td>
+        <td>Acceso total al sistema — superusuario</td>
+      </tr>
+      <tr>
+        <td><strong>gerente</strong></td>
+        <td>Dashboards, reportes, visión global — solo lectura en módulos operativos</td>
+      </tr>
+      <tr>
+        <td><strong>facturadora</strong></td>
+        <td>Ventas, facturas, cobros, caja, notas de crédito/débito</td>
+      </tr>
+      <tr>
+        <td><strong>asesor_servicios</strong></td>
+        <td>OTs, citas, vehículos, clientes, checklist de recepción</td>
+      </tr>
+      <tr>
+        <td><strong>asesor_repuestos</strong></td>
+        <td>Inventario, compras, proveedores, solicitudes de repuestos</td>
+      </tr>
+      <tr>
+        <td><strong>bodeguero</strong></td>
+        <td>Inventario: entradas, salidas, ajustes y transferencias entre bodegas</td>
+      </tr>
+      <tr>
+        <td><strong>contador</strong></td>
+        <td>Contabilidad completa, asientos, períodos, activos fijos, bancos</td>
+      </tr>
+      <tr>
+        <td><strong>mecanico</strong></td>
+        <td>Portal móvil: fotos de daños, checklist, cambiar estado de OT asignada</td>
+      </tr>
+      <tr>
+        <td><strong>cliente</strong></td>
+        <td>Portal cliente: sus vehículos, citas, facturas e historial de mantenimiento</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PÁGINA 8 — SCRIPT ERP DEMO               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand"><div class="dot"></div><span>DG Motors — Guía Demo</span></div>
+    <span class="page-num">Pág. 8 — Script Demo ERP (Flujo Completo)</span>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">🎬</div>
+    <div>
+      <h2>Guión Demo ERP — 15 minutos</h2>
+      <p>Flujo completo desde la recepción del vehículo hasta el cobro</p>
+    </div>
+  </div>
+
+  <ol class="flow-steps">
+    <li>
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Consulta ANT — El vehículo llega sin datos</h4>
+        <p>Ir a <em>Clientes → Nuevo Cliente Walk-In</em>. Llenar nombre y cédula del cliente. En Paso 2 (Vehículo), escribir la placa <strong>ABC-1234</strong> y hacer clic en <strong>"Consultar ANT"</strong>. En 2-3 segundos los campos marca, modelo, año y color se llenan automáticamente desde la base de datos de la ANT. El recepcionista solo confirma y guarda.</p>
+        <span class="step-login">Login: admin1@dgmotors.com / Demo1234! — ir a /admin/clientes/nuevo</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Crear Orden de Trabajo con Checklist</h4>
+        <p>Ir a <em>Órdenes de Trabajo → Nueva OT</em>. Seleccionar el cliente y vehículo recién creado. Agregar descripción del problema. Guardar la OT. Dentro de la OT, ir a la pestaña <strong>"Recepción"</strong> — mostrar el checklist de 22 ítems (documentos, carrocería, niveles). Marcar algunos en verde (OK) y uno en rojo (Daño). Ir a pestaña <strong>"Fotos"</strong> y simular subida de fotos de daños.</p>
+        <span class="step-login">Ir a /admin/ordenes/nueva</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Agregar Servicios y Repuestos a la OT</h4>
+        <p>Dentro de la OT, ir a la pestaña <strong>"Líneas"</strong>. Agregar: (a) mano de obra — Diagnóstico computarizado $45, (b) repuesto — Filtro de aceite $18.50. Observar cómo el subtotal y el IVA 15% se calculan en tiempo real. Cambiar el estado de la OT a <strong>"En proceso"</strong>.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Email automático al cliente</h4>
+        <p>Al cambiar el estado de la OT, el sistema envía automáticamente un email al cliente con el nuevo estado y un resumen del trabajo. Mostrar la plantilla del email (si está configurado con Resend). <strong>El cliente no necesita llamar para saber el estado de su vehículo.</strong></p>
+        <span class="step-login">Requiere RESEND_API_KEY en .env.local para emails reales</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Stock se descuenta automáticamente</h4>
+        <p>Ir a <em>Inventario</em>. Mostrar que el filtro de aceite (si estaba en inventario) disminuyó su stock al ser usado en la OT. Si hay alertas de stock bajo mínimo, aparecen en el dashboard con indicador rojo.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <h4>Generar Factura desde OT</h4>
+        <p>Desde la OT, hacer clic en <strong>"Crear Factura"</strong> (o ir a <em>Facturación → Nueva Factura</em> y seleccionar la OT). La factura se crea con todas las líneas prellenadas, IVA 15%, numeración SRI <strong>001-001-000000001</strong>. Hacer clic en el ícono PDF para generar el documento imprimible.</p>
+        <span class="step-login">Ir a /admin/facturacion/nueva</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <h4>Cobrar y Cerrar Caja</h4>
+        <p>Ir a <em>Caja</em>. Si la caja no está abierta, abrirla con fondo inicial de $50. Registrar el cobro de la factura: $73.75 en efectivo. La caja registra el movimiento. Al final del día, hacer clic en <strong>"Cerrar Caja"</strong> — el sistema muestra el cuadre: fondo + cobros = total esperado vs. efectivo físico.</p>
+        <span class="step-login">Ir a /admin/caja</span>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">8</div>
+      <div class="step-content">
+        <h4>PDF de Orden de Trabajo</h4>
+        <p>Volver a la OT. Hacer clic en el botón <strong>"Descargar OT"</strong> (ícono PDF en la parte superior derecha). El PDF incluye: datos del cliente y vehículo, descripción, diagnóstico, tabla de servicios y repuestos con totales, checklist de recepción marcado, y línea de firma del cliente.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">9</div>
+      <div class="step-content">
+        <h4>Dashboard con métricas reales</h4>
+        <p>Ir a <em>Dashboard</em>. Mostrar: OTs de hoy, caja del día (abierta/cerrada con monto), alertas de stock bajo mínimo, gráfica de ingresos de los últimos 6 meses, top mecánicos del mes. Todo se actualiza en tiempo real con los datos que acabamos de ingresar.</p>
+      </div>
+    </li>
+    <li>
+      <div class="step-num">10</div>
+      <div class="step-content">
+        <h4>Portal Cliente — El cliente ve todo</h4>
+        <p>Cambiar a <strong>rchiriboga@gmail.com</strong>. El cliente ve en <em>Mis Facturas</em> la factura recién generada con botón de descarga PDF. En <em>Mantenimiento</em> aparece el registro del trabajo. El ciclo completo está cerrado: <strong>placa ANT → OT → checklist → factura → caja → cliente notificado</strong>.</p>
+        <span class="step-login">Login: rchiriboga@gmail.com / Demo1234!</span>
+      </div>
+    </li>
+  </ol>
+
+  <div class="info-box blue">
+    <p>💡 <strong>Fases futuras ya planificadas:</strong> Contabilidad con plan de cuentas y asientos automáticos · Activos fijos con depreciación · Facturación electrónica SRI (XML firmado) · 8 dashboards gerenciales · Transferencias de inventario entre bodegas · App móvil PWA para mecánicos · Multi-taller SaaS para los 400+ talleres en su red.</p>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PÁGINA 9 — TÉCNICO Y BASE DE DATOS        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-header">
+    <div class="brand"><div class="dot"></div><span>DG Motors — Guía Demo</span></div>
+    <span class="page-num">Pág. 9 — Stack Técnico y Base de Datos</span>
+  </div>
+
+  <div class="section-header">
+    <div class="icon">⚙️</div>
+    <div><h2>Stack Tecnológico</h2><p>Tecnologías utilizadas en el desarrollo</p></div>
+  </div>
+
+  <div class="tech-grid">
+    <div class="tech-item">
+      <span class="tech-icon">▲</span>
+      <div><span class="tech-name">Next.js 16</span><span class="tech-desc">Framework principal con App Router</span></div>
+    </div>
+    <div class="tech-item">
+      <span class="tech-icon">📘</span>
+      <div><span class="tech-name">TypeScript</span><span class="tech-desc">Tipado estricto en todo el proyecto</span></div>
+    </div>
+    <div class="tech-item">
+      <span class="tech-icon">🎨</span>
+      <div><span class="tech-name">Tailwind CSS</span><span class="tech-desc">Estilos utilitarios responsive</span></div>
+    </div>
+    <div class="tech-item">
+      <span class="tech-icon">🗄️</span>
+      <div><span class="tech-name">Supabase</span><span class="tech-desc">Base de datos PostgreSQL + Auth</span></div>
+    </div>
+    <div class="tech-item">
+      <span class="tech-icon">🔐</span>
+      <div><span class="tech-name">Supabase Auth</span><span class="tech-desc">Login, registro y sesiones</span></div>
+    </div>
+    <div class="tech-item">
+      <span class="tech-icon">🧩</span>
+      <div><span class="tech-name">shadcn/ui</span><span class="tech-desc">Componentes de interfaz reutilizables</span></div>
+    </div>
+    <div class="tech-item">
+      <span class="tech-icon">✅</span>
+      <div><span class="tech-name">Zod</span><span class="tech-desc">Validación de formularios</span></div>
+    </div>
+    <div class="tech-item">
+      <span class="tech-icon">🌙</span>
+      <div><span class="tech-name">next-themes</span><span class="tech-desc">Modo oscuro / claro</span></div>
+    </div>
+    <div class="tech-item">
+      <span class="tech-icon">🚀</span>
+      <div><span class="tech-name">Vercel</span><span class="tech-desc">Deploy y hosting en producción</span></div>
+    </div>
+  </div>
+
+  <div class="section-header" style="margin-top:18px;">
+    <div class="icon">🗄️</div>
+    <div><h2>Tablas de la Base de Datos</h2><p>PostgreSQL gestionado por Supabase con Row Level Security</p></div>
+  </div>
+
+  <table class="db-table">
+    <thead>
+      <tr>
+        <th>Tabla</th>
+        <th>Descripción</th>
+        <th>Campos principales</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>perfiles</strong></td>
+        <td>Datos de todos los usuarios (admin, mecánico, cliente)</td>
+        <td>nombre, apellido, cédula, teléfono, rol</td>
+      </tr>
+      <tr>
+        <td><strong>vehiculos</strong></td>
+        <td>Vehículos registrados por los clientes</td>
+        <td>placa, marca, modelo, año, kilometraje, combustible</td>
+      </tr>
+      <tr>
+        <td><strong>citas</strong></td>
+        <td>Citas agendadas con su estado y mecánico asignado</td>
+        <td>estado, sucursal, fecha_hora, tecnico_id, notas</td>
+      </tr>
+      <tr>
+        <td><strong>mantenimientos</strong></td>
+        <td>Registros de trabajos realizados en el taller</td>
+        <td>tipo, descripción, costo, repuestos (JSON), próximo servicio</td>
+      </tr>
+      <tr>
+        <td><strong>cambios_aceite</strong></td>
+        <td>Historial específico de cambios de aceite</td>
+        <td>marca, viscosidad, litros, próxima fecha y km</td>
+      </tr>
+      <tr>
+        <td><strong>servicios</strong></td>
+        <td>Catálogo de servicios del taller con precios</td>
+        <td>nombre, precio mínimo, precio máximo, duración</td>
+      </tr>
+      <tr>
+        <td><strong>contactos</strong></td>
+        <td>Mensajes del formulario de contacto público</td>
+        <td>nombre, email, teléfono, mensaje, leído</td>
+      </tr>
+      <tr>
+        <td><strong>productos</strong></td>
+        <td>Catálogo de productos disponibles en el taller</td>
+        <td>nombre, categoría, precio referencial, imagen</td>
+      </tr>
+      <tr>
+        <td><strong>horarios</strong></td>
+        <td>Horarios de atención por sucursal y día de la semana</td>
+        <td>sucursal, día, hora_inicio, hora_fin</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box orange">
+    <p>🔒 <strong>Seguridad (RLS):</strong> Cada tabla tiene políticas que restringen el acceso. Un cliente solo ve sus propios datos. Un mecánico solo ve vehículos y citas de su área. El admin tiene acceso total. Esto se verifica en la base de datos, no solo en la interfaz.</p>
+  </div>
+
+  <div style="margin-top:20px;padding-top:16px;border-top:2px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <p style="font-size:11px;font-weight:700;color:#1a1a1f;">DG Motors — Taller Automotriz</p>
+      <p style="font-size:10px;color:#999;">Especialistas en Ford y vehículos americanos · Quito y Guayaquil</p>
+    </div>
+    <div style="text-align:right;">
+      <p style="font-size:10px;color:#999;">Plataforma web desarrollada con Next.js 16 + Supabase</p>
+      <p style="font-size:10px;color:#ccc;">Demo v1.0 · 2024</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

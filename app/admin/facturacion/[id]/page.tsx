@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, AlertCircle, CreditCard } from "lucide-react";
+import { ArrowLeft, CheckCircle2, AlertCircle, CreditCard, Download } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -104,16 +104,24 @@ export default function FacturaDetallePage() {
             </p>
           </div>
         </div>
-        {factura.estado !== "pagada" && factura.estado !== "anulada" && (
-          <Button
-            size="sm"
-            className="gap-2"
-            onClick={() => setMostrarPago(!mostrarPago)}
-          >
-            <CreditCard className="w-4 h-4" />
-            Registrar cobro
-          </Button>
-        )}
+        <div className="flex items-center gap-2">
+          <a href={`/api/pdf/factura/${id}`} target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" size="sm" className="gap-2">
+              <Download className="w-4 h-4" />
+              PDF
+            </Button>
+          </a>
+          {factura.estado !== "pagada" && factura.estado !== "anulada" && (
+            <Button
+              size="sm"
+              className="gap-2"
+              onClick={() => setMostrarPago(!mostrarPago)}
+            >
+              <CreditCard className="w-4 h-4" />
+              Registrar cobro
+            </Button>
+          )}
+        </div>
       </div>
 
       {msg && (

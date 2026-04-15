@@ -2,6 +2,9 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { Resend } from "resend";
+import { createElement } from "react";
+import { OTStatusEmail } from "@/lib/emails/otStatusEmail";
 
 async function checkAdmin() {
   const supabase = await createClient();
@@ -85,7 +88,11 @@ export async function actualizarEstadoOT(
 
     const { data: ot } = await supabase
       .from("ordenes_trabajo")
-      .select("estado")
+      .select(`
+        estado, numero, cliente_email,
+        perfiles!ordenes_trabajo_cliente_id_fkey(nombre, apellido, id),
+        vehiculos(marca, modelo, placa)
+      `)
       .eq("id", otId)
       .single();
 
@@ -104,7 +111,148 @@ export async function actualizarEstadoOT(
       nota: nota || null,
     });
 
+    // Enviar email de notificación si hay API key configurada
+    if (process.env.RESEND_API_KEY && ot) {
+      const perfil = ot.perfiles as any;
+      const vehiculo = ot.vehiculos as any;
+
+      // Obtener email del perfil si no está en la OT
+      let emailDestino = ot.cliente_email;
+      if (!emailDestino && perfil?.id) {
+        const { data: authUser } = await supabase.auth.admin.getUserById(perfil.id);
+        emailDestino = authUser?.user?.email || null;
+      }
+
+      if (emailDestino) {
+        try {
+          const resend = new Resend(process.env.RESEND_API_KEY);
+          const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+          await resend.emails.send({
+            from: "DG Motors <notificaciones@dgmotors.com.ec>",
+            to: emailDestino,
+            subject: `OT-${String(ot.numero).padStart(4, "0")} — ${estadoNuevo === "completado" ? "Tu vehículo está listo 🎉" : "Actualización de tu orden de trabajo"}`,
+            react: createElement(OTStatusEmail, {
+              clienteNombre: `${perfil?.nombre || ""} ${perfil?.apellido || ""}`.trim(),
+              otNumero: String(ot.numero).padStart(4, "0"),
+              estadoNuevo,
+              vehiculo: `${vehiculo?.marca || ""} ${vehiculo?.modelo || ""} — ${vehiculo?.placa || ""}`.trim(),
+              nota,
+              linkOT: `${appUrl}/cliente/dashboard`,
+            }),
+          });
+        } catch {
+          // Email falla silenciosamente — no bloquea la operación
+        }
+      }
+    }
+
     return { success: "Estado actualizado." };
+  } catch (e: any) {
+    return { error: e.message };
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CHECKLIST DE RECEPCIÓN
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function guardarChecklistOT(
+  otId: string,
+  checklist: Record<string, any>
+): Promise<ErpState> {
+  try {
+    const { supabase } = await checkAdmin();
+    const { error } = await supabase
+      .from("ordenes_trabajo")
+      .update({ checklist_entrada: checklist })
+      .eq("id", otId);
+    if (error) return { error: "Error al guardar checklist." };
+    return { success: "Checklist guardado." };
+  } catch (e: any) {
+    return { error: e.message };
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FOTOS DE OT (Supabase Storage)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function subirFotoOT(
+  formData: FormData
+): Promise<ErpState & { url?: string }> {
+  try {
+    const { supabase } = await checkAdmin();
+
+    const file = formData.get("file") as File;
+    const otId = formData.get("ot_id") as string;
+    const tipo = formData.get("tipo") as "entrada" | "salida";
+
+    if (!file || !otId) return { error: "Archivo y OT son requeridos." };
+    if (file.size > 5 * 1024 * 1024) return { error: "Máximo 5 MB por foto." };
+
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `ot/${otId}/${tipo}/${Date.now()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("ot-fotos")
+      .upload(path, file, { cacheControl: "3600", upsert: false });
+
+    if (uploadError) return { error: "Error al subir foto: " + uploadError.message };
+
+    const { data: urlData } = supabase.storage.from("ot-fotos").getPublicUrl(path);
+    const url = urlData.publicUrl;
+
+    // Actualizar array en la OT
+    const campo = tipo === "entrada" ? "fotos_entrada" : "fotos_salida";
+    const { data: ot } = await supabase
+      .from("ordenes_trabajo")
+      .select(campo)
+      .eq("id", otId)
+      .single();
+
+    const fotosActuales: string[] = (ot as any)?.[campo] || [];
+    await supabase
+      .from("ordenes_trabajo")
+      .update({ [campo]: [...fotosActuales, url] })
+      .eq("id", otId);
+
+    return { success: "Foto subida.", url };
+  } catch (e: any) {
+    return { error: e.message };
+  }
+}
+
+export async function eliminarFotoOT(
+  otId: string,
+  tipo: "entrada" | "salida",
+  url: string
+): Promise<ErpState> {
+  try {
+    const { supabase } = await checkAdmin();
+
+    // Extraer path del storage desde la URL pública
+    const urlObj = new URL(url);
+    const path = urlObj.pathname.split("/storage/v1/object/public/ot-fotos/")[1];
+
+    if (path) {
+      await supabase.storage.from("ot-fotos").remove([path]);
+    }
+
+    // Actualizar array en la OT
+    const campo = tipo === "entrada" ? "fotos_entrada" : "fotos_salida";
+    const { data: ot } = await supabase
+      .from("ordenes_trabajo")
+      .select(campo)
+      .eq("id", otId)
+      .single();
+
+    const fotosActuales: string[] = (ot as any)?.[campo] || [];
+    await supabase
+      .from("ordenes_trabajo")
+      .update({ [campo]: fotosActuales.filter((f) => f !== url) })
+      .eq("id", otId);
+
+    return { success: "Foto eliminada." };
   } catch (e: any) {
     return { error: e.message };
   }

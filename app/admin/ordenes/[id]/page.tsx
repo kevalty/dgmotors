@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   ArrowLeft, Plus, Trash2, CheckCircle2, Clock, AlertCircle,
-  Wrench, User, Car, FileText, History, ChevronDown,
+  Wrench, User, Car, FileText, History, ChevronDown, Download, Camera, ClipboardCheck,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +31,8 @@ import {
 import {
   actualizarEstadoOT, agregarLineaOT, eliminarLineaOT, actualizarDiagnosticoOT,
 } from "@/lib/actions/erp";
+import { ChecklistRecepcion } from "@/components/admin/ChecklistRecepcion";
+import { FotosOT } from "@/components/admin/FotosOT";
 
 const ESTADOS_TRANSICION: Record<string, string[]> = {
   presupuesto: ["aprobado", "cancelado"],
@@ -169,6 +171,13 @@ export default function OrdenDetallePageClient() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Botón PDF presupuesto/OT */}
+          <a href={`/api/pdf/ot/${otId}`} target="_blank" rel="noopener noreferrer">
+            <Button variant="outline" size="sm" className="gap-2">
+              <Download className="w-4 h-4" />
+              PDF
+            </Button>
+          </a>
           {ot.estado === "completado" && (
             <Link href={`/admin/facturacion/nueva?ot=${otId}`}>
               <Button variant="outline" size="sm" className="gap-2">
@@ -250,9 +259,17 @@ export default function OrdenDetallePageClient() {
       </div>
 
       <Tabs defaultValue="servicios">
-        <TabsList className="mb-6">
+        <TabsList className="mb-6 flex-wrap h-auto gap-1">
           <TabsTrigger value="servicios">Servicios y Repuestos</TabsTrigger>
           <TabsTrigger value="diagnostico">Diagnóstico</TabsTrigger>
+          <TabsTrigger value="recepcion" className="gap-1.5">
+            <ClipboardCheck className="w-3.5 h-3.5" />
+            Recepción
+          </TabsTrigger>
+          <TabsTrigger value="fotos" className="gap-1.5">
+            <Camera className="w-3.5 h-3.5" />
+            Fotos
+          </TabsTrigger>
           <TabsTrigger value="historial">Historial</TabsTrigger>
         </TabsList>
 
@@ -444,6 +461,33 @@ export default function OrdenDetallePageClient() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* TAB: Checklist de recepción */}
+        <TabsContent value="recepcion">
+          <ChecklistRecepcion
+            otId={otId}
+            initial={ot.checklist_entrada || {}}
+            readonly={["entregado", "cancelado"].includes(ot.estado)}
+          />
+        </TabsContent>
+
+        {/* TAB: Fotos */}
+        <TabsContent value="fotos">
+          <div className="space-y-4">
+            <FotosOT
+              otId={otId}
+              tipo="entrada"
+              fotosIniciales={ot.fotos_entrada || []}
+              readonly={false}
+            />
+            <FotosOT
+              otId={otId}
+              tipo="salida"
+              fotosIniciales={ot.fotos_salida || []}
+              readonly={false}
+            />
+          </div>
         </TabsContent>
 
         {/* TAB: Historial */}

@@ -1,9 +1,8 @@
 "use client";
 
-import type { Metadata } from "next";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Loader2, AlertCircle } from "lucide-react";
+import { ArrowLeft, Loader2, AlertCircle, Search, Sparkles } from "lucide-react";
 import { crearVehiculo } from "@/lib/actions/vehiculos";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +21,50 @@ const initialState = {};
 
 export default function NuevoVehiculoPage() {
   const [state, formAction, isPending] = useActionState(crearVehiculo, initialState);
+
+  // ANT lookup state
+  const [antLoading, setAntLoading] = useState(false);
+  const [antError,   setAntError]   = useState("");
+  const [antOk,      setAntOk]      = useState(false);
+
+  // Controlled fields for ANT pre-fill
+  const [placa,  setPlaca]  = useState("");
+  const [marca,  setMarca]  = useState("");
+  const [modelo, setModelo] = useState("");
+  const [anio,   setAnio]   = useState("");
+  const [color,  setColor]  = useState("");
+  const [tipo,   setTipo]   = useState("");
+
+  const handleConsultarANT = async () => {
+    if (!placa || placa.trim().length < 3) {
+      setAntError("Ingresa una placa válida primero");
+      return;
+    }
+    setAntLoading(true);
+    setAntError("");
+    setAntOk(false);
+
+    try {
+      const res  = await fetch(`/api/ant/placa?placa=${encodeURIComponent(placa.trim())}`);
+      const json = await res.json();
+
+      if (!res.ok || !json.datos) {
+        setAntError(json.error || "No se encontraron datos para esta placa");
+      } else {
+        const d = json.datos;
+        setMarca(d.marca  || "");
+        setModelo(d.modelo || "");
+        setAnio(d.anio ? String(d.anio) : "");
+        setColor(d.color  || "");
+        if (d.tipo) setTipo(d.tipo);
+        setAntOk(true);
+      }
+    } catch {
+      setAntError("Error de conexión al consultar ANT");
+    } finally {
+      setAntLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -54,19 +97,64 @@ export default function NuevoVehiculoPage() {
               </div>
             )}
 
+            {/* Placa + ANT button */}
             <div className="space-y-1.5">
               <Label htmlFor="placa">Placa *</Label>
-              <Input id="placa" name="placa" placeholder="ABC-1234" required className="uppercase" />
+              <div className="flex gap-2">
+                <Input
+                  id="placa"
+                  name="placa"
+                  placeholder="ABC-1234"
+                  required
+                  className="uppercase flex-1"
+                  value={placa}
+                  onChange={(e) => {
+                    setPlaca(e.target.value.toUpperCase());
+                    setAntOk(false);
+                    setAntError("");
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleConsultarANT}
+                  disabled={antLoading || !placa}
+                  className="shrink-0 gap-1.5"
+                >
+                  {antLoading
+                    ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />Consultando...</>
+                    : <><Search className="w-3.5 h-3.5" />Consultar ANT</>
+                  }
+                </Button>
+              </div>
+              {antOk && (
+                <p className="flex items-center gap-1.5 text-xs text-green-600 mt-1">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Datos completados desde la ANT — verifica y guarda
+                </p>
+              )}
+              {antError && (
+                <p className="flex items-center gap-1.5 text-xs text-destructive mt-1">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  {antError}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="marca">Marca *</Label>
-                <Input id="marca" name="marca" placeholder="Ford" required />
+                <Input
+                  id="marca" name="marca" placeholder="Ford" required
+                  value={marca} onChange={(e) => setMarca(e.target.value)}
+                />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="modelo">Modelo *</Label>
-                <Input id="modelo" name="modelo" placeholder="F-150" required />
+                <Input
+                  id="modelo" name="modelo" placeholder="F-150" required
+                  value={modelo} onChange={(e) => setModelo(e.target.value)}
+                />
               </div>
             </div>
 
@@ -74,25 +162,25 @@ export default function NuevoVehiculoPage() {
               <div className="space-y-1.5">
                 <Label htmlFor="anio">Año *</Label>
                 <Input
-                  id="anio"
-                  name="anio"
-                  type="number"
-                  placeholder="2020"
-                  min="1980"
-                  max={new Date().getFullYear() + 1}
-                  required
+                  id="anio" name="anio" type="number"
+                  placeholder="2020" min="1980"
+                  max={new Date().getFullYear() + 1} required
+                  value={anio} onChange={(e) => setAnio(e.target.value)}
                 />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="color">Color</Label>
-                <Input id="color" name="color" placeholder="Blanco" />
+                <Input
+                  id="color" name="color" placeholder="Blanco"
+                  value={color} onChange={(e) => setColor(e.target.value)}
+                />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="tipo">Tipo</Label>
-                <Select name="tipo">
+                <Select name="tipo" value={tipo} onValueChange={setTipo}>
                   <SelectTrigger id="tipo">
                     <SelectValue placeholder="Seleccionar" />
                   </SelectTrigger>
