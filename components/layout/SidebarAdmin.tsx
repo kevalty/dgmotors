@@ -23,6 +23,10 @@ import {
   Wallet,
   Truck,
   ShoppingCart,
+  BookOpen,
+  ListTree,
+  AlignLeft,
+  CalendarRange,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/actions/auth";
@@ -51,6 +55,14 @@ const navGroups = [
       { href: "/admin/caja", icon: Wallet, label: "Caja" },
       { href: "/admin/proveedores", icon: Truck, label: "Proveedores" },
       { href: "/admin/compras", icon: ShoppingCart, label: "Compras" },
+    ],
+  },
+  {
+    label: "Contabilidad",
+    items: [
+      { href: "/admin/contabilidad/plan-cuentas", icon: ListTree,     label: "Plan de Cuentas" },
+      { href: "/admin/contabilidad/asientos",     icon: AlignLeft,    label: "Asientos" },
+      { href: "/admin/contabilidad/periodos",     icon: CalendarRange, label: "Períodos" },
     ],
   },
   {

@@ -12,9 +12,9 @@ export interface DatosVehiculoANT {
 }
 
 /**
- * Consulta datos de un vehículo por placa (Ecuador).
- * Primero revisa la tabla ant_cache — si existe y no expiró, devuelve cache.
- * Si no, llama a la API externa, guarda en cache y devuelve los datos.
+ * Consulta datos de un vehículo por placa (Ecuador — placaapi.ec).
+ * Primero revisa ant_cache; si existe y no expiró, devuelve el cache.
+ * Si no, llama a la API externa, guarda en cache y retorna los datos.
  */
 export async function consultarPlacaANT(placa: string): Promise<DatosVehiculoANT | null> {
   const placaNorm = placa.toUpperCase().replace(/[^A-Z0-9]/g, "");
@@ -34,10 +34,10 @@ export async function consultarPlacaANT(placa: string): Promise<DatosVehiculoANT
   }
 
   // 2. Llamar API externa
-  const datos = await fetchANTExterno(placaNorm);
+  const datos = await fetchPlacaAPI(placaNorm);
   if (!datos) return null;
 
-  // 3. Guardar o actualizar cache (upsert)
+  // 3. Guardar / actualizar cache (upsert)
   await supabase.from("ant_cache").upsert({
     placa:      placaNorm,
     datos,
@@ -49,107 +49,93 @@ export async function consultarPlacaANT(placa: string): Promise<DatosVehiculoANT
 }
 
 /**
- * Llama a la API externa de consulta de placas.
- * Intenta múltiples proveedores en orden.
+ * Llama a placaapi.ec
+ * Endpoint: GET {ANT_API_URL}?placa={placa}&apikey={ANT_API_KEY}
+ * Documentación: https://www.placaapi.ec
  */
-async function fetchANTExterno(placa: string): Promise<DatosVehiculoANT | null> {
-  // Proveedor 1: consultaplaca.com.ec
-  try {
-    const apiUrl = process.env.ANT_API_URL || "https://api.consultaplaca.com.ec";
-    const apiKey = process.env.ANT_API_KEY;
+async function fetchPlacaAPI(placa: string): Promise<DatosVehiculoANT | null> {
+  const apiUrl = process.env.ANT_API_URL;
+  const apiKey = process.env.ANT_API_KEY;
 
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    };
-    if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
-
-    const res = await fetch(`${apiUrl}/v1/placa/${placa}`, {
-      headers,
-      signal: AbortSignal.timeout(8000),
-    });
-
-    if (res.ok) {
-      const json = await res.json();
-      return normalizarRespuestaANT(placa, json);
-    }
-  } catch {
-    // silenciar y probar siguiente
+  if (!apiUrl || !apiKey) {
+    console.warn("ANT_API_URL o ANT_API_KEY no configurados en .env.local");
+    return null;
   }
 
-  // Proveedor 2: formato alternativo
   try {
-    const res = await fetch(`https://srienlinea.sri.gob.ec/movil-servicios/api/v1.0/matriculacion/placa/${placa}`, {
+    const url = `${apiUrl}?placa=${encodeURIComponent(placa)}&apikey=${encodeURIComponent(apiKey)}`;
+
+    const res = await fetch(url, {
       headers: { "Accept": "application/json" },
-      signal: AbortSignal.timeout(8000),
+      signal: AbortSignal.timeout(10_000),
     });
-    if (res.ok) {
-      const json = await res.json();
-      return normalizarRespuestaSRI(placa, json);
-    }
-  } catch {
-    // silenciar
-  }
 
-  // Si ningún proveedor responde, devolver null
-  return null;
+    if (!res.ok) {
+      console.warn(`PlacaAPI respondió ${res.status} para placa ${placa}`);
+      return null;
+    }
+
+    const json = await res.json();
+    return normalizarRespuesta(placa, json);
+  } catch (err) {
+    console.error("Error llamando placaapi.ec:", err);
+    return null;
+  }
 }
 
-function normalizarRespuestaANT(placa: string, json: Record<string, unknown>): DatosVehiculoANT | null {
-  // Mapear según estructura de consultaplaca.com.ec
-  // { marca, modelo, anio, color, propietario, cedula, tipo }
+/**
+ * Normaliza la respuesta de placaapi.ec al formato DatosVehiculoANT.
+ * placaapi.ec devuelve algo similar a:
+ * { MARCA, MODELO, ANIO, COLOR, PROPIETARIO, CEDULA, CLASE }
+ */
+function normalizarRespuesta(placa: string, json: unknown): DatosVehiculoANT | null {
   if (!json || typeof json !== "object") return null;
 
-  const get = (keys: string[]): string => {
+  const j = json as Record<string, unknown>;
+
+  const str = (...keys: string[]): string => {
     for (const k of keys) {
-      const val = (json as Record<string, unknown>)[k];
-      if (val && typeof val === "string") return val.trim();
+      const v = j[k];
+      if (v !== null && v !== undefined && String(v).trim()) return String(v).trim();
     }
     return "";
   };
 
-  const getNum = (keys: string[]): number => {
+  const num = (...keys: string[]): number => {
     for (const k of keys) {
-      const val = (json as Record<string, unknown>)[k];
-      if (val) return parseInt(String(val)) || 0;
+      const v = j[k];
+      if (v !== null && v !== undefined) {
+        const n = parseInt(String(v));
+        if (!isNaN(n)) return n;
+      }
     }
     return 0;
   };
 
+  const marca  = str("MARCA",  "marca",  "brand", "Marca");
+  const modelo = str("MODELO", "modelo", "model", "Modelo");
+
+  // Si no tiene al menos marca, probablemente la placa no existe
+  if (!marca && !modelo) return null;
+
   return {
     placa,
-    marca:       get(["marca", "MARCA", "brand"]),
-    modelo:      get(["modelo", "MODELO", "model"]),
-    anio:        getNum(["anio", "año", "ANIO", "year", "modelo_anio"]),
-    color:       get(["color", "COLOR"]),
-    propietario: get(["propietario", "PROPIETARIO", "owner", "nombre_propietario"]),
-    cedula:      get(["cedula", "CEDULA", "id", "identificacion"]),
-    tipo:        normalizarTipo(get(["tipo", "TIPO", "clase", "CLASE"])),
-  };
-}
-
-function normalizarRespuestaSRI(placa: string, json: Record<string, unknown>): DatosVehiculoANT | null {
-  if (!json || typeof json !== "object") return null;
-
-  const v = (json as Record<string, unknown>);
-  return {
-    placa,
-    marca:       String((v.marca || v.MARCA || "")).trim(),
-    modelo:      String((v.modelo || v.MODELO || "")).trim(),
-    anio:        parseInt(String(v.anio || v.año || 0)) || 0,
-    color:       String((v.color || "")).trim(),
-    propietario: String((v.propietario || v.nombrePropietario || "")).trim(),
-    cedula:      String((v.cedula || v.ruc || "")).trim(),
-    tipo:        normalizarTipo(String(v.tipo || v.clase || "")),
+    marca,
+    modelo,
+    anio:        num("ANIO", "anio", "AÑO", "año", "year", "Anio"),
+    color:       str("COLOR",       "color",       "Color"),
+    propietario: str("PROPIETARIO", "propietario", "NOMBRE", "nombre", "owner"),
+    cedula:      str("CEDULA",      "cedula",      "CI",     "ruc",    "identificacion"),
+    tipo:        normalizarTipo(str("CLASE", "clase", "TIPO", "tipo", "type")),
   };
 }
 
 function normalizarTipo(raw: string): string {
   const t = raw.toLowerCase();
   if (t.includes("sedan") || t.includes("sedán")) return "sedan";
-  if (t.includes("camion") || t.includes("pickup") || t.includes("furgon")) return "pickup";
-  if (t.includes("suv") || t.includes("todo") || t.includes("4x4")) return "suv";
-  if (t.includes("camioneta")) return "camioneta";
-  if (t.includes("furgoneta") || t.includes("van")) return "furgoneta";
+  if (t.includes("pickup"))                        return "pickup";
+  if (t.includes("camioneta"))                     return "camioneta";
+  if (t.includes("suv") || t.includes("4x4") || t.includes("todo terreno")) return "suv";
+  if (t.includes("furgon") || t.includes("van"))   return "furgoneta";
   return "otro";
 }

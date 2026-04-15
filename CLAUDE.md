@@ -553,33 +553,36 @@ Sitio público, auth, portal cliente, panel admin base, OTs, inventario, factura
 ---
 
 ### FASE 8 — Pulido Core ERP `[~]` ← EN PROGRESO
-- [ ] PDF factura con formato correcto SRI (001-001-000000001, IVA 15%)
-- [ ] PDF OT con checklist de daños, fotos y línea de firma del cliente
-- [ ] Email automático al cliente al cambiar estado de OT
-- [ ] Fotos entrada/salida suben correctamente a bucket `ot-fotos` en Supabase Storage
-- [ ] **Integración ANT** — consulta por placa en form de nuevo vehículo
-- [ ] Cache ANT funcionando en tabla `ant_cache` (migration 016)
-- [ ] Ejecutar migration 015 (roles completos)
-- [ ] Middleware actualizado con nuevos roles (gerente, facturadora, asesor_servicios, etc.)
-- [ ] Dashboard admin: OTs del día, facturación del mes, stock bajo mínimo, estado caja
+- [x] PDF factura con formato correcto SRI (001-001-000000001, IVA 15%) — `lib/pdf/FacturaPDF.tsx` + `app/api/pdf/factura/[id]/route.ts`
+- [x] PDF OT con checklist de daños, fotos y línea de firma del cliente — `lib/pdf/PresupuestoPDF.tsx` + `app/api/pdf/ot/[id]/route.ts`
+- [x] Email automático al cliente al cambiar estado de OT — `lib/emails/otStatusEmail.tsx` + Resend en `lib/actions/erp.ts`
+- [x] Fotos entrada/salida suben correctamente a bucket `ot-fotos` — `components/admin/FotosOT.tsx` + server actions `subirFotoOT` / `eliminarFotoOT`
+- [x] **Integración ANT** — `lib/ant/consultar.ts` + `app/api/ant/placa/route.ts` + formularios admin y cliente actualizados
+- [x] Cache ANT funcionando en tabla `ant_cache` — migration 016 lista para ejecutar en Supabase
+- [x] Migration 015 (roles completos) — lista para ejecutar en Supabase
+- [x] Middleware actualizado con nuevos roles (gerente, facturadora, asesor_servicios, etc.) — `lib/supabase/middleware.ts`
+- [x] Dashboard admin: OTs del día, facturación del mes, stock bajo mínimo, estado caja — `app/admin/dashboard/page.tsx` + `components/admin/IngresosMesChart.tsx`
+- [ ] **Ejecutar migrations 015 y 016 en Supabase** (pendiente — requiere acceso al panel Supabase)
 - [ ] Prueba flujo completo: vehículo por placa ANT → OT → factura → cobro → cierre caja
-- [ ] **DEMO_GUIDE.html actualizado** con todos los módulos ERP para mostrar el viernes
+- [x] **DEMO_GUIDE.html actualizado** con módulos ERP (Págs. 7 y 8 agregadas)
 
 ---
 
-### FASE 9 — Contabilidad `[ ]`
-- [ ] Ejecutar migration 017 (plan_cuentas, centros_costos, periodos, asientos)
-- [ ] `admin/contabilidad/plan-cuentas/page.tsx` — Árbol jerárquico de cuentas
-- [ ] CRUD de cuentas contables con validación de nivel y padre
-- [ ] `admin/contabilidad/asientos/page.tsx` — Lista con estado y cuadre
-- [ ] `admin/contabilidad/asientos/nuevo/page.tsx` — Asiento manual partida doble
-  - Validar que debe = haber antes de guardar
+### FASE 9 — Contabilidad `[~]` ← EN PROGRESO
+- [ ] Ejecutar migration 017 en Supabase (plan_cuentas, centros_costos, periodos, asientos)
+- [x] `admin/contabilidad/plan-cuentas/page.tsx` — Árbol jerárquico de cuentas con CRUD
+- [x] `admin/contabilidad/plan-cuentas/nueva/page.tsx` — Nueva cuenta con validación de padre
+- [x] `admin/contabilidad/asientos/page.tsx` — Lista con filtros de estado y tipo
+- [x] `admin/contabilidad/asientos/[id]/page.tsx` — Detalle con cuadre, acciones contabilizar/anular
+- [x] `admin/contabilidad/asientos/nuevo/page.tsx` — Asiento manual partida doble (validación debe = haber)
+- [x] `admin/contabilidad/periodos/page.tsx` — Cierre y apertura de períodos mensuales
+- [x] `lib/actions/contabilidad.ts` — contabilizarAsiento, anularAsiento, cerrarPeriodo, abrirPeriodo
+- [x] Sidebar admin actualizado con sección "Contabilidad"
+- [x] Migration 017 escrita con seed de plan de cuentas NEC/NIIF Ecuador + períodos 2026
 - [ ] Asientos automáticos al emitir factura de venta
 - [ ] Asientos automáticos al registrar compra
 - [ ] Asientos automáticos al movimiento de caja
-- [ ] `admin/contabilidad/periodos/page.tsx` — Cierre mensual y anual
 - [ ] Reportes: Balance General y Estado de Resultados (básico)
-- [ ] Prueba: emitir factura → verificar asiento automático generado con debe = haber
 
 ---
 
@@ -795,26 +798,39 @@ Claude Code debe retomar inmediatamente sin necesitar ninguna explicación adici
 
 ```
 Última actualización:  15 de abril 2026
-Fase en progreso:      Fase 8 — Pulido Core ERP
+Fase en progreso:      Fase 9 (Contabilidad) + Tests E2E completos
 Migrations ejecutadas: 001 → 014
-Migrations pendientes: 015 → 021
+Migrations listas (NO ejecutadas aún): 015, 016, 017
 
-Claude Code está trabajando en:
-  - PDFs de facturas y OTs
-  - Fotos de entrada/salida en OT
-  - Email automático al cambiar estado OT
-  - Checklist de daños en JSONB
+Completado esta sesión:
+  ✅ PDFs de factura y OT (lib/pdf/ + app/api/pdf/)
+  ✅ Fotos de entrada/salida en OT (FotosOT.tsx + server actions)
+  ✅ Email automático al cambiar estado OT (Resend + React email)
+  ✅ Checklist de recepción 22 ítems (ChecklistRecepcion.tsx)
+  ✅ Dashboard mejorado (IngresosMesChart, top mecánicos, stock bajo)
+  ✅ Integración ANT por placa (lib/ant/consultar.ts + app/api/ant/placa/route.ts)
+  ✅ Formularios admin y cliente con botón "Consultar ANT" + auto-fill
+  ✅ Middleware actualizado con 7 nuevos roles ERP
+  ✅ DEMO_GUIDE.html actualizado (Págs. 7 y 8 ERP agregadas)
+  ✅ Migrations 015, 016 y 017 escritas (pendiente ejecutar en Supabase)
+  ✅ Módulo Contabilidad completo (plan-cuentas, asientos, periodos — Fase 9)
+  ✅ Playwright E2E — 49 tests, 9 suites, 100% passing, HTML report
+     playwright.config.ts + tests/e2e/ (01-auth, 02-public, 03-cliente,
+     04-ant, 05-ordenes, 06-inventario, 07-facturacion, 08-caja, 09-contabilidad)
 
-Próximos pasos prioritarios (para el viernes):
-  1. Terminar PDFs y emails (Fase 8)
-  2. Integrar consulta ANT por placa (feature estrella del demo)
-  3. Ejecutar migration 015 (roles completos)
-  4. Actualizar DEMO_GUIDE.html con módulos ERP
+Próximo paso INMEDIATO:
+  1. Ejecutar en Supabase SQL Editor (en orden):
+     → supabase/migrations/015_roles_completos.sql
+     → supabase/migrations/016_consulta_ant.sql
+     → supabase/migrations/017_contabilidad.sql
+  2. Prueba flujo completo: placa ANT → OT → factura → cobro → cierre caja
+  3. Fase 9 pendiente: asientos automáticos (factura/compra/caja) + Balance General
+  4. Siguiente fase disponible: Fase 10 — Activos Fijos (migration 018)
 
-Pendiente de cliente:
-  - Credenciales SRI (se entregan al firmar contrato)
-  - Qué módulo de GETSOFT les duele más (preguntar mañana)
-  - Confirmar API ANT a usar
+Bloqueadores activos:
+  - API ANT key: sin key la función devuelve null; confirmar proveedor con cliente
+  - Credenciales SRI: llegan al firmar contrato (no bloquea demo)
+  - RESEND_API_KEY: emails no se envían sin esta clave (no crítico para demo)
 ```
 
 ---

@@ -180,7 +180,7 @@ export default function NuevoVehiculoPage() {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="tipo">Tipo</Label>
-                <Select name="tipo" value={tipo} onValueChange={setTipo}>
+                <Select name="tipo" value={tipo} onValueChange={(v) => setTipo(v ?? "")}>
                   <SelectTrigger id="tipo">
                     <SelectValue placeholder="Seleccionar" />
                   </SelectTrigger>
