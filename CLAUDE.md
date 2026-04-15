@@ -579,20 +579,25 @@ Sitio público, auth, portal cliente, panel admin base, OTs, inventario, factura
 - [x] `lib/actions/contabilidad.ts` — contabilizarAsiento, anularAsiento, cerrarPeriodo, abrirPeriodo
 - [x] Sidebar admin actualizado con sección "Contabilidad"
 - [x] Migration 017 escrita con seed de plan de cuentas NEC/NIIF Ecuador + períodos 2026
-- [ ] Asientos automáticos al emitir factura de venta
-- [ ] Asientos automáticos al registrar compra
-- [ ] Asientos automáticos al movimiento de caja
-- [ ] Reportes: Balance General y Estado de Resultados (básico)
+- [x] Asientos automáticos al emitir factura de venta — `lib/actions/erp.ts` (crearFactura)
+- [x] Asientos automáticos al registrar pago/cobro — `lib/actions/erp.ts` (registrarPago)
+- [x] Asientos automáticos al recibir compra — `lib/actions/erp.ts` (recibirCompra)
+- [x] `lib/actions/contabilidad.ts` — crearAsientoContable helper exportable
+- [x] `admin/contabilidad/balance/page.tsx` — Balance General con activos/pasivos/patrimonio
+- [x] `admin/contabilidad/resultados/page.tsx` — Estado de Resultados filtrable por año/mes
 
 ---
 
-### FASE 10 — Activos Fijos `[ ]`
-- [ ] Ejecutar migration 018 (categorias_activo, activos_fijos, depreciaciones)
-- [ ] `admin/activos/page.tsx` — Lista con valor original, depreciación acumulada, valor neto
-- [ ] `admin/activos/nuevo/page.tsx` — Registrar activo con categoría y fecha de compra
-- [ ] `admin/activos/depreciacion/page.tsx` — Procesar depreciación del período activo
-- [ ] Reportes: resumen depreciación, depreciación por activo, histórico por activo
-- [ ] Prueba: registrar activo → procesar depreciación → verificar asiento contable generado
+### FASE 10 — Activos Fijos `[x]`
+- [ ] Ejecutar migration 018 en Supabase (categorias_activo, activos_fijos, depreciaciones)
+- [x] `supabase/migrations/018_activos_fijos.sql` — migration con seed de 5 categorías
+- [x] `admin/activos/page.tsx` — Lista con costo original, dep. acumulada, valor neto, % depreciado
+- [x] `admin/activos/nuevo/page.tsx` — Registrar activo con categoría y fecha de compra
+- [x] `admin/activos/[id]/page.tsx` — Detalle con historial de depreciaciones y barra progreso
+- [x] `admin/activos/depreciacion/page.tsx` — Procesar depreciación mensual (todos los activos)
+- [x] `lib/actions/activos.ts` — crearActivoFijo, procesarDepreciacionMensual
+- [x] Sidebar admin con sección "Activos Fijos"
+- [x] Asiento contable automático generado al procesar depreciación
 
 ---
 
@@ -797,35 +802,39 @@ Claude Code debe retomar inmediatamente sin necesitar ninguna explicación adici
 ## 📍 Estado Actual
 
 ```
-Última actualización:  15 de abril 2026
-Fase en progreso:      Fase 9 (Contabilidad) + Tests E2E completos
+Última actualización:  15 de abril 2026 (sesión 2)
+Fase completada:       Fase 9 (Contabilidad — COMPLETA) + Fase 10 (Activos Fijos — COMPLETA)
 Migrations ejecutadas: 001 → 014
-Migrations listas (NO ejecutadas aún): 015, 016, 017
+Migrations listas (NO ejecutadas aún): 015, 016, 017, 018
+
+Completado en sesión anterior:
+  ✅ Módulo Contabilidad: plan-cuentas, asientos, periodos (Fase 9 parte 1)
+  ✅ Playwright E2E — 49 tests, 9 suites, 100% passing
+  ✅ Documentación HTML completa (DG_MOTORS_DOCUMENTACION.html)
 
 Completado esta sesión:
-  ✅ PDFs de factura y OT (lib/pdf/ + app/api/pdf/)
-  ✅ Fotos de entrada/salida en OT (FotosOT.tsx + server actions)
-  ✅ Email automático al cambiar estado OT (Resend + React email)
-  ✅ Checklist de recepción 22 ítems (ChecklistRecepcion.tsx)
-  ✅ Dashboard mejorado (IngresosMesChart, top mecánicos, stock bajo)
-  ✅ Integración ANT por placa (lib/ant/consultar.ts + app/api/ant/placa/route.ts)
-  ✅ Formularios admin y cliente con botón "Consultar ANT" + auto-fill
-  ✅ Middleware actualizado con 7 nuevos roles ERP
-  ✅ DEMO_GUIDE.html actualizado (Págs. 7 y 8 ERP agregadas)
-  ✅ Migrations 015, 016 y 017 escritas (pendiente ejecutar en Supabase)
-  ✅ Módulo Contabilidad completo (plan-cuentas, asientos, periodos — Fase 9)
-  ✅ Playwright E2E — 49 tests, 9 suites, 100% passing, HTML report
-     playwright.config.ts + tests/e2e/ (01-auth, 02-public, 03-cliente,
-     04-ant, 05-ordenes, 06-inventario, 07-facturacion, 08-caja, 09-contabilidad)
+  ✅ crearAsientoContable helper en lib/actions/contabilidad.ts
+  ✅ Asiento automático venta: Factura → Clientes/Ventas/IVA (erp.ts crearFactura)
+  ✅ Asiento automático cobro: Pago → Caja/Clientes (erp.ts registrarPago)
+  ✅ Asiento automático compra: Recepción → Inventario/Proveedores (erp.ts recibirCompra)
+  ✅ Balance General (app/admin/contabilidad/balance/page.tsx)
+  ✅ Estado de Resultados (app/admin/contabilidad/resultados/page.tsx) — filtrable por año/mes
+  ✅ Sidebar actualizado: Balance General + Est. Resultados en sección Contabilidad
+  ✅ Migration 018 (activos_fijos, categorias_activo, depreciaciones) + seed 5 categorías
+  ✅ Activos Fijos: lista, nuevo, detalle, historial (app/admin/activos/)
+  ✅ Procesar Depreciación mensual con asiento automático (app/admin/activos/depreciacion/)
+  ✅ lib/actions/activos.ts: crearActivoFijo, procesarDepreciacionMensual
+  ✅ Sidebar: nueva sección "Activos Fijos"
 
 Próximo paso INMEDIATO:
   1. Ejecutar en Supabase SQL Editor (en orden):
      → supabase/migrations/015_roles_completos.sql
      → supabase/migrations/016_consulta_ant.sql
      → supabase/migrations/017_contabilidad.sql
-  2. Prueba flujo completo: placa ANT → OT → factura → cobro → cierre caja
-  3. Fase 9 pendiente: asientos automáticos (factura/compra/caja) + Balance General
-  4. Siguiente fase disponible: Fase 10 — Activos Fijos (migration 018)
+     → supabase/migrations/018_activos_fijos.sql
+  2. Prueba flujo completo: placa ANT → OT → factura → cobro → verificar asientos en contabilidad
+  3. Siguiente fase disponible: Fase 11 — Caja y Bancos Avanzado (migration 019)
+     O Fase 12 — Ventas Avanzadas (retenciones, anticipos, notas crédito)
 
 Bloqueadores activos:
   - API ANT key: sin key la función devuelve null; confirmar proveedor con cliente

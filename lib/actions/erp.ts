@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Resend } from "resend";
 import { createElement } from "react";
 import { OTStatusEmail } from "@/lib/emails/otStatusEmail";
+import { crearAsientoContable } from "@/lib/actions/contabilidad";
 
 async function checkAdmin() {
   const supabase = await createClient();
@@ -544,6 +545,28 @@ export async function crearFactura(
         .eq("id", ot_id);
     }
 
+    // Asiento contable automático: Venta
+    // DEBE: Clientes (CxC)  = total
+    // HABER: Ventas Servicios = subtotal_neto
+    // HABER: IVA en Ventas   = iva_valor
+    const { data: { user: u } } = await supabase.auth.getUser();
+    if (u) {
+      const fechaHoy = new Date().toISOString().slice(0, 10);
+      await crearAsientoContable({
+        fecha: fechaHoy,
+        descripcion: `Venta — Factura ${numero}`,
+        tipo: "automatico",
+        modulo: "ventas",
+        referencia: numero,
+        usuario_id: u.id,
+        lineas: [
+          { cuenta_codigo: "1.1.02.001", descripcion: "Clientes", debe: total, haber: 0 },
+          { cuenta_codigo: "4.1.01.001", descripcion: "Ventas de Servicios", debe: 0, haber: subtotal_neto },
+          { cuenta_codigo: "2.1.02.001", descripcion: "IVA en Ventas", debe: 0, haber: iva_valor },
+        ],
+      });
+    }
+
     redirect(`/admin/facturacion/${factura.id}`);
   } catch (e: any) {
     if (e.message === "NEXT_REDIRECT") throw e;
@@ -623,6 +646,23 @@ export async function registrarPago(
         usuario_id: user.id,
       });
     }
+
+    // Asiento contable automático: Cobro
+    // DEBE: Caja General = monto
+    // HABER: Clientes (CxC) = monto
+    const fechaHoy = new Date().toISOString().slice(0, 10);
+    await crearAsientoContable({
+      fecha: fechaHoy,
+      descripcion: `Cobro factura — ${metodo}`,
+      tipo: "automatico",
+      modulo: "caja",
+      referencia: factura_id,
+      usuario_id: user.id,
+      lineas: [
+        { cuenta_codigo: "1.1.01.001", descripcion: "Caja General", debe: monto, haber: 0 },
+        { cuenta_codigo: "1.1.02.001", descripcion: "Clientes", debe: 0, haber: monto },
+      ],
+    });
 
     return { success: `Pago de $${monto.toFixed(2)} registrado.` };
   } catch (e: any) {
@@ -910,16 +950,36 @@ export async function recibirCompra(compraId: string): Promise<ErpState> {
     }
 
     // Marcar compra como recibida
+    const { data: compraData } = await supabase
+      .from("compras")
+      .select("numero, total")
+      .eq("id", compraId)
+      .single();
+
     await supabase
       .from("compras")
       .update({ estado: "recibida" })
       .eq("id", compraId);
 
-    // Actualizar cantidades recibidas
-    await supabase
-      .from("compra_lineas")
-      .update({ cantidad_recibida: supabase.rpc as any })
-      .eq("compra_id", compraId);
+    // Asiento contable automático: Compra
+    // DEBE: Repuestos y Materiales = subtotal
+    // HABER: Proveedores (CxP) = total
+    const fechaHoy = new Date().toISOString().slice(0, 10);
+    const totalCompra = compraData?.total || lineas.reduce(
+      (acc: number, l: any) => acc + l.cantidad * l.precio_unitario, 0
+    );
+    await crearAsientoContable({
+      fecha: fechaHoy,
+      descripcion: `Compra recibida — ${compraData?.numero || compraId.slice(0, 8)}`,
+      tipo: "automatico",
+      modulo: "compras",
+      referencia: compraData?.numero || compraId,
+      usuario_id: user.id,
+      lineas: [
+        { cuenta_codigo: "1.1.03.001", descripcion: "Repuestos y Materiales", debe: totalCompra, haber: 0 },
+        { cuenta_codigo: "2.1.01.001", descripcion: "Proveedores", debe: 0, haber: totalCompra },
+      ],
+    });
 
     return { success: "Compra recibida. Stock actualizado." };
   } catch (e: any) {

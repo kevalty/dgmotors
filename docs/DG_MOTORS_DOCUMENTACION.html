@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DG Motors ERP — Documentación Técnica v1.0</title>
+  <style>
+    :root {
+      --red: #E84040;
+      --red-dark: #c43030;
+      --bg: #0A0A0B;
+      --bg2: #111113;
+      --bg3: #1a1a1d;
+      --border: #2a2a2e;
+      --text: #e8e8ea;
+      --muted: #888890;
+      --green: #22c55e;
+      --blue: #3b82f6;
+      --yellow: #f59e0b;
+      --purple: #a855f7;
+      --cyan: #06b6d4;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── SIDEBAR ── */
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 280px;
+      min-height: 100vh;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .sidebar-logo {
+      padding: 24px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo .brand {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--red);
+      letter-spacing: -0.5px;
+    }
+    .sidebar-logo .version {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .nav-section {
+      padding: 16px 12px 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .nav-item {
+      display: block;
+      padding: 8px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      border-radius: 6px;
+      margin: 1px 8px;
+      transition: all 0.15s;
+    }
+    .nav-item:hover { background: var(--bg3); color: var(--text); }
+    .nav-item.active { background: rgba(232,64,64,0.12); color: var(--red); }
+
+    /* ── MAIN ── */
+    .main { flex: 1; max-width: 900px; padding: 48px 48px 80px; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, rgba(232,64,64,0.08) 0%, rgba(232,64,64,0.02) 100%);
+      border: 1px solid rgba(232,64,64,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 48px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(232,64,64,0.15);
+      color: var(--red);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .hero h1 span { color: var(--red); }
+    .hero p { color: var(--muted); font-size: 15px; max-width: 600px; }
+    .hero-meta {
+      display: flex;
+      gap: 24px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .hero-meta-item .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+    }
+    .hero-meta-item .value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ── SECTIONS ── */
+    .section { margin-bottom: 56px; scroll-margin-top: 24px; }
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(232,64,64,0.12);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 24px 0 12px;
+      color: var(--text);
+    }
+    h4 {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 16px 0 8px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    p { color: #b0b0b8; margin-bottom: 12px; font-size: 14px; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-desc { font-size: 13px; color: var(--muted); }
+
+    /* ── BADGES ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-red    { background: rgba(232,64,64,0.15);  color: #f87171; }
+    .badge-green  { background: rgba(34,197,94,0.12);  color: #4ade80; }
+    .badge-blue   { background: rgba(59,130,246,0.12); color: #60a5fa; }
+    .badge-yellow { background: rgba(245,158,11,0.12); color: #fbbf24; }
+    .badge-purple { background: rgba(168,85,247,0.12); color: #c084fc; }
+    .badge-cyan   { background: rgba(6,182,212,0.12);  color: #22d3ee; }
+    .badge-gray   { background: rgba(255,255,255,0.06); color: var(--muted); }
+
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; margin-bottom: 24px; border-radius: 10px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr { background: var(--bg3); }
+    th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: #c0c0c8;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    td code {
+      background: rgba(255,255,255,0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: 'Consolas', 'Cascadia Code', monospace;
+      color: var(--cyan);
+    }
+
+    /* ── CODE ── */
+    pre {
+      background: #0d0d10;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      font-family: 'Consolas', 'Cascadia Code', monospace;
+    }
+    pre .c  { color: #555560; }   /* comment */
+    pre .k  { color: #c084fc; }   /* keyword */
+    pre .s  { color: #4ade80; }   /* string */
+    pre .n  { color: #60a5fa; }   /* name */
+    pre .m  { color: #fbbf24; }   /* method */
+    pre .t  { color: #22d3ee; }   /* type */
+    pre .p  { color: #f87171; }   /* path */
+    code.inline {
+      background: rgba(255,255,255,0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: 'Consolas', 'Cascadia Code', monospace;
+      color: var(--cyan);
+    }
+
+    /* ── ROUTE LIST ── */
+    .route { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .route:last-child { border-bottom: none; }
+    .route-method {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 4px;
+      min-width: 46px;
+      text-align: center;
+    }
+    .method-get  { background: rgba(34,197,94,0.15);  color: #4ade80; }
+    .method-post { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .method-sa   { background: rgba(168,85,247,0.15); color: #c084fc; }
+    .route-path  { font-family: 'Consolas', monospace; font-size: 13px; color: var(--cyan); }
+    .route-desc  { font-size: 13px; color: var(--muted); }
+
+    /* ── ROLE TABLE ── */
+    .check   { color: #4ade80; font-size: 14px; }
+    .cross   { color: #374151; font-size: 14px; }
+    .partial { color: #fbbf24; font-size: 14px; }
+
+    /* ── FLOW ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+    .flow-step {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .flow-arrow {
+      color: var(--red);
+      font-size: 18px;
+      padding: 0 6px;
+    }
+
+    /* ── ALERT ── */
+    .alert {
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      border-left: 3px solid;
+    }
+    .alert-info    { background: rgba(59,130,246,0.06); border-color: var(--blue); color: #93c5fd; }
+    .alert-warning { background: rgba(245,158,11,0.06); border-color: var(--yellow); color: #fcd34d; }
+    .alert-success { background: rgba(34,197,94,0.06);  border-color: var(--green); color: #86efac; }
+
+    /* ── DB SCHEMA ── */
+    .schema-table {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .schema-header {
+      padding: 10px 16px;
+      background: rgba(232,64,64,0.08);
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 13px;
+      font-family: 'Consolas', monospace;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .schema-row {
+      display: grid;
+      grid-template-columns: 160px 110px 1fr;
+      gap: 12px;
+      padding: 7px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 12px;
+    }
+    .schema-row:last-child { border-bottom: none; }
+    .schema-row:hover { background: rgba(255,255,255,0.02); }
+    .col-name  { font-family: 'Consolas', monospace; color: var(--cyan); }
+    .col-type  { color: var(--purple); font-family: 'Consolas', monospace; }
+    .col-desc  { color: var(--muted); }
+
+    /* ── DIVIDER ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+    /* ── TEST RESULT ── */
+    .test-suite {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .test-suite-header {
+      padding: 12px 16px;
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .test-row {
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .test-row:last-child { border-bottom: none; }
+    .test-ok { color: #4ade80; font-size: 12px; }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ═══════════════════════════════════════════════════════ SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">⚙ DG Motors ERP</div>
+    <div class="version">Documentación Técnica v1.0 — Abril 2026</div>
+  </div>
+
+  <div class="nav-section">General</div>
+  <a href="#overview"       class="nav-item">Visión General</a>
+  <a href="#stack"          class="nav-item">Stack Tecnológico</a>
+  <a href="#setup"          class="nav-item">Instalación y Setup</a>
+
+  <div class="nav-section">Arquitectura</div>
+  <a href="#estructura"     class="nav-item">Estructura de Archivos</a>
+  <a href="#base-datos"     class="nav-item">Base de Datos</a>
+  <a href="#auth"           class="nav-item">Autenticación y Roles</a>
+  <a href="#middleware"     class="nav-item">Middleware / Rutas</a>
+
+  <div class="nav-section">Módulos</div>
+  <a href="#sitio-publico"  class="nav-item">Sitio Público</a>
+  <a href="#portal-cliente" class="nav-item">Portal Cliente</a>
+  <a href="#panel-admin"    class="nav-item">Panel Administrativo</a>
+  <a href="#portal-mecanico"class="nav-item">Portal Mecánico</a>
+  <a href="#modulo-erp"     class="nav-item">Módulos ERP</a>
+  <a href="#contabilidad"   class="nav-item">Contabilidad</a>
+
+  <div class="nav-section">APIs</div>
+  <a href="#api-rest"       class="nav-item">API Routes</a>
+  <a href="#server-actions" class="nav-item">Server Actions</a>
+  <a href="#api-ant"        class="nav-item">Integración ANT</a>
+
+  <div class="nav-section">Calidad</div>
+  <a href="#tests"          class="nav-item">Tests E2E</a>
+  <a href="#seguridad"      class="nav-item">Seguridad y RLS</a>
+
+  <div class="nav-section">Referencia</div>
+  <a href="#env"            class="nav-item">Variables de Entorno</a>
+  <a href="#credenciales"   class="nav-item">Credenciales Demo</a>
+  <a href="#migrations"     class="nav-item">Migrations SQL</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">📋 Documentación Técnica</div>
+    <h1>DG Motors <span>ERP Platform</span></h1>
+    <p>Sistema de gestión integral para talleres automotrices. Reemplaza GETSOFT con una plataforma propia, personalizable y escalable hacia un modelo SaaS multi-taller.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="label">Versión</span><span class="value">1.0.0</span></div>
+      <div class="hero-meta-item"><span class="label">Framework</span><span class="value">Next.js 16.2</span></div>
+      <div class="hero-meta-item"><span class="label">Base de datos</span><span class="value">Supabase / PostgreSQL</span></div>
+      <div class="hero-meta-item"><span class="label">Tests</span><span class="value">49 E2E passing</span></div>
+      <div class="hero-meta-item"><span class="label">Repositorio</span><span class="value">github.com/kevalty/dgmotors</span></div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════ 1. VISIÓN GENERAL -->
+  <section class="section" id="overview">
+    <h2><span class="icon">🎯</span> Visión General</h2>
+    <p>DG Motors es una mecánica automotriz con dos sucursales en Ecuador (Quito y Guayaquil), especializada en vehículos americanos, Ford y multimarca. Esta plataforma reemplaza su ERP anterior (GETSOFT) con un sistema 100% propio.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">🌐 Sitio Público</div>
+        <div class="card-desc">Landing, servicios, precios, sucursales con mapas Google, formulario de contacto y catálogo de productos.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">👤 Portal Cliente</div>
+        <div class="card-desc">Gestión de vehículos, agendamiento de citas, historial de mantenimiento, cambios de aceite y facturas.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚙ Panel Administrativo</div>
+        <div class="card-desc">Gestión completa: OTs, inventario, facturación, caja, compras, proveedores, reportes y contabilidad.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔧 Portal Mecánico</div>
+        <div class="card-desc">App móvil simplificada: citas asignadas, fotos de daños, checklist de recepción y registro de trabajo.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Módulos ERP</div>
+        <div class="card-desc">Órdenes de trabajo, inventario por bodegas, facturación con IVA 15%, caja diaria y compras a proveedores.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">📒 Contabilidad</div>
+        <div class="card-desc">Plan de cuentas NEC/NIIF Ecuador, asientos de partida doble, períodos contables y centros de costos.</div>
+      </div>
+    </div>
+
+    <h3>Sucursales</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sucursal</th><th>Ciudad</th><th>Horario L–V</th><th>Horario Sáb</th></tr></thead>
+        <tbody>
+          <tr><td>Principal (Quito)</td><td>Quito, Ecuador</td><td>08:00 – 18:00</td><td>08:00 – 13:00</td></tr>
+          <tr><td>Guayaquil</td><td>Cdla. Guayacanes, Guayaquil</td><td>08:00 – 17:00</td><td>08:00 – 13:00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 2. STACK -->
+  <section class="section" id="stack">
+    <h2><span class="icon">🛠</span> Stack Tecnológico</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title"><span class="badge badge-blue">Frontend</span></div>
+        <div class="card-desc">
+          Next.js 16.2 (App Router)<br>
+          React 19 + TypeScript strict<br>
+          Tailwind CSS v4<br>
+          shadcn/ui + Lucide React<br>
+          Fuentes: Syne + DM Sans<br>
+          next-themes (dark/light)
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="badge badge-green">Backend</span></div>
+        <div class="card-desc">
+          Next.js API Routes<br>
+          Server Actions (RSC)<br>
+          Supabase Auth + SSR<br>
+          PostgreSQL via Supabase<br>
+          Row Level Security (RLS)<br>
+          @supabase/ssr
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="badge badge-purple">Librerías clave</span></div>
+        <div class="card-desc">
+          react-hook-form + Zod<br>
+          date-fns (locale español)<br>
+          @react-pdf/renderer<br>
+          recharts (gráficas)<br>
+          resend (emails)<br>
+          sonner (toasts)
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="badge badge-yellow">Dev / QA</span></div>
+        <div class="card-desc">
+          Playwright 1.59 (E2E)<br>
+          TypeScript strict (0 errores)<br>
+          ESLint Next.js<br>
+          HTML test reports
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 3. SETUP -->
+  <section class="section" id="setup">
+    <h2><span class="icon">🚀</span> Instalación y Setup</h2>
+
+    <h3>Requisitos</h3>
+    <ul style="color: #b0b0b8; font-size: 14px; padding-left: 20px; margin-bottom: 16px; line-height: 2;">
+      <li>Node.js 18+ / npm 9+</li>
+      <li>Cuenta en <strong>Supabase</strong> (proyecto PostgreSQL)</li>
+      <li>Variables de entorno configuradas (ver sección <a href="#env" style="color: var(--cyan);">Variables de Entorno</a>)</li>
+    </ul>
+
+    <h3>Instalación</h3>
+    <pre><span class="c"># 1. Clonar repositorio</span>
+git clone https://github.com/kevalty/dgmotors.git
+cd dgmotors
+
+<span class="c"># 2. Instalar dependencias</span>
+npm install
+
+<span class="c"># 3. Instalar browsers de Playwright</span>
+npx playwright install chromium
+
+<span class="c"># 4. Configurar variables de entorno</span>
+cp .env.local.example .env.local
+<span class="c"># → Editar .env.local con tus credenciales Supabase</span>
+
+<span class="c"># 5. Ejecutar migrations en Supabase SQL Editor (en orden)</span>
+<span class="c">#    supabase/migrations/001_schema_inicial.sql</span>
+<span class="c">#    ... (hasta 017_contabilidad.sql)</span>
+
+<span class="c"># 6. Iniciar servidor de desarrollo</span>
+npm run dev</pre>
+
+    <h3>Comandos disponibles</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Comando</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td><code>npm run dev</code></td><td>Inicia servidor en localhost:3000</td></tr>
+          <tr><td><code>npm run build</code></td><td>Build de producción</td></tr>
+          <tr><td><code>npm run start</code></td><td>Servidor de producción</td></tr>
+          <tr><td><code>npm run lint</code></td><td>ESLint</td></tr>
+          <tr><td><code>npm run test:e2e</code></td><td>Ejecutar todos los tests E2E</td></tr>
+          <tr><td><code>npm run test:e2e:ui</code></td><td>Tests en modo visual interactivo</td></tr>
+          <tr><td><code>npm run test:e2e:report</code></td><td>Abrir reporte HTML de tests</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 4. ESTRUCTURA -->
+  <section class="section" id="estructura">
+    <h2><span class="icon">📁</span> Estructura de Archivos</h2>
+    <pre><span class="p">dgmotors/</span>
+├── <span class="p">app/</span>
+│   ├── <span class="p">(public)/</span>          <span class="c">← Sitio público (sin auth)</span>
+│   │   ├── page.tsx             <span class="c">← Home / Landing</span>
+│   │   ├── servicios/           <span class="c">← Catálogo de servicios</span>
+│   │   ├── sucursales/          <span class="c">← Mapa + info sucursales</span>
+│   │   ├── contacto/            <span class="c">← Formulario de contacto</span>
+│   │   ├── nosotros/            <span class="c">← Quiénes somos</span>
+│   │   └── productos/           <span class="c">← Catálogo de productos</span>
+│   ├── <span class="p">(auth)/</span>            <span class="c">← Autenticación</span>
+│   │   ├── login/
+│   │   ├── registro/
+│   │   └── recuperar/
+│   ├── <span class="p">admin/</span>             <span class="c">← Panel admin (rol: admin)</span>
+│   │   ├── dashboard/
+│   │   ├── citas/
+│   │   ├── clientes/
+│   │   ├── vehiculos/
+│   │   ├── ordenes/             <span class="c">← Órdenes de Trabajo (OTs)</span>
+│   │   ├── inventario/
+│   │   ├── facturacion/
+│   │   ├── caja/
+│   │   ├── compras/
+│   │   ├── proveedores/
+│   │   ├── mantenimiento/
+│   │   ├── mecanicos/
+│   │   ├── servicios/
+│   │   ├── productos/
+│   │   ├── reportes/
+│   │   ├── contacto/
+│   │   └── contabilidad/        <span class="c">← Plan cuentas, asientos, períodos</span>
+│   ├── <span class="p">cliente/</span>           <span class="c">← Portal cliente (rol: cliente)</span>
+│   │   ├── dashboard/
+│   │   ├── vehiculos/
+│   │   ├── citas/
+│   │   ├── mantenimiento/
+│   │   ├── aceite/
+│   │   ├── mis-facturas/
+│   │   └── perfil/
+│   ├── <span class="p">mecanico/</span>          <span class="c">← Portal mecánico (rol: mecanico)</span>
+│   │   ├── dashboard/
+│   │   ├── citas/
+│   │   ├── vehiculos/
+│   │   ├── historial/
+│   │   └── registrar/
+│   └── <span class="p">api/</span>               <span class="c">← REST API Routes</span>
+│       ├── ant/placa/           <span class="c">← Consulta ANT Ecuador</span>
+│       ├── auth/callback/       <span class="c">← OAuth callback</span>
+│       └── pdf/                 <span class="c">← Generación de PDFs</span>
+│           ├── factura/[id]/
+│           └── ot/[id]/
+├── <span class="p">components/</span>
+│   ├── ui/                      <span class="c">← shadcn/ui auto-generado</span>
+│   ├── layout/                  <span class="c">← Navbar, Footers, Sidebars</span>
+│   ├── admin/                   <span class="c">← Componentes del panel admin</span>
+│   ├── cliente/                 <span class="c">← Componentes del portal cliente</span>
+│   └── public/                  <span class="c">← Componentes del sitio público</span>
+├── <span class="p">lib/</span>
+│   ├── actions/                 <span class="c">← Server Actions</span>
+│   │   ├── auth.ts
+│   │   ├── admin.ts
+│   │   ├── erp.ts               <span class="c">← OTs, inventario, factura, caja, compras</span>
+│   │   ├── contabilidad.ts
+│   │   ├── citas.ts
+│   │   ├── vehiculos.ts
+│   │   └── perfil.ts
+│   ├── ant/consultar.ts         <span class="c">← Integración ANT Ecuador</span>
+│   ├── supabase/                <span class="c">← Clientes Supabase SSR</span>
+│   └── validations/             <span class="c">← Schemas Zod</span>
+├── <span class="p">supabase/migrations/</span>   <span class="c">← 17 migrations SQL</span>
+├── <span class="p">tests/e2e/</span>             <span class="c">← Tests Playwright</span>
+├── proxy.ts                     <span class="c">← Middleware Next.js 16 (protección rutas)</span>
+└── playwright.config.ts</pre>
+  </section>
+
+
+  <!-- ══════════════════ 5. BASE DE DATOS -->
+  <section class="section" id="base-datos">
+    <h2><span class="icon">🗄</span> Base de Datos</h2>
+    <p>PostgreSQL gestionado por Supabase. 17 migrations ejecutadas en orden. Row Level Security (RLS) habilitado en todas las tablas.</p>
+
+    <div class="schema-table">
+      <div class="schema-header">📋 perfiles <span class="badge badge-gray" style="font-size:10px">extiende auth.users</span></div>
+      <div class="schema-row"><span class="col-name">id</span><span class="col-type">UUID PK</span><span class="col-desc">FK → auth.users(id)</span></div>
+      <div class="schema-row"><span class="col-name">nombre, apellido</span><span class="col-type">TEXT</span><span class="col-desc">Nombre completo del usuario</span></div>
+      <div class="schema-row"><span class="col-name">rol</span><span class="col-type">TEXT</span><span class="col-desc">cliente | admin | mecanico | gerente | facturadora | asesor_servicios | asesor_repuestos | bodeguero | contador</span></div>
+      <div class="schema-row"><span class="col-name">telefono, cedula</span><span class="col-type">TEXT</span><span class="col-desc">Datos de contacto e identificación</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-header">🚗 vehiculos</div>
+      <div class="schema-row"><span class="col-name">cliente_id</span><span class="col-type">UUID FK</span><span class="col-desc">FK → perfiles(id)</span></div>
+      <div class="schema-row"><span class="col-name">placa</span><span class="col-type">TEXT UNIQUE</span><span class="col-desc">Placa ecuatoriana (se valida con ANT)</span></div>
+      <div class="schema-row"><span class="col-name">marca, modelo, anio</span><span class="col-type">TEXT / INT</span><span class="col-desc">Datos técnicos del vehículo</span></div>
+      <div class="schema-row"><span class="col-name">tipo</span><span class="col-type">TEXT</span><span class="col-desc">sedan | camioneta | suv | pickup | furgoneta | otro</span></div>
+      <div class="schema-row"><span class="col-name">combustible</span><span class="col-type">TEXT</span><span class="col-desc">gasolina | diesel | hibrido | electrico</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-header">📝 ordenes_trabajo (OT)</div>
+      <div class="schema-row"><span class="col-name">numero</span><span class="col-type">SERIAL</span><span class="col-desc">Número secuencial auto (OT-0001, OT-0002…)</span></div>
+      <div class="schema-row"><span class="col-name">cliente_id, vehiculo_id</span><span class="col-type">UUID FK</span><span class="col-desc">Cliente y vehículo asociados</span></div>
+      <div class="schema-row"><span class="col-name">tecnico_id</span><span class="col-type">UUID FK</span><span class="col-desc">Mecánico asignado</span></div>
+      <div class="schema-row"><span class="col-name">estado</span><span class="col-type">TEXT</span><span class="col-desc">pendiente | recibido | diagnostico | en_proceso | completado | entregado | cancelado</span></div>
+      <div class="schema-row"><span class="col-name">checklist_entrada</span><span class="col-type">JSONB</span><span class="col-desc">22 ítems de recepción (documentos, carrocería, accesorios)</span></div>
+      <div class="schema-row"><span class="col-name">fotos_entrada / salida</span><span class="col-type">TEXT[]</span><span class="col-desc">URLs en bucket Supabase Storage 'ot-fotos'</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-header">🧾 facturas</div>
+      <div class="schema-row"><span class="col-name">numero</span><span class="col-type">TEXT</span><span class="col-desc">Formato SRI: 001-001-000000001</span></div>
+      <div class="schema-row"><span class="col-name">subtotal, iva, total</span><span class="col-type">NUMERIC(15,2)</span><span class="col-desc">IVA 15% Ecuador</span></div>
+      <div class="schema-row"><span class="col-name">estado</span><span class="col-type">TEXT</span><span class="col-desc">borrador | emitida | pagada | anulada</span></div>
+      <div class="schema-row"><span class="col-name">metodo_pago</span><span class="col-type">TEXT</span><span class="col-desc">efectivo | tarjeta | transferencia | cheque</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-header">📦 inventario</div>
+      <div class="schema-row"><span class="col-name">codigo, nombre</span><span class="col-type">TEXT</span><span class="col-desc">Código SKU y nombre del ítem</span></div>
+      <div class="schema-row"><span class="col-name">stock_actual, stock_minimo</span><span class="col-type">NUMERIC</span><span class="col-desc">Alerta cuando stock_actual &lt; stock_minimo</span></div>
+      <div class="schema-row"><span class="col-name">precio_costo, precio_venta</span><span class="col-type">NUMERIC(15,2)</span><span class="col-desc">Precios de costo y venta</span></div>
+      <div class="schema-row"><span class="col-name">sucursal</span><span class="col-type">TEXT</span><span class="col-desc">quito | guayaquil | ambos</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-header">💰 caja_sesiones / caja_movimientos</div>
+      <div class="schema-row"><span class="col-name">caja_id</span><span class="col-type">UUID FK</span><span class="col-desc">Caja física (por sucursal)</span></div>
+      <div class="schema-row"><span class="col-name">estado</span><span class="col-type">TEXT</span><span class="col-desc">abierta | cerrada</span></div>
+      <div class="schema-row"><span class="col-name">monto_apertura, monto_cierre</span><span class="col-type">NUMERIC</span><span class="col-desc">Fondo inicial y cierre con cuadre</span></div>
+      <div class="schema-row"><span class="col-name">tipo (movimiento)</span><span class="col-type">TEXT</span><span class="col-desc">cobro | gasto | apertura | cierre | ajuste</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-header">📒 plan_cuentas</div>
+      <div class="schema-row"><span class="col-name">codigo</span><span class="col-type">TEXT UNIQUE</span><span class="col-desc">Ej: 1.1.01.001 (jerarquía por puntos)</span></div>
+      <div class="schema-row"><span class="col-name">tipo</span><span class="col-type">TEXT</span><span class="col-desc">activo | pasivo | patrimonio | ingreso | gasto | costo</span></div>
+      <div class="schema-row"><span class="col-name">nivel</span><span class="col-type">INTEGER</span><span class="col-desc">1=grupo, 2=subgrupo, 3=cuenta, 4=subcuenta, 5=auxiliar</span></div>
+      <div class="schema-row"><span class="col-name">permite_mov</span><span class="col-type">BOOLEAN</span><span class="col-desc">Solo cuentas con permite_mov=true aceptan asientos</span></div>
+    </div>
+
+    <div class="schema-table">
+      <div class="schema-header">📒 asientos_contables + asiento_lineas</div>
+      <div class="schema-row"><span class="col-name">numero</span><span class="col-type">IDENTITY</span><span class="col-desc">Número secuencial único del asiento</span></div>
+      <div class="schema-row"><span class="col-name">tipo</span><span class="col-type">TEXT</span><span class="col-desc">manual | automatico | apertura | cierre</span></div>
+      <div class="schema-row"><span class="col-name">estado</span><span class="col-type">TEXT</span><span class="col-desc">borrador | contabilizado | anulado</span></div>
+      <div class="schema-row"><span class="col-name">debe / haber (línea)</span><span class="col-type">NUMERIC(15,2)</span><span class="col-desc">Partida doble — suma debe = suma haber</span></div>
+    </div>
+
+    <div class="alert alert-info">
+      <strong>Migrations ejecutadas:</strong> 001 → 014 están en producción. Las migrations 015, 016 y 017 están listas pero deben ejecutarse manualmente en el SQL Editor de Supabase.
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 6. AUTH Y ROLES -->
+  <section class="section" id="auth">
+    <h2><span class="icon">🔐</span> Autenticación y Roles</h2>
+    <p>Autenticación manejada por <strong>Supabase Auth</strong>. Al registrarse, un trigger SQL crea automáticamente el registro en la tabla <code class="inline">perfiles</code> con rol <code class="inline">cliente</code>.</p>
+
+    <h3>Roles del sistema</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rol</th><th>Descripción</th><th>Portal</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-red">admin</span></td><td>Acceso total al sistema. Superusuario.</td><td>/admin/*</td></tr>
+          <tr><td><span class="badge badge-blue">cliente</span></td><td>Ve sus vehículos, citas, historial y facturas.</td><td>/cliente/*</td></tr>
+          <tr><td><span class="badge badge-cyan">mecanico</span></td><td>App móvil simplificada. Solo sus OTs asignadas.</td><td>/mecanico/*</td></tr>
+          <tr><td><span class="badge badge-purple">gerente</span></td><td>Dashboards y reportes. Solo lectura.</td><td>/admin/*</td></tr>
+          <tr><td><span class="badge badge-yellow">facturadora</span></td><td>Ventas, facturas, cobros, caja.</td><td>/admin/*</td></tr>
+          <tr><td><span class="badge badge-green">asesor_servicios</span></td><td>OTs, citas, clientes, agenda del taller.</td><td>/admin/*</td></tr>
+          <tr><td><span class="badge badge-gray">asesor_repuestos</span></td><td>Inventario, compras, proveedores.</td><td>/admin/*</td></tr>
+          <tr><td><span class="badge badge-gray">bodeguero</span></td><td>Inventario, ajustes de stock, transferencias.</td><td>/admin/*</td></tr>
+          <tr><td><span class="badge badge-gray">contador</span></td><td>Contabilidad completa, cierre de período.</td><td>/admin/*</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Flujo de autenticación</h3>
+    <div class="flow">
+      <div class="flow-step">POST /login</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">signIn() Server Action</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Supabase Auth</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Leer perfil.rol</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">redirect por rol</div>
+    </div>
+    <div class="flow" style="margin-top:8px">
+      <div class="flow-step" style="background:rgba(232,64,64,0.08)">admin → /admin/dashboard</div>
+      <div class="flow-arrow">|</div>
+      <div class="flow-step" style="background:rgba(34,197,94,0.08)">mecanico → /mecanico/dashboard</div>
+      <div class="flow-arrow">|</div>
+      <div class="flow-step" style="background:rgba(59,130,246,0.08)">cliente → /cliente/dashboard</div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 7. MIDDLEWARE -->
+  <section class="section" id="middleware">
+    <h2><span class="icon">🛡</span> Middleware y Protección de Rutas</h2>
+    <p>Archivo <code class="inline">proxy.ts</code> (renombrado de middleware.ts en Next.js 16). Protege todas las rutas privadas verificando la sesión de Supabase SSR.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Patrón de Ruta</th><th>Condición</th><th>Acción si falla</th></tr></thead>
+        <tbody>
+          <tr><td><code>/admin/*</code></td><td>Sesión activa + rol admin/gerente/etc.</td><td>Redirect → /login</td></tr>
+          <tr><td><code>/cliente/*</code></td><td>Sesión activa + rol cliente o admin</td><td>Redirect → /login</td></tr>
+          <tr><td><code>/mecanico/*</code></td><td>Sesión activa + rol mecanico o admin</td><td>Redirect → /login</td></tr>
+          <tr><td><code>/admin/*</code> con rol cliente</td><td>Rol insuficiente</td><td>Redirect → /cliente/dashboard</td></tr>
+          <tr><td><code>/(public)/*</code></td><td>Ninguna — rutas públicas</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- ══════════════════ 8. SITIO PÚBLICO -->
+  <section class="section" id="sitio-publico">
+    <h2><span class="icon">🌐</span> Sitio Público</h2>
+    <p>Accesible sin autenticación. Todas las páginas incluyen Navbar con toggle dark/light mode y Footer con contacto, redes y horarios.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ruta</th><th>Página</th><th>Contenido</th></tr></thead>
+        <tbody>
+          <tr><td><code>/</code></td><td>Home</td><td>Hero, servicios destacados, stats, reseñas, mapas, CTA agendar</td></tr>
+          <tr><td><code>/servicios</code></td><td>Servicios</td><td>Grid por categoría con precios estimados</td></tr>
+          <tr><td><code>/sucursales</code></td><td>Sucursales</td><td>Tarjetas + iframe Google Maps, horarios</td></tr>
+          <tr><td><code>/contacto</code></td><td>Contacto</td><td>Formulario (nombre, email, teléfono, sucursal, mensaje)</td></tr>
+          <tr><td><code>/nosotros</code></td><td>Nosotros</td><td>Historia, valores, equipo, certificaciones</td></tr>
+          <tr><td><code>/productos</code></td><td>Productos</td><td>Catálogo de productos y repuestos</td></tr>
+          <tr><td><code>/productos/[slug]</code></td><td>Detalle producto</td><td>Ficha técnica del producto</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 9. PORTAL CLIENTE -->
+  <section class="section" id="portal-cliente">
+    <h2><span class="icon">👤</span> Portal Cliente</h2>
+    <p>Requiere rol <code class="inline">cliente</code> o <code class="inline">admin</code>. Sidebar colapsable en móvil.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ruta</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td><code>/cliente/dashboard</code></td><td>Resumen: próxima cita, último mantenimiento, estado aceite, vehículos</td></tr>
+          <tr><td><code>/cliente/vehiculos</code></td><td>Listado de vehículos registrados</td></tr>
+          <tr><td><code>/cliente/vehiculos/nuevo</code></td><td>Registrar vehículo con consulta ANT automática por placa</td></tr>
+          <tr><td><code>/cliente/vehiculos/[id]</code></td><td>Detalle del vehículo + historial de mantenimientos</td></tr>
+          <tr><td><code>/cliente/citas</code></td><td>Listado de citas con estados y badges de color</td></tr>
+          <tr><td><code>/cliente/citas/nueva</code></td><td>Wizard: vehículo → servicio → sucursal → fecha/hora</td></tr>
+          <tr><td><code>/cliente/mantenimiento</code></td><td>Timeline de todos los mantenimientos</td></tr>
+          <tr><td><code>/cliente/aceite</code></td><td>Historial cambios de aceite + próximo cambio</td></tr>
+          <tr><td><code>/cliente/mis-facturas</code></td><td>Facturas emitidas al cliente</td></tr>
+          <tr><td><code>/cliente/mis-facturas/[id]</code></td><td>Detalle de factura con link al PDF</td></tr>
+          <tr><td><code>/cliente/perfil</code></td><td>Editar datos personales, cambiar contraseña</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Consulta ANT en formulario de vehículo</h3>
+    <div class="flow">
+      <div class="flow-step">Ingresa placa</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Clic "Consultar ANT"</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">GET /api/ant/placa?placa=ABC1234</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Auto-fill marca/modelo/año/color</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Confirmar y guardar</div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 10. PANEL ADMIN -->
+  <section class="section" id="panel-admin">
+    <h2><span class="icon">⚙</span> Panel Administrativo</h2>
+    <p>Requiere rol <code class="inline">admin</code> (o roles ERP según módulo). Sidebar con breadcrumbs y grupos de navegación.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Módulo</th><th>Rutas</th><th>Funciones</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-blue">Dashboard</span></td>
+            <td><code>/admin/dashboard</code></td>
+            <td>OTs del día, facturación del mes, stock bajo mínimo, estado caja, gráfica ingresos</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-green">Clientes</span></td>
+            <td><code>/admin/clientes</code></td>
+            <td>Tabla paginada, búsqueda, detalle con vehículos y citas, registro walk-in con ANT</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-cyan">Citas</span></td>
+            <td><code>/admin/citas</code></td>
+            <td>Lista + detalle, cambiar estado, asignar mecánico, agregar notas</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-yellow">OTs</span></td>
+            <td><code>/admin/ordenes</code></td>
+            <td>Lista numerada, detalle con pestañas (info, checklist 22 ítems, fotos, líneas), PDF</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-purple">Inventario</span></td>
+            <td><code>/admin/inventario</code></td>
+            <td>Lista con alertas stock bajo, nuevo ítem, ajustes manuales, detalle por producto</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-red">Facturación</span></td>
+            <td><code>/admin/facturacion</code></td>
+            <td>Lista facturas, nueva factura con IVA 15%, registro de pago, PDF SRI</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-green">Caja</span></td>
+            <td><code>/admin/caja</code></td>
+            <td>Abrir/cerrar sesión de caja, movimientos (cobros, gastos), historial de sesiones</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-blue">Compras</span></td>
+            <td><code>/admin/compras</code></td>
+            <td>Órdenes de compra a proveedores, recepción de mercancía, actualización de stock</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gray">Proveedores</span></td>
+            <td><code>/admin/proveedores</code></td>
+            <td>CRUD de proveedores con RUC, contacto y condiciones de pago</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gray">Mecánicos</span></td>
+            <td><code>/admin/mecanicos</code></td>
+            <td>Lista y registro de técnicos, asignación de OTs</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gray">Servicios</span></td>
+            <td><code>/admin/servicios</code></td>
+            <td>CRUD de servicios y precios por categoría</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-yellow">Reportes</span></td>
+            <td><code>/admin/reportes</code></td>
+            <td>Gráficas: citas por mes, servicios más solicitados, ingresos</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-purple">Contabilidad</span></td>
+            <td><code>/admin/contabilidad/*</code></td>
+            <td>Plan de cuentas NEC/NIIF, asientos partida doble, períodos contables</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 11. PORTAL MECÁNICO -->
+  <section class="section" id="portal-mecanico">
+    <h2><span class="icon">🔧</span> Portal Mecánico</h2>
+    <p>Optimizado para dispositivos móviles. Requiere rol <code class="inline">mecanico</code>. Pensado para uso en taller con celular.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ruta</th><th>Función</th></tr></thead>
+        <tbody>
+          <tr><td><code>/mecanico/dashboard</code></td><td>OTs asignadas hoy, resumen rápido del día</td></tr>
+          <tr><td><code>/mecanico/citas</code></td><td>Citas asignadas al mecánico</td></tr>
+          <tr><td><code>/mecanico/citas/[id]</code></td><td>Detalle de cita + vehículo + historial</td></tr>
+          <tr><td><code>/mecanico/vehiculos</code></td><td>Vehículos que ha atendido</td></tr>
+          <tr><td><code>/mecanico/historial</code></td><td>Historial de trabajos realizados</td></tr>
+          <tr><td><code>/mecanico/registrar</code></td><td>Registrar trabajo / mantenimiento completado</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 12. MÓDULOS ERP -->
+  <section class="section" id="modulo-erp">
+    <h2><span class="icon">📊</span> Módulos ERP — Flujos Principales</h2>
+
+    <h3>Flujo Completo: Placa ANT → OT → Factura → Caja</h3>
+    <div class="flow">
+      <div class="flow-step">Cliente llega</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Consulta ANT por placa</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Crear OT</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Diagnóstico + fotos</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Trabajo completado</div>
+    </div>
+    <div class="flow" style="margin-top: 8px;">
+      <div class="flow-step">Email automático al cliente</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Generar factura desde OT</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Cobrar (efectivo/tarjeta)</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Movimiento en caja</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Cierre de caja</div>
+    </div>
+
+    <h3>Checklist de Recepción OT (22 ítems)</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">📄 Documentación</div>
+        <div class="card-desc">Tarjeta de circulación, matrícula, SOAT, licencia del conductor</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🚗 Carrocería</div>
+        <div class="card-desc">Estado de puertas, capó, maletero, parachoques, vidrios, espejos</div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎁 Accesorios</div>
+        <div class="card-desc">Radio, gato mecánico, triángulos, extintor, llave de ruedas</div>
+      </div>
+    </div>
+
+    <h3>Fotos de Entrada / Salida</h3>
+    <p>Las fotos se suben al bucket <code class="inline">ot-fotos</code> de Supabase Storage. Soporta múltiples fotos por OT, organizadas por tipo (entrada / salida). Visibles en la pestaña "Fotos" del detalle de OT.</p>
+
+    <h3>Email Automático</h3>
+    <p>Al cambiar el estado de una OT, el sistema envía un email al cliente via <strong>Resend</strong> con el nuevo estado, descripción del trabajo y link al portal del cliente. Requiere <code class="inline">RESEND_API_KEY</code> en las variables de entorno.</p>
+  </section>
+
+
+  <!-- ══════════════════ 13. CONTABILIDAD -->
+  <section class="section" id="contabilidad">
+    <h2><span class="icon">📒</span> Módulo de Contabilidad</h2>
+    <p>Plan de cuentas basado en la normativa NEC/NIIF de Ecuador. Asientos contables con validación de partida doble en tiempo real.</p>
+
+    <h3>Plan de Cuentas — Grupos Principales</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Código</th><th>Nombre</th><th>Tipo</th><th>Nivel</th></tr></thead>
+        <tbody>
+          <tr><td><code>1</code></td><td>ACTIVOS</td><td><span class="badge badge-blue">activo</span></td><td>1 — Grupo</td></tr>
+          <tr><td><code>1.1</code></td><td>ACTIVO CORRIENTE (Caja, CxC, Inventario)</td><td><span class="badge badge-blue">activo</span></td><td>2 — Subgrupo</td></tr>
+          <tr><td><code>1.2</code></td><td>ACTIVO NO CORRIENTE (PPE, Vehículos)</td><td><span class="badge badge-blue">activo</span></td><td>2 — Subgrupo</td></tr>
+          <tr><td><code>2</code></td><td>PASIVOS (CxP, Obligaciones SRI)</td><td><span class="badge badge-red">pasivo</span></td><td>1 — Grupo</td></tr>
+          <tr><td><code>3</code></td><td>PATRIMONIO (Capital, Resultados)</td><td><span class="badge badge-purple">patrimonio</span></td><td>1 — Grupo</td></tr>
+          <tr><td><code>4</code></td><td>INGRESOS (Servicios, Repuestos)</td><td><span class="badge badge-green">ingreso</span></td><td>1 — Grupo</td></tr>
+          <tr><td><code>5</code></td><td>GASTOS (Personal, Generales)</td><td><span class="badge badge-yellow">gasto</span></td><td>1 — Grupo</td></tr>
+          <tr><td><code>6</code></td><td>COSTOS (Repuestos vendidos, M.O.)</td><td><span class="badge badge-cyan">costo</span></td><td>1 — Grupo</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Asientos Contables</h3>
+    <div class="alert alert-info">
+      El sistema valida que <strong>∑ Debe = ∑ Haber</strong> antes de permitir guardar el asiento. El botón "Guardar Asiento" permanece deshabilitado hasta que el asiento cuadre.
+    </div>
+    <p>Estados del asiento: <span class="badge badge-gray">borrador</span> → <span class="badge badge-green">contabilizado</span> (no editable) o <span class="badge badge-red">anulado</span>.</p>
+
+    <h3>Períodos Contables</h3>
+    <p>Seed 2026: enero–marzo cerrados, abril abierto. Los asientos solo pueden crearse en períodos abiertos. El cierre es irreversible salvo apertura manual por el contador.</p>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- ══════════════════ 14. API ROUTES -->
+  <section class="section" id="api-rest">
+    <h2><span class="icon">🔌</span> API Routes</h2>
+    <p>Todos los endpoints requieren sesión activa (Supabase Auth). Las respuestas son JSON salvo los PDFs.</p>
+
+    <div class="card" style="margin-bottom: 20px;">
+      <div class="route">
+        <span class="route-method method-get">GET</span>
+        <div>
+          <div class="route-path">/api/ant/placa?placa=ABC1234</div>
+          <div class="route-desc">Consulta datos del vehículo en la ANT Ecuador. Retorna marca, modelo, año, color, propietario y cédula. Usa caché 30 días en tabla <code>ant_cache</code>.</div>
+        </div>
+      </div>
+      <div class="route">
+        <span class="route-method method-get">GET</span>
+        <div>
+          <div class="route-path">/api/pdf/factura/[id]</div>
+          <div class="route-desc">Genera y retorna el PDF de una factura en formato SRI Ecuador. Content-Type: application/pdf.</div>
+        </div>
+      </div>
+      <div class="route">
+        <span class="route-method method-get">GET</span>
+        <div>
+          <div class="route-path">/api/pdf/ot/[id]</div>
+          <div class="route-desc">Genera y retorna el PDF de una Orden de Trabajo con checklist de daños, fotos y línea de firma del cliente.</div>
+        </div>
+      </div>
+      <div class="route">
+        <span class="route-method method-get">GET</span>
+        <div>
+          <div class="route-path">/api/auth/callback</div>
+          <div class="route-desc">Callback de Supabase Auth para links mágicos y OAuth. Redirige según rol post-autenticación.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Respuesta estándar ANT</h3>
+    <pre>{
+  <span class="s">"datos"</span>: {
+    <span class="s">"placa"</span>:       <span class="s">"ABC1234"</span>,
+    <span class="s">"marca"</span>:       <span class="s">"Ford"</span>,
+    <span class="s">"modelo"</span>:      <span class="s">"F-150"</span>,
+    <span class="s">"anio"</span>:        <span class="m">2020</span>,
+    <span class="s">"color"</span>:       <span class="s">"Blanco"</span>,
+    <span class="s">"propietario"</span>: <span class="s">"Juan Pérez"</span>,
+    <span class="s">"cedula"</span>:      <span class="s">"1712345678"</span>,
+    <span class="s">"tipo"</span>:        <span class="s">"pickup"</span>
+  }
+}</pre>
+
+    <h3>Códigos de error ANT</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>HTTP</th><th>Causa</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-yellow">400</span></td><td>Placa inválida o vacía</td></tr>
+          <tr><td><span class="badge badge-red">401</span></td><td>Sin sesión activa</td></tr>
+          <tr><td><span class="badge badge-gray">404</span></td><td>Placa no encontrada en la ANT</td></tr>
+          <tr><td><span class="badge badge-red">500</span></td><td>Error de conexión con la ANT</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 15. SERVER ACTIONS -->
+  <section class="section" id="server-actions">
+    <h2><span class="icon">⚡</span> Server Actions</h2>
+    <p>Funciones del servidor invocadas directamente desde componentes React. No requieren fetch manual. Ubicadas en <code class="inline">lib/actions/</code>.</p>
+
+    <h3>auth.ts — Autenticación</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Función</th><th>Parámetros</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td><code>signIn()</code></td><td>FormData (email, password)</td><td>Login con Supabase Auth. Redirige por rol.</td></tr>
+          <tr><td><code>signUp()</code></td><td>FormData (nombre, apellido, email, password)</td><td>Registro. Trigger SQL crea perfil automáticamente.</td></tr>
+          <tr><td><code>signOut()</code></td><td>—</td><td>Cierra sesión. Redirige a /.</td></tr>
+          <tr><td><code>resetPassword()</code></td><td>FormData (email)</td><td>Envía email de recuperación vía Supabase.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>erp.ts — ERP Core</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td><code>crearOrdenTrabajo()</code></td><td>Nueva OT con cliente, vehículo, descripción y sucursal</td></tr>
+          <tr><td><code>actualizarEstadoOT()</code></td><td>Cambia estado + envía email automático al cliente</td></tr>
+          <tr><td><code>guardarChecklistOT()</code></td><td>Guarda los 22 ítems del checklist de recepción</td></tr>
+          <tr><td><code>subirFotoOT()</code></td><td>Sube foto a Supabase Storage bucket 'ot-fotos'</td></tr>
+          <tr><td><code>eliminarFotoOT()</code></td><td>Elimina foto del bucket y la referencia en BD</td></tr>
+          <tr><td><code>agregarLineaOT()</code></td><td>Agrega servicio/repuesto a la OT (descuenta inventario)</td></tr>
+          <tr><td><code>crearFactura()</code></td><td>Genera factura con líneas, IVA 15% y numeración SRI</td></tr>
+          <tr><td><code>registrarPago()</code></td><td>Registra pago y crea movimiento en caja activa</td></tr>
+          <tr><td><code>abrirCaja()</code></td><td>Abre sesión de caja con fondo inicial</td></tr>
+          <tr><td><code>cerrarCaja()</code></td><td>Cierra sesión con cuadre de efectivo</td></tr>
+          <tr><td><code>crearCompra()</code></td><td>Orden de compra al proveedor</td></tr>
+          <tr><td><code>recibirCompra()</code></td><td>Confirma recepción y actualiza stock de inventario</td></tr>
+          <tr><td><code>ajustarStock()</code></td><td>Ajuste manual de inventario con motivo</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>contabilidad.ts — Contabilidad</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Función</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td><code>contabilizarAsiento(id)</code></td><td>Cambia estado borrador → contabilizado (irreversible)</td></tr>
+          <tr><td><code>anularAsiento(id)</code></td><td>Anula asiento contabilizado (deja registro de auditoría)</td></tr>
+          <tr><td><code>cerrarPeriodo(id)</code></td><td>Cierra período mensual. No se pueden crear asientos en períodos cerrados.</td></tr>
+          <tr><td><code>abrirPeriodo(anio, mes)</code></td><td>Reabre un período cerrado (solo contador o admin)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 16. INTEGRACIÓN ANT -->
+  <section class="section" id="api-ant">
+    <h2><span class="icon">🚗</span> Integración ANT Ecuador</h2>
+    <p>Feature estrella del demo. Al ingresar una placa ecuatoriana, el sistema consulta la ANT y autocompleta todos los datos del vehículo automáticamente.</p>
+
+    <h3>Funcionamiento técnico</h3>
+    <pre><span class="c">// lib/ant/consultar.ts</span>
+<span class="k">async function</span> <span class="m">consultarPlacaANT</span>(placa: string) {
+  <span class="c">// 1. Verificar caché en tabla ant_cache (30 días de TTL)</span>
+  <span class="k">const</span> cache = <span class="k">await</span> supabase
+    .from(<span class="s">'ant_cache'</span>)
+    .select(<span class="s">'*'</span>)
+    .eq(<span class="s">'placa'</span>, placa)
+    .gt(<span class="s">'expira'</span>, <span class="k">new</span> Date().toISOString())
+    .maybeSingle()
+
+  <span class="k">if</span> (cache.data) <span class="k">return</span> cache.data.datos  <span class="c">// hit de caché</span>
+
+  <span class="c">// 2. Consultar API externa ANT</span>
+  <span class="k">const</span> res = <span class="k">await</span> fetch(
+    <span class="s">`${ANT_API_URL}?placa=${placa}&apikey=${ANT_API_KEY}`</span>
+  )
+
+  <span class="c">// 3. Guardar en caché y retornar datos</span>
+}</pre>
+
+    <div class="alert alert-warning">
+      <strong>⚠ Configuración requerida:</strong> Se necesita una <code>ANT_API_KEY</code> válida de placaapi.ec para que la consulta funcione con datos reales. En desarrollo/demo, el mock de Playwright intercepta la llamada.
+    </div>
+
+    <h3>UX del formulario</h3>
+    <div class="flow">
+      <div class="flow-step">Campo "Placa"</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Botón "Consultar ANT"</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Spinner 1-2s</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Campos prellenados</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Toast "Datos completados desde la ANT"</div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- ══════════════════ 17. TESTS -->
+  <section class="section" id="tests">
+    <h2><span class="icon">✅</span> Tests E2E con Playwright</h2>
+    <p>49 tests automatizados en Chrome (Chromium). Ejecutan contra el servidor real de desarrollo con mocks solo para APIs externas (ANT, Resend).</p>
+
+    <div class="alert alert-success">
+      <strong>✓ 49 tests — 0 fallos</strong> — Tiempo de ejecución: ~1.6 minutos en serie (workers: 1)
+    </div>
+
+    <div class="test-suite">
+      <div class="test-suite-header"><span class="badge badge-blue">01-auth.spec.ts</span> <span style="color: var(--muted); font-size: 12px;">8 tests — Autenticación</span></div>
+      <div class="test-row"><span class="test-ok">✓</span> Login admin redirige a /admin/dashboard</div>
+      <div class="test-row"><span class="test-ok">✓</span> Login cliente redirige a /cliente/dashboard</div>
+      <div class="test-row"><span class="test-ok">✓</span> Login mecánico redirige a /mecanico/dashboard</div>
+      <div class="test-row"><span class="test-ok">✓</span> Credenciales incorrectas muestra error</div>
+      <div class="test-row"><span class="test-ok">✓</span> Ruta /admin/* sin login redirige a /login</div>
+      <div class="test-row"><span class="test-ok">✓</span> Ruta /cliente/* sin login redirige a /login</div>
+      <div class="test-row"><span class="test-ok">✓</span> Cliente no puede acceder a /admin/*</div>
+      <div class="test-row"><span class="test-ok">✓</span> Logout funciona y redirige</div>
+    </div>
+
+    <div class="test-suite">
+      <div class="test-suite-header"><span class="badge badge-green">02-public.spec.ts</span> <span style="color: var(--muted); font-size: 12px;">6 tests — Sitio Público</span></div>
+      <div class="test-row"><span class="test-ok">✓</span> Home carga con hero y CTAs</div>
+      <div class="test-row"><span class="test-ok">✓</span> /servicios lista servicios</div>
+      <div class="test-row"><span class="test-ok">✓</span> /sucursales muestra Quito y Guayaquil</div>
+      <div class="test-row"><span class="test-ok">✓</span> Formulario de contacto es visible</div>
+      <div class="test-row"><span class="test-ok">✓</span> Toggle dark/light mode funciona</div>
+      <div class="test-row"><span class="test-ok">✓</span> Navbar tiene link al portal</div>
+    </div>
+
+    <div class="test-suite">
+      <div class="test-suite-header"><span class="badge badge-cyan">04-ant.spec.ts</span> <span style="color: var(--muted); font-size: 12px;">3 tests — Integración ANT (con mock)</span></div>
+      <div class="test-row"><span class="test-ok">✓</span> Admin: consultar placa auto-rellena marca/modelo/año</div>
+      <div class="test-row"><span class="test-ok">✓</span> Cliente: consultar placa auto-rellena campos</div>
+      <div class="test-row"><span class="test-ok">✓</span> Placa no encontrada muestra mensaje de error</div>
+    </div>
+
+    <div class="test-suite">
+      <div class="test-suite-header"><span class="badge badge-purple">09-contabilidad.spec.ts</span> <span style="color: var(--muted); font-size: 12px;">7 tests — Contabilidad</span></div>
+      <div class="test-row"><span class="test-ok">✓</span> Plan de cuentas carga</div>
+      <div class="test-row"><span class="test-ok">✓</span> Nuevo asiento tiene tabla de partida doble</div>
+      <div class="test-row"><span class="test-ok">✓</span> Botón guardar deshabilitado si debe ≠ haber</div>
+      <div class="test-row"><span class="test-ok">✓</span> Períodos contables carga</div>
+      <div class="test-row"><span class="test-ok">✓</span> Sidebar muestra sección Contabilidad</div>
+    </div>
+
+    <h3>Correr los tests</h3>
+    <pre><span class="c"># Asegúrate que el servidor esté corriendo en localhost:3000</span>
+npm run dev
+
+<span class="c"># En otra terminal — correr todos los tests</span>
+npm run test:e2e
+
+<span class="c"># Ver reporte HTML con screenshots de fallos</span>
+npm run test:e2e:report
+
+<span class="c"># Debug visual interactivo</span>
+npm run test:e2e:ui</pre>
+
+    <h3>Mocks configurados</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Mock</th><th>Intercepta</th><th>Retorna</th></tr></thead>
+        <tbody>
+          <tr><td><code>mockANT()</code></td><td><code>**/api/ant/placa**</code></td><td>Datos ficticios: Ford F-150, 2020</td></tr>
+          <tr><td><code>mockResend()</code></td><td><code>**/api.resend.com/**</code></td><td><code>{"id": "test-email-id"}</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 18. SEGURIDAD -->
+  <section class="section" id="seguridad">
+    <h2><span class="icon">🛡</span> Seguridad y RLS</h2>
+    <p>Row Level Security habilitado en todas las tablas. Los usuarios solo pueden ver y modificar sus propios datos.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Regla</th><th>Detalle</th></tr></thead>
+        <tbody>
+          <tr><td>Perfiles</td><td>Usuario solo ve su propio perfil. Admin ve todos.</td></tr>
+          <tr><td>Vehículos</td><td>Cliente solo ve sus vehículos (WHERE cliente_id = auth.uid())</td></tr>
+          <tr><td>Citas</td><td>Cliente solo ve sus citas. Admin ve y modifica todas.</td></tr>
+          <tr><td>Mantenimientos</td><td>Cliente solo lectura de sus vehículos. Admin full CRUD.</td></tr>
+          <tr><td>Facturas / OTs</td><td>Admin y roles ERP. Cliente solo sus facturas en /cliente/mis-facturas.</td></tr>
+          <tr><td>Contabilidad</td><td>Solo admin y contador pueden escribir. Gerente solo lectura.</td></tr>
+          <tr><td>Inventario / Compras</td><td>Solo admin, asesor_repuestos y bodeguero.</td></tr>
+          <tr><td>Caja</td><td>Solo admin y facturadora pueden operar la caja.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Función helper de rol</h3>
+    <pre><span class="c">-- Usada en todas las políticas RLS</span>
+<span class="k">CREATE OR REPLACE FUNCTION</span> tiene_rol(roles <span class="t">TEXT[]</span>)
+<span class="k">RETURNS BOOLEAN AS</span> $$
+  <span class="k">SELECT EXISTS</span> (
+    <span class="k">SELECT</span> 1 <span class="k">FROM</span> public.perfiles
+    <span class="k">WHERE</span> id = auth.uid() <span class="k">AND</span> rol = <span class="k">ANY</span>(roles)
+  );
+$$ <span class="k">LANGUAGE sql SECURITY DEFINER</span>;</pre>
+
+    <div class="alert alert-warning">
+      <strong>⚠ Regla de oro:</strong> La verificación de permisos se hace siempre en el servidor (Server Components, Server Actions, API Routes). Nunca confiar en validaciones solo del cliente.
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+
+  <!-- ══════════════════ 19. ENV -->
+  <section class="section" id="env">
+    <h2><span class="icon">🔑</span> Variables de Entorno</h2>
+    <pre><span class="c"># ── Supabase (requerido) ──────────────────────────────────</span>
+NEXT_PUBLIC_SUPABASE_URL=https://TU_PROJECT_ID.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key_aqui
+SUPABASE_SERVICE_ROLE_KEY=tu_service_role_key   <span class="c"># Solo server-side</span>
+
+<span class="c"># ── App ──────────────────────────────────────────────────</span>
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_EMPRESA_NOMBRE="DG Motors"
+
+<span class="c"># ── ANT Ecuador ──────────────────────────────────────────</span>
+ANT_API_URL=https://www.placaapi.ec/api/reg.asmx/CheckEC
+ANT_API_KEY=tu_api_key_de_placaapi_ec
+
+<span class="c"># ── Email (Resend) ───────────────────────────────────────</span>
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
+
+<span class="c"># ── SRI Ecuador (llegan al firmar contrato) ──────────────</span>
+SRI_RUC=
+SRI_AMBIENTE=pruebas
+SRI_CERTIFICADO_P12=
+SRI_CERTIFICADO_PASS=</pre>
+  </section>
+
+
+  <!-- ══════════════════ 20. CREDENCIALES -->
+  <section class="section" id="credenciales">
+    <h2><span class="icon">👥</span> Credenciales Demo</h2>
+    <div class="alert alert-info">Estas credenciales son para el entorno de demo/pruebas. Cambiarlas antes de ir a producción.</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rol</th><th>Email</th><th>Contraseña</th><th>Portal</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-red">admin</span></td>
+            <td><code>admin1@dgmotors.com</code></td>
+            <td><code>Demo1234!</code></td>
+            <td>/admin/dashboard</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-blue">cliente</span></td>
+            <td><code>jvargas@gmail.com</code></td>
+            <td><code>Demo1234!</code></td>
+            <td>/cliente/dashboard</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-cyan">mecanico</span></td>
+            <td><code>carlos@dgmotors.com</code></td>
+            <td><code>Demo1234!</code></td>
+            <td>/mecanico/dashboard</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════ 21. MIGRATIONS -->
+  <section class="section" id="migrations">
+    <h2><span class="icon">🗂</span> Migrations SQL</h2>
+    <p>Ejecutar en orden en el SQL Editor de Supabase. Las migrations 015, 016 y 017 están listas pero aún no ejecutadas.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Migration</th><th>Descripción</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td><code>001_schema_inicial</code></td><td>Tablas base: perfiles, vehículos, servicios, citas, mantenimientos, aceite, notificaciones, reseñas, horarios</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>002_rls_policies</code></td><td>RLS para todas las tablas base</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>003_seed_servicios</code></td><td>15 servicios con precios, 7 categorías, horarios sucursales</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>004_productos</code></td><td>Tabla productos para catálogo público</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>005_mecanico_role</code></td><td>Soporte para rol mecánico en RLS</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>006_seed_productos</code></td><td>Productos de ejemplo para el catálogo</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>007_citas_tecnico</code></td><td>Campo tecnico_id en citas</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>008_fix_citas_rls</code></td><td>Corrección de políticas RLS para mecánicos</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>009_demo_seed</code></td><td>Datos demo iniciales</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>010_contactos_table</code></td><td>Tabla contactos del formulario público</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>011_demo_contactos</code></td><td>Contactos de ejemplo</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>012_reset_y_seed_final</code></td><td>Seed completo de usuarios, vehículos y datos demo</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>013_erp_schema_completo</code></td><td>ERP: OTs, inventario, facturas, caja, compras, proveedores, cajas</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>014_checklist_fotos_ot</code></td><td>Campos checklist_entrada, fotos_entrada/salida en OTs</td><td><span class="badge badge-green">✓ Ejecutada</span></td></tr>
+          <tr><td><code>015_roles_completos</code></td><td>Nuevos roles: gerente, facturadora, asesor_servicios, asesor_repuestos, bodeguero, contador</td><td><span class="badge badge-yellow">⏳ Pendiente</span></td></tr>
+          <tr><td><code>016_consulta_ant</code></td><td>Tabla ant_cache para caché de consultas ANT (30 días TTL)</td><td><span class="badge badge-yellow">⏳ Pendiente</span></td></tr>
+          <tr><td><code>017_contabilidad</code></td><td>Plan de cuentas, centros de costos, períodos, asientos contables + seed NEC/NIIF Ecuador</td><td><span class="badge badge-yellow">⏳ Pendiente</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <div style="margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap;">
+    <div>DG Motors ERP — Documentación Técnica v1.0</div>
+    <div>Next.js 16.2 · Supabase · Playwright · Abril 2026</div>
+  </div>
+
+</main>
+</div>
+
+<script>
+  // Highlight active nav item on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navItems.forEach(item => item.classList.remove('active'));
+        const active = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Smooth scroll
+  navItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = item.getAttribute('href').slice(1);
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>

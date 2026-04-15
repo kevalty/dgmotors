@@ -27,6 +27,9 @@ import {
   ListTree,
   AlignLeft,
   CalendarRange,
+  Scale,
+  TrendingUp,
+  Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/actions/auth";
@@ -63,6 +66,15 @@ const navGroups = [
       { href: "/admin/contabilidad/plan-cuentas", icon: ListTree,     label: "Plan de Cuentas" },
       { href: "/admin/contabilidad/asientos",     icon: AlignLeft,    label: "Asientos" },
       { href: "/admin/contabilidad/periodos",     icon: CalendarRange, label: "Períodos" },
+      { href: "/admin/contabilidad/balance",      icon: Scale,        label: "Balance General" },
+      { href: "/admin/contabilidad/resultados",   icon: TrendingUp,   label: "Est. Resultados" },
+    ],
+  },
+  {
+    label: "Activos Fijos",
+    items: [
+      { href: "/admin/activos",              icon: Building2,     label: "Activos" },
+      { href: "/admin/activos/depreciacion", icon: TrendingUp,    label: "Depreciación" },
     ],
   },
   {
