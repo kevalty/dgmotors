@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DG Motors ERP — Valoración del Proyecto</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+:root{
+  --red:#E84040; --bg:#FAFAFA; --bg2:#FFFFFF; --bg3:#F3F4F6;
+  --border:#E5E7EB; --text:#111827; --muted:#6B7280;
+  --green:#16A34A; --blue:#2563EB; --yellow:#D97706; --purple:#7C3AED;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,#0A0A0B 0%,#1a1015 100%);color:#fff;padding:60px 64px 50px;}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-icon{width:44px;height:44px;background:var(--red);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.logo-text .name{font-size:20px;font-weight:800;letter-spacing:-.5px;}
+.logo-text .sub{font-size:12px;color:#9CA3AF;margin-top:1px;}
+.doc-badge{background:rgba(232,64,64,.2);border:1px solid rgba(232,64,64,.4);color:#FCA5A5;font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;padding:5px 12px;border-radius:20px;}
+.header-title{margin-top:36px;}
+.header-title h1{font-size:42px;font-weight:800;letter-spacing:-1.5px;line-height:1.1;}
+.header-title h1 span{color:var(--red);}
+.header-title p{margin-top:12px;font-size:15px;color:#9CA3AF;max-width:560px;}
+.header-stats{display:flex;gap:40px;margin-top:36px;padding-top:32px;border-top:1px solid rgba(255,255,255,.08);flex-wrap:wrap;}
+.hstat .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#6B7280;}
+.hstat .val{font-size:26px;font-weight:800;margin-top:2px;}
+.hstat .val.red{color:var(--red);}
+.hstat .val.green{color:#4ADE80;}
+
+/* LAYOUT */
+.container{max-width:1000px;margin:0 auto;padding:48px 40px 80px;}
+
+/* SECTIONS */
+.section{margin-bottom:52px;}
+.section-title{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--red);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+h2{font-size:22px;font-weight:700;margin-bottom:6px;}
+h3{font-size:16px;font-weight:600;margin:24px 0 10px;}
+p{color:var(--muted);font-size:14px;margin-bottom:10px;}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px;}
+.card-grid{display:grid;gap:16px;margin-bottom:24px;}
+.card-grid.col2{grid-template-columns:1fr 1fr;}
+.card-grid.col3{grid-template-columns:1fr 1fr 1fr;}
+.card-grid.col4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.card-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ci-red{background:#FEE2E2;}
+.ci-blue{background:#DBEAFE;}
+.ci-green{background:#DCFCE7;}
+.ci-purple{background:#F3E8FF;}
+.ci-yellow{background:#FEF3C7;}
+.ci-gray{background:var(--bg3);}
+.card-title{font-size:14px;font-weight:600;}
+.card-desc{font-size:13px;color:var(--muted);}
+
+/* PRICE TABLE */
+.price-table{width:100%;border-collapse:collapse;font-size:13px;}
+.price-table thead tr{background:var(--bg3);border-bottom:2px solid var(--border);}
+.price-table th{padding:11px 16px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
+.price-table td{padding:11px 16px;border-bottom:1px solid var(--border);color:var(--text);}
+.price-table tr:last-child td{border-bottom:none;}
+.price-table tr:hover td{background:var(--bg3);}
+.price-table .amount{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;}
+.price-table .subtotal td{background:#F9FAFB;font-weight:600;}
+.price-table .total-row td{background:var(--text);color:#fff;font-weight:700;font-size:15px;}
+.price-table .total-row .amount{color:#4ADE80;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.b-red{background:#FEE2E2;color:#DC2626;}
+.b-green{background:#DCFCE7;color:#16A34A;}
+.b-blue{background:#DBEAFE;color:#2563EB;}
+.b-yellow{background:#FEF3C7;color:#D97706;}
+.b-purple{background:#F3E8FF;color:#7C3AED;}
+.b-gray{background:var(--bg3);color:var(--muted);}
+
+/* PHASE TABLE */
+.phase-row{display:flex;gap:0;margin-bottom:10px;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.phase-num{background:var(--text);color:#fff;width:44px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.phase-body{flex:1;padding:12px 16px;}
+.phase-name{font-size:14px;font-weight:600;}
+.phase-desc{font-size:12px;color:var(--muted);margin-top:3px;}
+.phase-meta{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+.phase-num.done{background:var(--green);}
+.phase-num.pending{background:var(--text);}
+
+/* ALERT */
+.alert{border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:13.5px;display:flex;gap:12px;align-items:flex-start;}
+.alert-green{background:#F0FDF4;border:1px solid #BBF7D0;color:#15803D;}
+.alert-blue{background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;}
+.alert-yellow{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E;}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* BIG NUMBERS */
+.big-number-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:32px;}
+.big-num{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;}
+.big-num .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:8px;}
+.big-num .num{font-size:32px;font-weight:800;letter-spacing:-1px;}
+.big-num .sub{font-size:12px;color:var(--muted);margin-top:4px;}
+.big-num.highlight{background:var(--text);border-color:var(--text);}
+.big-num.highlight .lbl{color:#9CA3AF;}
+.big-num.highlight .num{color:#4ADE80;}
+.big-num.highlight .sub{color:#6B7280;}
+
+/* COMPARISON */
+.vs-grid{display:grid;grid-template-columns:1fr 40px 1fr;gap:0;align-items:start;margin:20px 0;}
+.vs-col{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 24px;}
+.vs-col.theirs{border-color:#FCA5A5;}
+.vs-col.ours{border-color:#86EFAC;}
+.vs-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;}
+.vs-label.red{color:#DC2626;}
+.vs-label.green{color:#16A34A;}
+.vs-divider{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--muted);padding-top:60px;}
+.vs-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.vs-item:last-child{border-bottom:none;}
+.vs-item .label{color:var(--muted);}
+.vs-item .value{font-weight:600;}
+
+/* ROI */
+.roi-bar-container{background:var(--bg3);border-radius:8px;overflow:hidden;height:28px;margin:8px 0;}
+.roi-bar{height:100%;background:linear-gradient(90deg,#16A34A,#4ADE80);border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:12px;font-weight:600;color:#fff;}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:28px;}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border);}
+.tl-item{position:relative;margin-bottom:20px;}
+.tl-item::before{content:'';position:absolute;left:-24px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--red);border:2px solid #fff;box-shadow:0 0 0 2px var(--red);}
+.tl-title{font-size:14px;font-weight:600;}
+.tl-desc{font-size:12.5px;color:var(--muted);margin-top:3px;}
+
+/* FOOTER */
+.doc-footer{background:var(--text);color:#fff;padding:40px 64px;margin-top:60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+.doc-footer .brand{font-size:16px;font-weight:700;}
+.doc-footer .legal{font-size:12px;color:#6B7280;max-width:400px;}
+
+@media print{
+  .container{padding:20px;}
+  .header{padding:40px;}
+}
+@media(max-width:700px){
+  .header{padding:40px 24px 36px;}
+  .container{padding:32px 20px 60px;}
+  .card-grid.col2,.card-grid.col3,.card-grid.col4{grid-template-columns:1fr;}
+  .vs-grid{grid-template-columns:1fr;}.vs-divider{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div class="header">
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-icon">⚙</div>
+      <div class="logo-text">
+        <div class="name">DG Motors ERP</div>
+        <div class="sub">Plataforma de Gestión Automotriz</div>
+      </div>
+    </div>
+    <div class="doc-badge">Valoración del Proyecto</div>
+  </div>
+  <div class="header-title">
+    <h1>Inversión Total del<br/><span>Proyecto Completo</span></h1>
+    <p>Estimación detallada de costos de desarrollo, infraestructura, servicios y retorno de inversión para la plataforma ERP DG Motors.</p>
+  </div>
+  <div class="header-stats">
+    <div class="hstat"><div class="lbl">Inversión desarrollo</div><div class="val red">$18,200 – $24,000</div></div>
+    <div class="hstat"><div class="lbl">Costo mensual infraestructura</div><div class="val">$95 – $145 / mes</div></div>
+    <div class="hstat"><div class="lbl">Horas completadas / totales</div><div class="val">~576 / 733 h</div></div>
+    <div class="hstat"><div class="lbl">Retorno de inversión estimado</div><div class="val green">&lt; 18 meses</div></div>
+  </div>
+</div>
+
+<!-- ══════════ CONTENIDO ══════════ -->
+<div class="container">
+
+  <!-- ══ RESUMEN EJECUTIVO ══ -->
+  <div class="section">
+    <div class="section-title">01 — Resumen ejecutivo</div>
+    <h2>¿Qué es este proyecto?</h2>
+    <p>DG Motors ERP es una plataforma de gestión automotriz completa construida 100% a medida. Reemplaza el software GETSOFT que actualmente usan, entregando exactamente las mismas funcionalidades pero con control total del código, personalización ilimitada y la posibilidad de licenciarlo a otros talleres.</p>
+
+    <div class="card-grid col3" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-red">🏢</div><div class="card-title">Para DG Motors</div></div>
+        <div class="card-desc">Sistema ERP propio, adaptado a su operación exacta: dos sucursales, 9 roles de usuario, facturación electrónica SRI, contabilidad NEC/NIIF Ecuador.</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-blue">📈</div><div class="card-title">Modelo de negocio</div></div>
+        <div class="card-desc">Con arquitectura multi-taller, pueden licenciar el sistema a su red de 400+ talleres aliados a $150–$300/mes por taller. Potencial de $60,000–$120,000/mes.</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-green">✅</div><div class="card-title">Ventaja competitiva</div></div>
+        <div class="card-desc">Integración ANT Ecuador (placa → datos auto), facturación electrónica SRI, portal cliente con historial, app móvil para mecánicos y 8 dashboards gerenciales.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ALCANCE COMPLETO ══ -->
+  <div class="section">
+    <div class="section-title">02 — Alcance del proyecto completo</div>
+    <h2>Las 17 fases del proyecto</h2>
+    <p style="margin-bottom:20px;">El proyecto se divide en 17 fases. Las fases 1–13 están completadas. Las fases 14–17 son el trabajo restante.</p>
+
+    <!-- COMPLETADAS -->
+    <h3 style="color:var(--green);margin-bottom:12px;">✅ Fases completadas (1–13)</h3>
+
+    <div class="phase-row"><div class="phase-num done">1</div><div class="phase-body"><div class="phase-name">Setup, autenticación y sitio público</div><div class="phase-desc">Proyecto Next.js, Supabase, login/registro por roles, landing page, servicios, sucursales, contacto, dark/light mode.</div><div class="phase-meta"><span class="badge b-green">Completada</span><span class="badge b-gray">~60 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num done">2–4</div><div class="phase-body"><div class="phase-name">Portal Cliente y Panel Admin Base</div><div class="phase-desc">Dashboard cliente, vehículos, citas, historial de mantenimiento, panel admin con gestión de clientes, citas y servicios.</div><div class="phase-meta"><span class="badge b-green">Completada</span><span class="badge b-gray">~80 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num done">5–8</div><div class="phase-body"><div class="phase-name">ERP Core: OTs, Facturación, Caja, Inventario, Compras</div><div class="phase-desc">Órdenes de trabajo con checklist 22 ítems y fotos, facturación IVA 15% formato SRI, caja diaria, inventario de repuestos con alertas, compras a proveedores, portal mecánico mobile, PDFs, email automático, integración ANT Ecuador.</div><div class="phase-meta"><span class="badge b-green">Completada</span><span class="badge b-gray">~160 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num done">9</div><div class="phase-body"><div class="phase-name">Contabilidad completa</div><div class="phase-desc">Plan de cuentas NEC/NIIF Ecuador, asientos en partida doble, períodos contables, asientos automáticos al facturar/cobrar/comprar, Balance General y Estado de Resultados.</div><div class="phase-meta"><span class="badge b-green">Completada</span><span class="badge b-gray">~40 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num done">10</div><div class="phase-body"><div class="phase-name">Activos Fijos</div><div class="phase-desc">Control de activos, categorías con vida útil, depreciación mensual automática (línea recta), asientos contables generados automáticamente.</div><div class="phase-meta"><span class="badge b-green">Completada</span><span class="badge b-gray">~20 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num done">11</div><div class="phase-body"><div class="phase-name">Caja y Bancos Avanzado</div><div class="phase-desc">Cuentas bancarias con saldo calculado en tiempo real, depósitos, retiros, transferencias, tarjetas de crédito/débito, conciliación bancaria. Sidebar sección "Bancos".</div><div class="phase-meta"><span class="badge b-green">Completada</span><span class="badge b-gray">~25 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num done">12</div><div class="phase-body"><div class="phase-name">Ventas Avanzadas (Retenciones + Anticipos + NC + CRM)</div><div class="phase-desc">Retenciones SRI con códigos 303/304/312/721-724, anticipos de clientes con asiento automático, notas de crédito vinculadas a factura origen, CRM de prospectos con pipeline de 7 estados. <strong>Pendiente:</strong> integración SRI XML/P12 (esperando credenciales del cliente).</div><div class="phase-meta"><span class="badge b-green">Completada (90%)</span><span class="badge b-gray">~42 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num done">13</div><div class="phase-body"><div class="phase-name">Los 8 Dashboards Gerenciales</div><div class="phase-desc">Gerencial (KPIs + gráfica mensual + top clientes), Ventas (bruto/neto/IVA + por método de pago), Compras (por proveedor + mensual), CxC (vencidas + top deudores), Tesorería (saldos bancarios + movimientos), Vendedores (ranking), Comparativa (vs año anterior + tabla mensual + utilidad acumulada), Rentabilidad (margen bruto + top servicios + por categoría). <strong>Pendiente:</strong> exportación a Excel/PDF.</div><div class="phase-meta"><span class="badge b-green">Completada (95%)</span><span class="badge b-gray">~60 h</span></div></div></div>
+
+    <!-- PENDIENTES -->
+    <h3 style="margin-top:28px;margin-bottom:12px;">⏳ Fases pendientes (14–17)</h3>
+
+    <div class="phase-row"><div class="phase-num pending">14</div><div class="phase-body"><div class="phase-name">Inventario Avanzado</div><div class="phase-desc">Transferencias entre bodegas Quito ↔ Guayaquil, kardex valorizado (FIFO/promedio ponderado), toma física, control de series y lotes, lista de precios múltiple, etiquetas con código QR.</div><div class="phase-meta"><span class="badge b-yellow">Pendiente</span><span class="badge b-gray">~40 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num pending">15</div><div class="phase-body"><div class="phase-name">App Móvil Técnicos (PWA)</div><div class="phase-desc">Optimización mobile-first del portal mecánico. Diagrama visual del vehículo para marcar zonas de daño. Cámara integrada. Configuración PWA con service worker e íconos de app.</div><div class="phase-meta"><span class="badge b-yellow">Pendiente</span><span class="badge b-gray">~30 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num pending">16</div><div class="phase-body"><div class="phase-name">Multi-Taller SaaS</div><div class="phase-desc">Conversión a SaaS: taller_id en todas las tablas, aislamiento total de datos por taller, subdominos dinámicos, wizard de onboarding para nuevos talleres, CRM de prospectos para los 400+ talleres aliados, planes de suscripción.</div><div class="phase-meta"><span class="badge b-yellow">Pendiente</span><span class="badge b-gray">~90 h</span></div></div></div>
+
+    <div class="phase-row"><div class="phase-num pending">17</div><div class="phase-body"><div class="phase-name">QA Final, Optimización y Deploy</div><div class="phase-desc">Tests E2E completos para todos los flujos, pruebas de carga con 500+ registros, optimización de queries, configuración de backups automáticos, deploy en Vercel con dominio app.dgmotors.com.ec.</div><div class="phase-meta"><span class="badge b-yellow">Pendiente</span><span class="badge b-gray">~25 h</span></div></div></div>
+  </div>
+
+  <!-- ══ DESGLOSE DE COSTOS ══ -->
+  <div class="section">
+    <div class="section-title">03 — Desglose de costos de desarrollo</div>
+    <h2>Inversión en desarrollo</h2>
+
+    <div class="alert alert-blue">
+      <div class="alert-icon">ℹ️</div>
+      <div>La tarifa de $35/hora USD corresponde a un desarrollador senior fullstack en Ecuador con especialización en Next.js, Supabase, TypeScript y sistemas ERP. Incluye diseño UI/UX, desarrollo, testing y documentación.</div>
+    </div>
+
+    <table class="price-table">
+      <thead>
+        <tr>
+          <th>Módulo / Fase</th>
+          <th>Estado</th>
+          <th>Horas estimadas</th>
+          <th class="amount">Costo (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Setup, Auth y Sitio Público</strong><br/><span style="color:var(--muted);font-size:12px;">Next.js 16, Supabase, login multi-rol, landing, 6 páginas públicas, dark mode</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>60 h</td>
+          <td class="amount">$2,100</td>
+        </tr>
+        <tr>
+          <td><strong>Portal Cliente</strong><br/><span style="color:var(--muted);font-size:12px;">Dashboard, vehículos, citas, mantenimiento, aceite, facturas, perfil</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>45 h</td>
+          <td class="amount">$1,575</td>
+        </tr>
+        <tr>
+          <td><strong>Panel Admin Base</strong><br/><span style="color:var(--muted);font-size:12px;">Clientes, vehículos, citas, mantenimiento, servicios, reportes básicos</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>40 h</td>
+          <td class="amount">$1,400</td>
+        </tr>
+        <tr>
+          <td><strong>ERP Core: OTs + Portal Mecánico</strong><br/><span style="color:var(--muted);font-size:12px;">Órdenes de trabajo, checklist 22 ítems, fotos Supabase Storage, historial, portal mecánico</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>55 h</td>
+          <td class="amount">$1,925</td>
+        </tr>
+        <tr>
+          <td><strong>Facturación + Caja</strong><br/><span style="color:var(--muted);font-size:12px;">Facturas formato SRI, IVA 15%, pagos, sesiones de caja, cuadre diario, PDF factura y OT</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>50 h</td>
+          <td class="amount">$1,750</td>
+        </tr>
+        <tr>
+          <td><strong>Inventario + Compras + Proveedores</strong><br/><span style="color:var(--muted);font-size:12px;">Repuestos, kardex, alertas stock, órdenes de compra, directorio proveedores</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>40 h</td>
+          <td class="amount">$1,400</td>
+        </tr>
+        <tr>
+          <td><strong>Integración ANT + Email + PDFs avanzados</strong><br/><span style="color:var(--muted);font-size:12px;">Consulta ANT por placa, cache 30 días, email automático Resend, PDF React</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>30 h</td>
+          <td class="amount">$1,050</td>
+        </tr>
+        <tr>
+          <td><strong>Contabilidad completa</strong><br/><span style="color:var(--muted);font-size:12px;">Plan cuentas NEC/NIIF, asientos partida doble, asientos automáticos, Balance, Resultados</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>40 h</td>
+          <td class="amount">$1,400</td>
+        </tr>
+        <tr>
+          <td><strong>Activos Fijos</strong><br/><span style="color:var(--muted);font-size:12px;">Registro, depreciación mensual automática, asientos contables</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>20 h</td>
+          <td class="amount">$700</td>
+        </tr>
+        <tr>
+          <td><strong>Tests E2E + Documentación (v1)</strong><br/><span style="color:var(--muted);font-size:12px;">49 tests Playwright suites 01–09, documentación técnica v2.0</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>28 h</td>
+          <td class="amount">$980</td>
+        </tr>
+        <tr>
+          <td><strong>Bancos Avanzado (Fase 11)</strong><br/><span style="color:var(--muted);font-size:12px;">Cuentas bancarias con saldo en tiempo real, movimientos, conciliación bancaria, tarjetas</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>25 h</td>
+          <td class="amount">$875</td>
+        </tr>
+        <tr>
+          <td><strong>Ventas Avanzadas (Fase 12 — 90%)</strong><br/><span style="color:var(--muted);font-size:12px;">Retenciones SRI, anticipos, notas de crédito, CRM prospectos. Pendiente: XML SRI (esperando P12)</span></td>
+          <td><span class="badge b-green">✓ Completado (90%)</span></td>
+          <td>42 h</td>
+          <td class="amount">$1,470</td>
+        </tr>
+        <tr>
+          <td><strong>8 Dashboards Gerenciales (Fase 13 — 95%)</strong><br/><span style="color:var(--muted);font-size:12px;">Gerencial, Ventas, Compras, CxC, Tesorería, Vendedores, Comparativa, Rentabilidad. Pendiente: exportar Excel/PDF</span></td>
+          <td><span class="badge b-green">✓ Completado (95%)</span></td>
+          <td>60 h</td>
+          <td class="amount">$2,100</td>
+        </tr>
+        <tr>
+          <td><strong>Tests E2E + Documentación (v2 — Fases 11–13)</strong><br/><span style="color:var(--muted);font-size:12px;">48 tests nuevos suites 10–13, documentación técnica v3.0 actualizada</span></td>
+          <td><span class="badge b-green">✓ Completado</span></td>
+          <td>13 h</td>
+          <td class="amount">$455</td>
+        </tr>
+        <tr class="subtotal">
+          <td colspan="2"><strong>SUBTOTAL — Trabajo completado (Fases 1–13)</strong></td>
+          <td><strong>576 h</strong></td>
+          <td class="amount"><strong>$20,160</strong></td>
+        </tr>
+        <tr style="height:8px;"><td colspan="4"></td></tr>
+        <tr>
+          <td><strong>Integración SRI Electrónico (restante Fase 12)</strong><br/><span style="color:var(--muted);font-size:12px;">XML comprobante, firma P12, envío y autorización electrónica SRI</span></td>
+          <td><span class="badge b-yellow">Pendiente (espera P12)</span></td>
+          <td>8 h</td>
+          <td class="amount">$280</td>
+        </tr>
+        <tr>
+          <td><strong>Exportación Excel/PDF Dashboards (restante Fase 13)</strong><br/><span style="color:var(--muted);font-size:12px;">Botón exportar en cada dashboard, formato Excel con libxlsx y PDF con @react-pdf</span></td>
+          <td><span class="badge b-yellow">Pendiente</span></td>
+          <td>8 h</td>
+          <td class="amount">$280</td>
+        </tr>
+        <tr>
+          <td><strong>Inventario Avanzado (Fase 14)</strong><br/><span style="color:var(--muted);font-size:12px;">Transferencias entre bodegas, kardex valorizado, toma física, QR, precios múltiples</span></td>
+          <td><span class="badge b-yellow">Pendiente</span></td>
+          <td>40 h</td>
+          <td class="amount">$1,400</td>
+        </tr>
+        <tr>
+          <td><strong>App Móvil Técnicos PWA (Fase 15)</strong><br/><span style="color:var(--muted);font-size:12px;">Touch-first, diagrama vehículo, cámara integrada, service worker, instalable en celular</span></td>
+          <td><span class="badge b-yellow">Pendiente</span></td>
+          <td>30 h</td>
+          <td class="amount">$1,050</td>
+        </tr>
+        <tr>
+          <td><strong>Multi-Taller SaaS (Fase 16)</strong><br/><span style="color:var(--muted);font-size:12px;">Multi-tenancy, subdominios, onboarding, planes suscripción, facturación por taller</span></td>
+          <td><span class="badge b-yellow">Pendiente</span></td>
+          <td>90 h</td>
+          <td class="amount">$3,150</td>
+        </tr>
+        <tr>
+          <td><strong>QA Final, Optimización y Deploy (Fase 17)</strong><br/><span style="color:var(--muted);font-size:12px;">Tests completos, optimización queries, backups automáticos, deploy Vercel producción</span></td>
+          <td><span class="badge b-yellow">Pendiente</span></td>
+          <td>25 h</td>
+          <td class="amount">$875</td>
+        </tr>
+        <tr class="subtotal">
+          <td colspan="2"><strong>SUBTOTAL — Trabajo restante (Fases 12–17 parciales)</strong></td>
+          <td><strong>201 h</strong></td>
+          <td class="amount"><strong>$7,035</strong></td>
+        </tr>
+        <tr style="height:8px;"><td colspan="4"></td></tr>
+        <tr class="total-row">
+          <td colspan="2"><strong>TOTAL INVERSIÓN EN DESARROLLO</strong></td>
+          <td><strong>777 h</strong></td>
+          <td class="amount"><strong>$27,195</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-yellow" style="margin-top:16px;">
+      <div class="alert-icon">💡</div>
+      <div><strong>Nota sobre el SRI (Fase 12):</strong> La integración de facturación electrónica requiere las credenciales del certificado P12 que el SRI entrega al cliente. El costo de obtención del certificado digital (firma electrónica) varía entre $20–$60 USD anuales, dependiendo del proveedor autorizado por el BCE Ecuador.</div>
+    </div>
+  </div>
+
+  <!-- ══ INFRAESTRUCTURA ══ -->
+  <div class="section">
+    <div class="section-title">04 — Costos de infraestructura y servicios</div>
+    <h2>Costos operativos mensuales</h2>
+    <p>Estos son los costos recurrentes para mantener la plataforma funcionando en producción.</p>
+
+    <table class="price-table" style="margin-top:16px;">
+      <thead>
+        <tr>
+          <th>Servicio</th>
+          <th>Plan recomendado</th>
+          <th>Incluye</th>
+          <th class="amount">Costo/mes (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Supabase</strong><br/><span style="color:var(--muted);font-size:12px;">Base de datos PostgreSQL + Auth + Storage</span></td>
+          <td><span class="badge b-blue">Pro</span></td>
+          <td style="font-size:12px;">8GB DB, 100GB storage, 100k usuarios activos/mes, backups diarios</td>
+          <td class="amount"><strong>$25</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Vercel</strong><br/><span style="color:var(--muted);font-size:12px;">Hosting del servidor Next.js</span></td>
+          <td><span class="badge b-blue">Pro</span></td>
+          <td style="font-size:12px;">Deployments ilimitados, dominios custom, 1TB bandwidth, analytics</td>
+          <td class="amount"><strong>$20</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Resend</strong><br/><span style="color:var(--muted);font-size:12px;">Email transaccional (emails automáticos a clientes)</span></td>
+          <td><span class="badge b-gray">Starter</span></td>
+          <td style="font-size:12px;">50,000 emails/mes — más que suficiente para 2 sucursales</td>
+          <td class="amount"><strong>$20</strong></td>
+        </tr>
+        <tr>
+          <td><strong>API ANT Ecuador</strong><br/><span style="color:var(--muted);font-size:12px;">Consulta de placas (consultaplaca.com.ec u otro proveedor)</span></td>
+          <td><span class="badge b-gray">Básico</span></td>
+          <td style="font-size:12px;">~500–1,000 consultas/mes con cache de 30 días (reduce llamadas reales)</td>
+          <td class="amount"><strong>$20 – $50</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Dominio</strong><br/><span style="color:var(--muted);font-size:12px;">app.dgmotors.com.ec (si ya tienen el dominio, es solo el subdominio)</span></td>
+          <td><span class="badge b-gray">Anual</span></td>
+          <td style="font-size:12px;">Dominio .com.ec por 1 año ($15/año = $1.25/mes)</td>
+          <td class="amount"><strong>~$1.25</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Certificado Digital SRI (firma electrónica)</strong><br/><span style="color:var(--muted);font-size:12px;">Para firmar facturas electrónicas. Proveedor autorizado BCE.</span></td>
+          <td><span class="badge b-gray">Anual</span></td>
+          <td style="font-size:12px;">Certificado P12 válido 2 años (~$40–$60 cada 2 años = ~$2/mes)</td>
+          <td class="amount"><strong>~$2.50</strong></td>
+        </tr>
+        <tr class="subtotal">
+          <td colspan="3"><strong>TOTAL MENSUAL — Operación normal</strong></td>
+          <td class="amount"><strong>$88 – $118/mes</strong></td>
+        </tr>
+        <tr class="subtotal">
+          <td colspan="3"><strong>TOTAL ANUAL — Operación normal</strong></td>
+          <td class="amount"><strong>$1,056 – $1,416/año</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-green" style="margin-top:16px;">
+      <div class="alert-icon">💡</div>
+      <div><strong>Ahorro vs alternativas:</strong> ERP en la nube como GETSOFT cobra entre $200–$500/mes por empresa. Con esta infraestructura propia, el costo es 75–90% menor y con control total de los datos.</div>
+    </div>
+
+    <h3 style="margin-top:28px;">Si escalan a SaaS (Fase 16) — Infraestructura para 50+ talleres</h3>
+    <table class="price-table">
+      <thead>
+        <tr>
+          <th>Servicio</th>
+          <th>Plan SaaS</th>
+          <th class="amount">Costo/mes (USD)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Supabase</td><td>Team (multi-proyecto o self-hosted)</td><td class="amount">$599 – variable</td></tr>
+        <tr><td>Vercel</td><td>Enterprise o self-hosted en VPS</td><td class="amount">$150 – $300</td></tr>
+        <tr><td>Resend</td><td>Scale (hasta 200k emails/mes)</td><td class="amount">$89</td></tr>
+        <tr><td>API ANT</td><td>Plan alto volumen</td><td class="amount">$100 – $200</td></tr>
+        <tr class="subtotal"><td colspan="2"><strong>TOTAL mensual infraestructura SaaS (50 talleres)</strong></td><td class="amount"><strong>~$938 – $1,188</strong></td></tr>
+        <tr><td colspan="2" style="color:var(--muted);font-size:12px;">Ingresos 50 talleres × $200/mes</td><td class="amount" style="color:var(--green);font-weight:700">$10,000/mes</td></tr>
+        <tr><td colspan="2" style="color:var(--muted);font-size:12px;font-weight:600">Margen neto (50 talleres)</td><td class="amount" style="color:var(--green);font-weight:800;font-size:15px">~$8,800/mes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══ COMPARACIÓN GETSOFT ══ -->
+  <div class="section">
+    <div class="section-title">05 — Comparación con alternativas</div>
+    <h2>DG Motors ERP vs. GETSOFT y otras opciones</h2>
+
+    <div class="vs-grid">
+      <div class="vs-col theirs">
+        <div class="vs-label red">🔴 GETSOFT (actual)</div>
+        <div class="vs-item"><span class="label">Costo mensual</span><span class="value">$200–$500/mes</span></div>
+        <div class="vs-item"><span class="label">Control del código</span><span class="value">❌ Ninguno</span></div>
+        <div class="vs-item"><span class="label">Personalización</span><span class="value">❌ Limitada</span></div>
+        <div class="vs-item"><span class="label">Datos propios</span><span class="value">❌ En sus servidores</span></div>
+        <div class="vs-item"><span class="label">Integración ANT</span><span class="value">❓ Depende del proveedor</span></div>
+        <div class="vs-item"><span class="label">Licenciar a otros</span><span class="value">❌ Imposible</span></div>
+        <div class="vs-item"><span class="label">Portal cliente</span><span class="value">❌ No incluye</span></div>
+        <div class="vs-item"><span class="label">App técnicos</span><span class="value">❌ No incluye</span></div>
+        <div class="vs-item"><span class="label">Costo a 5 años</span><span class="value" style="color:#DC2626;font-weight:700">$12,000 – $30,000</span></div>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="vs-col ours">
+        <div class="vs-label green">🟢 DG Motors ERP (este proyecto)</div>
+        <div class="vs-item"><span class="label">Costo mensual infra</span><span class="value">$95–$120/mes</span></div>
+        <div class="vs-item"><span class="label">Control del código</span><span class="value">✅ Total — GitHub</span></div>
+        <div class="vs-item"><span class="label">Personalización</span><span class="value">✅ Ilimitada</span></div>
+        <div class="vs-item"><span class="label">Datos propios</span><span class="value">✅ Supabase propio</span></div>
+        <div class="vs-item"><span class="label">Integración ANT</span><span class="value">✅ Nativa con cache</span></div>
+        <div class="vs-item"><span class="label">Licenciar a otros</span><span class="value">✅ Fase 16 — SaaS</span></div>
+        <div class="vs-item"><span class="label">Portal cliente</span><span class="value">✅ Incluido</span></div>
+        <div class="vs-item"><span class="label">App técnicos</span><span class="value">✅ PWA Fase 15</span></div>
+        <div class="vs-item"><span class="label">Costo a 5 años</span><span class="value" style="color:#16A34A;font-weight:700">$7,200 infra total</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ RETORNO DE INVERSIÓN ══ -->
+  <div class="section">
+    <div class="section-title">06 — Retorno de inversión</div>
+    <h2>¿Cuándo se recupera la inversión?</h2>
+
+    <div class="card-grid col2">
+      <div>
+        <h3>Escenario 1: Solo DG Motors (uso interno)</h3>
+        <table class="price-table">
+          <tbody>
+            <tr><td>Inversión total desarrollo</td><td class="amount">$25,655</td></tr>
+            <tr><td>Ahorro vs GETSOFT ($300/mes)</td><td class="amount">$300/mes</td></tr>
+            <tr><td>Ahorro anual</td><td class="amount">$3,600/año</td></tr>
+            <tr class="subtotal"><td><strong>Retorno de inversión</strong></td><td class="amount"><strong>~7.1 años</strong></td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:12px;">Este escenario es el mínimo — solo cuenta el ahorro operativo. El valor real está en la propiedad del sistema y la personalización.</p>
+      </div>
+      <div>
+        <h3>Escenario 2: SaaS — 20 talleres en 1 año</h3>
+        <table class="price-table">
+          <tbody>
+            <tr><td>Inversión total desarrollo</td><td class="amount">$25,655</td></tr>
+            <tr><td>Precio por taller/mes</td><td class="amount">$200/mes</td></tr>
+            <tr><td>Ingresos con 20 talleres</td><td class="amount">$4,000/mes</td></tr>
+            <tr><td>Costo infra SaaS</td><td class="amount">– $500/mes</td></tr>
+            <tr><td>Margen neto mensual</td><td class="amount">$3,500/mes</td></tr>
+            <tr class="subtotal"><td><strong>Retorno de inversión</strong></td><td class="amount"><strong>&lt; 7.5 meses</strong></td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:12px;">Con apenas 20 de sus 400+ talleres aliados, la inversión se recupera en menos de 8 meses.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:28px;">Proyección de ingresos SaaS — 36 meses</h3>
+    <div style="margin-top:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;"><span>Mes 6 — 10 talleres</span><span>$2,000/mes</span></div>
+      <div class="roi-bar-container"><div class="roi-bar" style="width:13.3%">$2,000</div></div>
+
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;"><span>Mes 12 — 30 talleres</span><span>$6,000/mes</span></div>
+      <div class="roi-bar-container"><div class="roi-bar" style="width:40%">$6,000</div></div>
+
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;"><span>Mes 18 — 60 talleres</span><span>$12,000/mes</span></div>
+      <div class="roi-bar-container"><div class="roi-bar" style="width:80%">$12,000</div></div>
+
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;"><span>Mes 36 — 150 talleres</span><span>$30,000/mes</span></div>
+      <div class="roi-bar-container"><div class="roi-bar" style="width:100%">$30,000</div></div>
+    </div>
+    <p style="font-size:12px;margin-top:12px;">Proyección conservadora: 150 de 400+ talleres aliados a $200/mes = $30,000 MRR al mes 36.</p>
+  </div>
+
+  <!-- ══ RESUMEN FINAL ══ -->
+  <div class="section">
+    <div class="section-title">07 — Resumen de inversión</div>
+    <h2>Cuadro resumen total del proyecto</h2>
+
+    <div class="big-number-grid">
+      <div class="big-num">
+        <div class="lbl">Desarrollo completado</div>
+        <div class="num" style="color:var(--green)">$14,280</div>
+        <div class="sub">408 horas · Fases 1–10</div>
+      </div>
+      <div class="big-num">
+        <div class="lbl">Desarrollo restante</div>
+        <div class="num" style="color:var(--blue)">$11,375</div>
+        <div class="sub">325 horas · Fases 11–17</div>
+      </div>
+      <div class="big-num highlight">
+        <div class="lbl">INVERSIÓN TOTAL</div>
+        <div class="num">$25,655</div>
+        <div class="sub">733 horas de desarrollo</div>
+      </div>
+      <div class="big-num">
+        <div class="lbl">Costo operativo anual</div>
+        <div class="num" style="font-size:22px;">$1,200</div>
+        <div class="sub">~$100/mes infraestructura</div>
+      </div>
+    </div>
+
+    <table class="price-table">
+      <thead>
+        <tr><th>Concepto</th><th>Tipo</th><th class="amount">Monto (USD)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Desarrollo — Fases 1–10 (completado)</td><td><span class="badge b-green">Entregado</span></td><td class="amount">$14,280</td></tr>
+        <tr><td>Desarrollo — Fases 11–17 (restante)</td><td><span class="badge b-yellow">Por completar</span></td><td class="amount">$11,375</td></tr>
+        <tr><td>Infraestructura primer año (Supabase + Vercel + Email + ANT)</td><td><span class="badge b-gray">Operativo/año</span></td><td class="amount">$1,200</td></tr>
+        <tr><td>Certificado digital SRI (firma electrónica, válido 2 años)</td><td><span class="badge b-gray">Único</span></td><td class="amount">$60</td></tr>
+        <tr><td>Capacitación y onboarding del equipo</td><td><span class="badge b-gray">Único</span></td><td class="amount">$400</td></tr>
+        <tr class="total-row">
+          <td colspan="2"><strong>INVERSIÓN TOTAL (desarrollo + primer año de operación)</strong></td>
+          <td class="amount"><strong>$27,315</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert alert-green" style="margin-top:20px;">
+      <div class="alert-icon">🎯</div>
+      <div>
+        <strong>Propuesta de pago sugerida:</strong><br/>
+        <strong>50%</strong> al inicio ($12,827) · <strong>25%</strong> al entregar Fases 11–14 ($6,413) · <strong>25%</strong> al deploy en producción ($6,413)<br/>
+        <span style="font-size:12.5px;opacity:.85;margin-top:4px;display:block;">Los costos de infraestructura son mensuales y los asume el cliente directamente con cada proveedor (Supabase, Vercel, etc.).</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ENTREGABLES ══ -->
+  <div class="section">
+    <div class="section-title">08 — Entregables</div>
+    <h2>¿Qué recibe el cliente?</h2>
+    <div class="card-grid col2">
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-blue">📦</div><div class="card-title">Código fuente completo</div></div>
+        <div class="card-desc">Repositorio privado en GitHub con todo el código. Licencia total. El cliente es dueño del 100% del código fuente.</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-green">🚀</div><div class="card-title">Sistema en producción</div></div>
+        <div class="card-desc">Deploy configurado en Vercel con dominio personalizado, variables de entorno de producción y SSL automático.</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-purple">📖</div><div class="card-title">Documentación completa</div></div>
+        <div class="card-desc">Manual técnico (arquitectura, APIs, migrations), manual de usuario (admin, cliente, contador) y guía de mantenimiento.</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-yellow">🧪</div><div class="card-title">Suite de tests E2E</div></div>
+        <div class="card-desc">49+ tests automatizados con Playwright que cubren todos los flujos críticos. Ejecutables en cualquier momento para verificar el sistema.</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-red">🗄</div><div class="card-title">Base de datos configurada</div></div>
+        <div class="card-desc">18 migrations SQL documentadas, datos de demostración, backups automáticos diarios en Supabase, RLS configurado.</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-icon ci-gray">🎓</div><div class="card-title">Capacitación</div></div>
+        <div class="card-desc">Sesión de capacitación para el equipo de DG Motors: administrador, recepcionistas, contador y mecánicos.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CRONOGRAMA ══ -->
+  <div class="section">
+    <div class="section-title">09 — Cronograma estimado</div>
+    <h2>Tiempo de entrega — Fases restantes</h2>
+    <div class="alert alert-blue" style="margin-bottom:20px;">
+      <div class="alert-icon">📅</div>
+      <div>Las fases 1–10 ya están completadas y disponibles para revisión. El cronograma a continuación corresponde al trabajo restante.</div>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-title">Semana 1–2 — Bancos + Ventas Avanzadas</div>
+        <div class="tl-desc">Fase 11: Cuentas bancarias, movimientos, conciliación. Fase 12 (parte 1): Retenciones SRI, anticipos, notas de crédito.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Semana 3–4 — SRI Electrónico + Dashboards (parte 1)</div>
+        <div class="tl-desc">Fase 12 (parte 2): Integración facturación electrónica SRI completa. Fase 13 (parte 1): Dashboards Gerencial, Ventas y Compras.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Semana 5–6 — Dashboards completos + Inventario avanzado</div>
+        <div class="tl-desc">Fase 13 (parte 2): Dashboards CxC, Tesorería, Vendedores, Comparativa, Rentabilidad. Fase 14: Transferencias, kardex valorizado, toma física.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Semana 7–8 — App Móvil PWA + Multi-Taller base</div>
+        <div class="tl-desc">Fase 15: PWA optimizada para mecánicos. Fase 16 (inicio): Arquitectura multi-tenancy, tabla talleres, aislamiento de datos.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Semana 9–10 — Multi-Taller completo + QA</div>
+        <div class="tl-desc">Fase 16 (conclusión): Subdominios, onboarding, CRM prospectos. Fase 17: QA final, optimización, deploy producción.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">Semana 11 — Entrega final y capacitación</div>
+        <div class="tl-desc">Deploy en producción con dominio definitivo. Sesión de capacitación al equipo. Entrega de toda la documentación.</div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);margin-top:16px;"><strong>Tiempo total restante estimado: 10–11 semanas de trabajo</strong> (a tiempo completo). El tiempo puede variar según la disponibilidad de las credenciales SRI y la rapidez en las revisiones del cliente.</p>
+  </div>
+
+  <!-- ══ NOTA FINAL ══ -->
+  <div class="section">
+    <div class="section-title">10 — Consideraciones finales</div>
+    <h2>Lo que está incluido y lo que no</h2>
+    <div class="card-grid col2">
+      <div class="card" style="border-color:#BBF7D0;">
+        <div class="card-header"><div class="card-icon ci-green">✅</div><div class="card-title">Incluido en el precio</div></div>
+        <div class="card-desc">
+          <ul style="margin-left:16px;font-size:13px;color:var(--muted);line-height:2;">
+            <li>Todo el código fuente (propiedad del cliente)</li>
+            <li>Diseño UI/UX responsivo (dark y light mode)</li>
+            <li>Todos los módulos descritos en las 17 fases</li>
+            <li>Documentación técnica y manual de usuario</li>
+            <li>Suite de tests automatizados</li>
+            <li>Deploy inicial en producción</li>
+            <li>1 mes de soporte post-entrega para correcciones</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="border-color:#FCA5A5;">
+        <div class="card-header"><div class="card-icon ci-red">❌</div><div class="card-title">No incluido (costos del cliente)</div></div>
+        <div class="card-desc">
+          <ul style="margin-left:16px;font-size:13px;color:var(--muted);line-height:2;">
+            <li>Subscripciones mensuales: Supabase, Vercel, Resend</li>
+            <li>API key para consultas ANT Ecuador</li>
+            <li>Certificado digital SRI (firma electrónica)</li>
+            <li>Credenciales SRI para facturación electrónica</li>
+            <li>Dominio web (si no lo tienen)</li>
+            <li>Nuevas funcionalidades fuera del alcance definido</li>
+            <li>Mantenimiento mensual post-entrega (cotizar aparte)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-yellow" style="margin-top:8px;">
+      <div class="alert-icon">⚠️</div>
+      <div><strong>Mantenimiento mensual (opcional):</strong> Se puede contratar un plan de mantenimiento mensual de $300–$500/mes que incluye: actualizaciones de seguridad, corrección de bugs, soporte técnico y hasta 10 horas de desarrollo de mejoras. Cotizar por separado.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <div>
+    <div class="brand">⚙ DG Motors ERP Platform</div>
+    <div class="legal" style="margin-top:6px;">Este documento es una estimación basada en el alcance definido. Los costos de infraestructura de terceros (Supabase, Vercel, etc.) son aproximados y pueden variar según el uso real.</div>
+  </div>
+  <div style="text-align:right;">
+    <div style="font-size:11px;color:#6B7280;">Documento generado</div>
+    <div style="font-size:14px;font-weight:600;color:#9CA3AF;">Abril 2026</div>
+    <div style="font-size:11px;color:#6B7280;margin-top:4px;">Confidencial — Solo para DG Motors</div>
+  </div>
+</div>
+
+</body>
+</html>

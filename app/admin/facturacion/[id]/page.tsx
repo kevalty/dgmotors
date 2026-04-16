@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2, AlertCircle, CreditCard, Download } from "lucide-react";
+import { ArrowLeft, CheckCircle2, AlertCircle, CreditCard, Download, RotateCcw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -111,6 +111,14 @@ export default function FacturaDetallePage() {
               PDF
             </Button>
           </a>
+          {factura.estado !== "anulada" && factura.tipo === "factura" && (
+            <Link href={`/admin/facturacion/nota-credito?origen=${id}`}>
+              <Button variant="outline" size="sm" className="gap-2">
+                <RotateCcw className="w-4 h-4" />
+                Nota de Crédito
+              </Button>
+            </Link>
+          )}
           {factura.estado !== "pagada" && factura.estado !== "anulada" && (
             <Button
               size="sm"

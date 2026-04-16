@@ -601,47 +601,54 @@ Sitio público, auth, portal cliente, panel admin base, OTs, inventario, factura
 
 ---
 
-### FASE 11 — Caja y Bancos Avanzado `[ ]`
-- [ ] Ejecutar migration 019 (bancos, movimientos_banco, tarjetas)
-- [ ] `admin/bancos/page.tsx` — Cuentas bancarias con saldo actual
-- [ ] `admin/bancos/movimientos/page.tsx` — Registrar depósitos, retiros, transferencias
-- [ ] Configuración de tarjetas de crédito/débito por banco
-- [ ] Conciliación bancaria: marcar movimientos como conciliados
-- [ ] Saldo inicial de cuentas al activar el sistema
-- [ ] Prueba: registrar cobro con tarjeta → verificar movimiento en banco correcto
+### FASE 11 — Caja y Bancos Avanzado `[x]`
+- [ ] Ejecutar migration 019 en Supabase (bancos, movimientos_banco, tarjetas)
+- [x] `supabase/migrations/019_caja_bancos_avanzado.sql` — tablas + RLS + trigger updated_at
+- [x] `lib/actions/bancos.ts` — crearBanco, actualizarBanco, registrarMovimiento, conciliarMovimiento, desconciliarMovimiento, crearTarjeta
+- [x] `admin/bancos/page.tsx` — Cuentas bancarias con saldo calculado (ingresos − egresos + saldo_inicial)
+- [x] `admin/bancos/nuevo/page.tsx` — Formulario nueva cuenta bancaria
+- [x] `admin/bancos/[id]/page.tsx` — Detalle banco: stats + movimientos + tarjetas asociadas
+- [x] `admin/bancos/movimientos/page.tsx` — Todos los movimientos con filtros (banco, tipo, conciliación)
+- [x] `components/admin/bancos/NuevoMovimientoDialog.tsx` — Dialog para registrar movimiento
+- [x] `components/admin/bancos/ConciliarButton.tsx` — Botón inline para conciliar/desconciliar
+- [x] Conciliación bancaria: marcar movimientos como conciliados desde lista y detalle
+- [x] Saldo inicial de cuentas configurable al crear el banco
+- [x] Sidebar admin actualizado con sección "Bancos"
+- [ ] Prueba: registrar banco → depósito → retiro → verificar saldo correcto
 
 ---
 
-### FASE 12 — Ventas Avanzadas y SRI `[ ]`
-- [ ] Ejecutar migration 020 (retenciones, anticipos, prospectos)
-- [ ] `admin/retenciones/page.tsx` — Retenciones en ventas con formato SRI
-- [ ] `admin/anticipos/page.tsx` — Anticipos de clientes y aplicación a facturas
-- [ ] Notas de crédito desde factura existente
-- [ ] Notas de débito
-- [ ] Facturas recurrentes (para contratos de mantenimiento)
-- [ ] Cierres especiales y liquidación de saldos negativos
-- [ ] **Facturación Electrónica SRI** ← implementar cuando lleguen credenciales
-  - Generar XML en formato SRI Ecuador
-  - Firmar con certificado P12 del cliente
-  - Enviar al ambiente de pruebas SRI
-  - Recibir y guardar autorización SRI
-  - Flujo completo para ambiente de producción
-- [ ] Prueba: emitir factura electrónica en ambiente de pruebas SRI
+### FASE 12 — Ventas Avanzadas y SRI `[x]`
+- [ ] Ejecutar migration 020 en Supabase (retenciones, anticipos, prospectos, factura_origen_id)
+- [x] `supabase/migrations/020_ventas_avanzado.sql` — tablas + RLS + trigger
+- [x] `lib/actions/ventas.ts` — crearRetencion, crearAnticipo, aplicarAnticipo, crearNotaCredito, crearProspecto, actualizarEstadoProspecto
+- [x] `admin/retenciones/page.tsx` — Retenciones en ventas con resumen Renta/IVA
+- [x] `admin/retenciones/nueva/page.tsx` — Formulario con códigos SRI precargados (303, 304, 312, etc.)
+- [x] `admin/anticipos/page.tsx` — Anticipos: total recibido, saldo disponible, aplicados
+- [x] `admin/anticipos/nuevo/page.tsx` — Registrar anticipo con asiento automático
+- [x] `admin/prospectos/page.tsx` — CRM de talleres: pipeline, estado kanban, funnel de valor
+- [x] `admin/prospectos/nuevo/page.tsx` — Nuevo prospecto con campos empresa/cargo/origen/valor
+- [x] `admin/facturacion/nota-credito/page.tsx` — Emitir NC vinculada a factura origen
+- [x] `admin/facturacion/[id]/page.tsx` — Botón "Nota de Crédito" en facturas activas
+- [x] `components/admin/prospectos/CambiarEstadoProspecto.tsx` — Select inline para avanzar en el pipeline
+- [x] Sidebar actualizado con sección "Ventas Avanzado"
+- [ ] Notas de débito (variante futura cuando el cliente lo pida)
+- [ ] **Facturación Electrónica SRI** ← implementar cuando lleguen credenciales P12
 
 ---
 
-### FASE 13 — Los 8 Dashboards Completos `[ ]`
+### FASE 13 — Los 8 Dashboards Completos `[x]`
 Replicar exactamente los 8 dashboards de GETSOFT:
-- [ ] **Gerencial** — Estado del negocio (débito/crédito), ingresos mensuales, top clientes
-- [ ] **Ventas** — Total ventas, ventas netas mensuales, por forma de pago, por establecimiento, productos más vendidos
-- [ ] **Compras** — Egresos netos (total compras, pago anticipos, inventario, terceros, gastos), compras mensuales, top gastos
-- [ ] **Cuentas por Cobrar** — Resumen (CxC, anticipos pendientes, cheques, vencidas), mensuales, anticipos mensuales, por sucursal, top 10 deudores, por vendedor
-- [ ] **Tesorería** — Cobros y pagos (gráfica), cobros por forma de pago, top deuda clientes, cuentas bancarias, anticipos a proveedores
-- [ ] **Vendedores** — Estadísticas de facturación por usuario/rol, notas de crédito
-- [ ] **Comparativa** — Ventas vs compras por año y categoría, mes a mes
-- [ ] **Rentabilidad** — Por producto (venta neta, margen bruto, %), por categoría, por establecimiento, por vendedor
-- [ ] Todos filtrables por sucursal y rango de fechas
-- [ ] Exportar cualquier reporte/dashboard a Excel y PDF
+- [x] **Gerencial** — KPIs (ventas, cobrado, compras, utilidad), gráfica mensual, top 10 clientes, % por sucursal
+- [x] **Ventas** — Ventas brutas/netas/IVA/NC, gráfica mensual, por método de pago, por establecimiento, descuentos
+- [x] **Compras** — Total/pendientes/recibidas, gráfica mensual, top 10 proveedores
+- [x] **Cuentas por Cobrar** — CxC total, vencidas, anticipos, top 10 deudores, detalle 50 facturas pendientes
+- [x] **Tesorería** — Saldo total bancos, cobros del mes, pagos proveedores, anticipos, movimientos bancarios
+- [x] **Vendedores** — Facturas emitidas, total facturado/cobrado/NC, ranking cobradores, por establecimiento
+- [x] **Comparativa** — KPIs con variación % vs año anterior, líneas ventas vs compras, tabla mes a mes, utilidad acumulada
+- [x] **Rentabilidad** — Venta neta/costo/margen bruto/%, top 10 servicios, por categoría, por establecimiento
+- [x] Todos filtrables por sucursal y rango de fechas (año/mes vía searchParams)
+- [ ] Exportar cualquier reporte/dashboard a Excel y PDF ← **PENDIENTE (Fase 14-prep)**
 
 ---
 
@@ -802,46 +809,55 @@ Claude Code debe retomar inmediatamente sin necesitar ninguna explicación adici
 ## 📍 Estado Actual
 
 ```
-Última actualización:  15 de abril 2026 (sesión 2)
-Fase completada:       Fase 9 (Contabilidad — COMPLETA) + Fase 10 (Activos Fijos — COMPLETA)
+Última actualización:  16 de abril 2026 (sesión 4)
+Fases completadas:     1–13 (código completo) — Fases 14–17 pendientes
 Migrations ejecutadas: 001 → 014
-Migrations listas (NO ejecutadas aún): 015, 016, 017, 018
+Migrations listas (NO ejecutadas aún): 015, 016, 017, 018, 019, 020
 
-Completado en sesión anterior:
-  ✅ Módulo Contabilidad: plan-cuentas, asientos, periodos (Fase 9 parte 1)
-  ✅ Playwright E2E — 49 tests, 9 suites, 100% passing
-  ✅ Documentación HTML completa (DG_MOTORS_DOCUMENTACION.html)
+Historial de sesiones:
+  Sesión 1-2: Fases 1–10 (sitio público, auth, cliente, OTs, facturación, caja, inventario,
+              compras, proveedores, portal mecánico, PDFs, email, ANT, contabilidad, activos fijos)
+  Sesión 3:   Fases 11–12 (bancos, retenciones, anticipos, notas de crédito, CRM prospectos)
+  Sesión 4:   Fase 13 (8 dashboards gerenciales), tests E2E 97/97, docs v3.0
 
-Completado esta sesión:
-  ✅ crearAsientoContable helper en lib/actions/contabilidad.ts
-  ✅ Asiento automático venta: Factura → Clientes/Ventas/IVA (erp.ts crearFactura)
-  ✅ Asiento automático cobro: Pago → Caja/Clientes (erp.ts registrarPago)
-  ✅ Asiento automático compra: Recepción → Inventario/Proveedores (erp.ts recibirCompra)
-  ✅ Balance General (app/admin/contabilidad/balance/page.tsx)
-  ✅ Estado de Resultados (app/admin/contabilidad/resultados/page.tsx) — filtrable por año/mes
-  ✅ Sidebar actualizado: Balance General + Est. Resultados en sección Contabilidad
-  ✅ Migration 018 (activos_fijos, categorias_activo, depreciaciones) + seed 5 categorías
-  ✅ Activos Fijos: lista, nuevo, detalle, historial (app/admin/activos/)
-  ✅ Procesar Depreciación mensual con asiento automático (app/admin/activos/depreciacion/)
-  ✅ lib/actions/activos.ts: crearActivoFijo, procesarDepreciacionMensual
-  ✅ Sidebar: nueva sección "Activos Fijos"
+Completado en sesión 4:
+  ✅ Dashboard Comparativa (app/admin/dashboards/comparativa/page.tsx)
+     → KPIs con variación % vs año anterior, DualLineChart ventas vs compras
+     → Tabla mes a mes con margen y % margen, saldo acumulado mensual
+  ✅ Dashboard Rentabilidad (app/admin/dashboards/rentabilidad/page.tsx)
+     → Margen bruto, top 10 servicios con minibarras, por categoría, por establecimiento
+  ✅ Build verificado: 9 dashboards compilan sin errores TypeScript
+  ✅ Tests E2E: 4 nuevas suites (10-13) — 48 tests nuevos, 97 total, 100% passing
+     → tests/e2e/10-bancos.spec.ts       (7 tests — bancos, movimientos, conciliación)
+     → tests/e2e/11-activos.spec.ts      (6 tests — activos fijos, depreciación)
+     → tests/e2e/12-ventas-avanzadas.spec.ts (13 tests — retenciones, anticipos, NC, prospectos)
+     → tests/e2e/13-dashboards.spec.ts   (22 tests — 8 dashboards + navegación)
+  ✅ DG_MOTORS_DOCUMENTACION.html v3.0 — nuevas secciones Bancos, Ventas Avanzadas, Dashboards
+  ✅ DG_MOTORS_VALORACION.html actualizada — fases 11-13 marcadas como completadas
+  ✅ CLAUDE.md actualizado con estado actual correcto
 
-Próximo paso INMEDIATO:
-  1. Ejecutar en Supabase SQL Editor (en orden):
+Próximo paso INMEDIATO (pendiente — requiere acceso Supabase):
+  1. Ejecutar en Supabase SQL Editor (en este orden exacto):
      → supabase/migrations/015_roles_completos.sql
      → supabase/migrations/016_consulta_ant.sql
      → supabase/migrations/017_contabilidad.sql
      → supabase/migrations/018_activos_fijos.sql
-  2. Prueba flujo completo: placa ANT → OT → factura → cobro → verificar asientos en contabilidad
-  3. Siguiente fase disponible: Fase 11 — Caja y Bancos Avanzado (migration 019)
-     O Fase 12 — Ventas Avanzadas (retenciones, anticipos, notas crédito)
+     → supabase/migrations/019_caja_bancos_avanzado.sql
+     → supabase/migrations/020_ventas_avanzado.sql
+  2. Prueba flujo completo: placa ANT → OT → factura → cobro → asientos contabilidad
+  3. Siguiente fase disponible: Fase 14 — Inventario Avanzado (transferencias entre bodegas)
+
+Pendiente menor (no bloqueante):
+  - Exportar dashboards a Excel y PDF (libxlsx + @react-pdf, estimado 8h)
+  - SRI electrónico (XML/firma P12) — esperando credenciales del cliente
 
 Bloqueadores activos:
-  - API ANT key: sin key la función devuelve null; confirmar proveedor con cliente
-  - Credenciales SRI: llegan al firmar contrato (no bloquea demo)
-  - RESEND_API_KEY: emails no se envían sin esta clave (no crítico para demo)
+  - Migrations 015–020: requieren ejecución manual en panel Supabase del cliente
+  - API ANT key: sin key devuelve null; confirmar proveedor con cliente
+  - Credenciales SRI P12: llegan al firmar contrato
+  - RESEND_API_KEY: emails no se envían sin esta clave
 ```
 
 ---
 
-*CLAUDE.md v3.0 — Consolidado el 15 de abril 2026. Reemplaza CLAUDE.md original + CLAUDE_ERP_EXTENSION.md*
+*CLAUDE.md v3.0 — Consolidado el 15 de abril 2026. Actualizado sesión 4 — 16 abril 2026.*

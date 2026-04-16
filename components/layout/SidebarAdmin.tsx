@@ -30,6 +30,11 @@ import {
   Scale,
   TrendingUp,
   Building2,
+  Landmark,
+  ArrowLeftRight,
+  Percent,
+  HandCoins,
+  Users2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/actions/auth";
@@ -75,6 +80,21 @@ const navGroups = [
     items: [
       { href: "/admin/activos",              icon: Building2,     label: "Activos" },
       { href: "/admin/activos/depreciacion", icon: TrendingUp,    label: "Depreciación" },
+    ],
+  },
+  {
+    label: "Bancos",
+    items: [
+      { href: "/admin/bancos",              icon: Landmark,       label: "Cuentas Bancarias" },
+      { href: "/admin/bancos/movimientos",  icon: ArrowLeftRight, label: "Movimientos" },
+    ],
+  },
+  {
+    label: "Ventas Avanzado",
+    items: [
+      { href: "/admin/retenciones", icon: Percent,    label: "Retenciones SRI" },
+      { href: "/admin/anticipos",   icon: HandCoins,  label: "Anticipos" },
+      { href: "/admin/prospectos",  icon: Users2,     label: "Prospectos CRM" },
     ],
   },
   {
